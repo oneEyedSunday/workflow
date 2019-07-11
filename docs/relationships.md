@@ -1,5 +1,5 @@
 # Relationships, Actors & Actions
-Relationships describe how elements (actors and actions) in this system will interact with each other.
+Relationships describe how elements (actors and [actions](./actions.md)) in this system will interact with each other.
 For now, we have the following elements in the system:
 * [Organization](##Organization)
 * [Entity](##Entity)
