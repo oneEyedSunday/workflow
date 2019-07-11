@@ -1,15 +1,15 @@
 # Relationships, Actors & Actions
 Relationships describe how elements (actors and [actions](./actions.md)) in this system will interact with each other.
 For now, we have the following elements in the system:
-* [Organization](##Organization)
-* [Entity](##Entity)
-* [Member](##Member)
-* [User](##User)
-* [Group](##Groups) (_under discussion_)
-* [Process](##Process)
-* [Stage](##Stage)
-* [Task](##Task)
-* [Privileges](##Privilege)
+* [Organization](#Organization)
+* [Entity](#Entity)
+* [Member](#Member)
+* [User](#User)
+* [Group](#Groups) (_under discussion_)
+* [Process](#Process)
+* [Stage](#Stage)
+* [Task](#Task)
+* [Privileges](#Privilege)
 
 ## Organization
 An organization is the highest entity level, an organization is a group of members having a set of processes.
