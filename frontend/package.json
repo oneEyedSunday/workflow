@@ -1,5 +1,5 @@
 {
-  "name": "frontend",
+  "name": "workflow",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "publish:ghpages": "ng build --prod --base-href '/oneeyedsunday/' && npx ngh --dir=../ui"
+    "publish:ghpages": "ng build --prod --base-href '/oneeyedsunday/workflow' && npx ngh --dir=../ui"
   },
   "private": true,
   "dependencies": {
