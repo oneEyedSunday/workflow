@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "publish:ghpages": "ng build --prod --base-href '/oneeyedsunday/workflow' && npx ngh --dir=../ui"
+    "publish:ghpages": "ng build --prod --base-href '/workflow/' && npx ngh --dir=../ui"
   },
   "private": true,
   "dependencies": {
