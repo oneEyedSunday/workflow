@@ -102,3 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+
+frontend/dist
+frontend/node_modules
+node_modules
