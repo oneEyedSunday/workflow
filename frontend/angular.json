@@ -27,6 +27,8 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/dragula/dist/dragula.css",
+              "src/assets/styles/app.scss",
               "src/styles.scss"
             ],
             "scripts": [],
