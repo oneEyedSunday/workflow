@@ -11,6 +11,12 @@
     "publish:ghpages": "ng build --prod --base-href '/workflow/' && npx ngh --dir=../ui"
   },
   "private": true,
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "ng test --watch=false --code-coverage=true --source-map && npm run build"
+    }
+  },
   "dependencies": {
     "@angular/animations": "~7.2.0",
     "@angular/common": "~7.2.0",
@@ -23,6 +29,7 @@
     "@ng-bootstrap/ng-bootstrap": "^5.0.0",
     "bootstrap": "^4.3.1",
     "core-js": "^2.5.4",
+    "feather-icons": "^4.22.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.1",
     "ng2-dragula": "^2.1.1",
@@ -40,6 +47,7 @@
     "@types/node": "~8.9.4",
     "angular-cli-ghpages": "^0.5.3",
     "codelyzer": "~4.5.0",
+    "husky": "^3.0.0",
     "jasmine-core": "~2.99.1",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.0.0",

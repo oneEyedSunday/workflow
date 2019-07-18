@@ -3,10 +3,12 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import * as CoreLayout from './core';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ...CoreLayout.layoutCmps
   ],
   imports: [
     BrowserModule,

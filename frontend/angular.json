@@ -31,7 +31,9 @@
               "src/assets/styles/app.scss",
               "src/styles.scss"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/feather-icons/dist/feather.min.js"
+            ],
             "es5BrowserSupport": true
           },
           "configurations": {
