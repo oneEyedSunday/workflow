@@ -1,0 +1,27 @@
+
+.custom-scroll {
+    // FireFox
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+      // height: 7px;
+      width: 8px;
+      height: 8px;
+      background-color: #aaa;
+    }
+  
+    /* Track */
+    &::-webkit-scrollbar-track {
+      background: #fff;
+    }
+  
+    /* Handle */
+    &::-webkit-scrollbar-thumb {
+      background: #ddd;
+      border-radius: 10px;
+    }
+  
+    /* Handle on hover */
+    &::-webkit-scrollbar-thumb:hover {
+      background: #555;
+    }
+  }

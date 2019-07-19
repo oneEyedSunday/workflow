@@ -1,0 +1,25 @@
+@import "../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import "../../../node_modules/font-awesome/css/font-awesome.min.css";
+@import "variables";
+@import "core/sidebar";
+@import "core/feather";
+@import "core/navbar";
+@import "./scrollbar.scss";
+
+body {
+    font-size: $base-font-size;
+}
+
+/*
+* Content
+*/
+  
+[role="main"] {
+    padding-top: 133px; /* Space for fixed navbar */
+}
+
+@media (min-width: 768px) {
+    [role="main"] {
+      padding-top: 48px; /* Space for fixed navbar */
+    }
+}
