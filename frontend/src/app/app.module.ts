@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   HttpClientModule,
   HTTP_INTERCEPTORS
@@ -19,6 +18,7 @@ import * as CoreLayout from './core';
 // TODO import interceptors
 // TODO angular-calendar or full-calendar 4 dashboard
 // TODO toastr for notifs?
+// TODO ng bootstraps toast looks good for projects page at least
 // TODO may need to import quill here
 @NgModule({
   declarations: [
@@ -27,8 +27,6 @@ import * as CoreLayout from './core';
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AppRoutingModule,
