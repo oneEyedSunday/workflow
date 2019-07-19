@@ -285,10 +285,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@ng-bootstrap/ng-bootstrap@~4.0.0":
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-4.0.5.tgz#4c27922f70a36a32e3ec7eb8d4eb6761c622f6d7"
-  integrity sha512-teQ3oNCfdMF/+//LmnF8Kf/2bdEoj90p0cPuKFhAMkyUUY7EAnN8JZfN+tVcGJnWkPxF4yCFYRdi+tDk0gUjdA==
+"@ng-bootstrap/ng-bootstrap@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@ng-bootstrap/ng-bootstrap/-/ng-bootstrap-5.1.0.tgz#c0bdb74702d46f58b3cfd526dd77921e6107e7f7"
+  integrity sha512-IYoKE1NMrIPbRV0077/uHOjdwPb3qyhHpbBXiMGjclkSm2GvKXNPIzgd3Vjon/lbKelHdAW4A/upUHN2VYUi3w==
   dependencies:
     tslib "^1.9.0"
 

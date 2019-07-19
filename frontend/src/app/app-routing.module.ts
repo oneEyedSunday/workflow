@@ -9,11 +9,15 @@ const routes: Routes = [
     children: [
       {
         path: 'projects',
-        loadChildren: './projects/projects.module#ProjectsModule'
+        loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule)
       },
       {
         path: 'account',
-        loadChildren: './auth/auth.module#AuthModule'
+        loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+      },
+      {
+        path: 'forms',
+        loadChildren: () => import('./forms/forms.module').then(m => m.WorkflowFormsModule)
       }
     ]
   },
