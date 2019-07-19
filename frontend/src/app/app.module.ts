@@ -35,7 +35,7 @@ import * as CoreLayout from './core';
     NgbDatepickerModule,
     NgbTimepickerModule,
     NgbModalModule,
-    NgbDropdownModule
+    NgbDropdownModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
