@@ -9,7 +9,6 @@ import * as fromServices from './services';
 
 @NgModule({
   declarations: [
-    // TODO install dragula
     ...fromComponents.components,
     ...fromContainers.containers
   ],
