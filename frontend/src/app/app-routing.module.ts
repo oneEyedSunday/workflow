@@ -10,9 +10,14 @@ const routes: Routes = [
       {
         path: 'projects',
         loadChildren: './projects/projects.module#ProjectsModule'
+      },
+      {
+        path: 'account',
+        loadChildren: './auth/auth.module#AuthModule'
       }
     ]
-  }
+  },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
