@@ -7,7 +7,6 @@ cache:
 before_script:
   - npm i -g @angular/cli
 script:
-  - ls ui
   - cd frontend
   - npm install
   - npm run lint
@@ -23,6 +22,6 @@ deploy:
   skip_cleanup: true
   github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep_history: true
-  local_dir: "../ui"
+  local_dir: ../ui
   on:
     branch: master
