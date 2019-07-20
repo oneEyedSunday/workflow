@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
-import { DragulaModule } from 'ng2-dragula';
-import { ProjectsRoutingModule } from './projects-routing.module';
+// TODO import pop over and tooltip modules form ngbootstrap
+import { FormsRoutingModule } from './forms-routing.module';
 import * as fromContainers from './containers';
 import * as fromComponents from './components';
 import * as fromServices from './services';
@@ -14,12 +15,13 @@ import * as fromServices from './services';
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     QuillModule.forRoot(),
-    DragulaModule.forRoot(),
-    ProjectsRoutingModule
+    FormsRoutingModule
   ],
   providers: [
     ...fromServices.services
   ]
 })
-export class ProjectsModule { }
+export class WorkflowFormsModule { }

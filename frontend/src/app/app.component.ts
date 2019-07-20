@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import * as feather from 'feather-icons';
 
 @Component({
@@ -6,10 +6,9 @@ import * as feather from 'feather-icons';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
-  title = 'Workflow';
+export class AppComponent implements AfterViewInit {
 
-  ngOnInit(): void {
-    feather.replace();
+  ngAfterViewInit() {
+    setTimeout(() => feather.replace(), 100);
   }
 }
