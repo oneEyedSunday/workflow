@@ -1,0 +1,45 @@
+app-auth-layout {
+    h4, .h4 {
+        font-size: 1.125rem;
+    }
+
+    label {
+        font-weight: 600;
+    }
+
+    .btn.btn-success {
+        box-shadow: 0 2px 6px 0 rgba(10,207,151,.5);
+    }
+
+    .btn-success {
+        color: #fff;
+        background-color: #0acf97;
+        border-color: #0acf97;
+    }
+
+    font-family: 'Nunito', sans-serif;
+    margin: 0;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6c757d;
+    text-align: left;
+    background-color: #fafbfe;
+
+    .form-control {
+        display: block;
+        width: 100%;
+        height: calc(2.2125rem + 2px);
+        padding: .45rem .9rem;
+        font-size: .875rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #6c757d;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+        -webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+}

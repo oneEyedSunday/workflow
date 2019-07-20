@@ -2,9 +2,12 @@
 @import "../../../node_modules/font-awesome/css/font-awesome.min.css";
 @import "variables";
 @import "core/sidebar";
+@import "core/buttons";
+@import "core/reboot";
 @import "core/feather";
 @import "core/navbar";
 @import "./scrollbar.scss";
+@import "./auth.scss";
 
 body {
     font-size: $base-font-size;
