@@ -13,20 +13,22 @@ export class LandingComponent implements OnInit, OnDestroy {
         // check auth status??
         // inject css into head
         const head = document.head || document.getElementsByTagName('head')[0];
-        head.appendChild(this.createStyle());
+        head.appendChild(this.createLinkTag());
     }
 
-    private createStyle() {
+    private createLinkTag(): HTMLLinkElement {
         const styleTag = document.createElement('style');
-        styleTag.innerHTML = require('../../../assets/styles/landing-cover.css');
-        styleTag.id = 'landing__page--cover';
-        return styleTag;
+        const linkTag = document.createElement('link');
+        linkTag.rel = 'stylesheet';
+        linkTag.href = 'assets/styles/landing-cover.css';
+        linkTag.id = 'landing__page--cover';
+        return linkTag;
     }
 
     ngOnDestroy(): void {
         // remove stylesheet
         const head = document.head || document.getElementsByTagName('head')[0];
-        head.removeChild(head.querySelector('#landing__page--cover'));
+        head.removeChild(head.querySelector('link#landing__page--cover'));
     }
 
 }
