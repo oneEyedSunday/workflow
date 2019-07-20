@@ -1,6 +1,9 @@
 language: node_js
 node_js:
   - "11.0"
+cache:
+  directories:
+    - ./frontend/node_modules
 before_script:
   - npm i -g @angular/cli
 script:
@@ -10,12 +13,15 @@ script:
   - ng test --watch=false  --code-coverage --source-map
   - if [[ "$TRAVIS_BRANCH" == "master" ]] ; then npm run build --prod --base-href="/workflow/"; fi 
   - if [[ "$TRAVIS_BRANCH" != "master" ]] ; then npm run build --prod; fi
+  - ls ../ui
+  - echo $TRAVIS_BUILD_DIR
+  - pwd
 
 deploy:
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
   keep_history: true
-  local_dir: "../ui"
+  local_dir: $TRAVIS_BUILD_DIR/ui
   on:
     branch: master
