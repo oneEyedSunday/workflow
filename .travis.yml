@@ -15,6 +15,8 @@ script:
   - if [[ "$TRAVIS_BRANCH" == "master" ]] ; then npm run build --prod --base-href="/workflow/"; fi 
   - if [[ "$TRAVIS_BRANCH" != "master" ]] ; then npm run build --prod; fi
   - ls ../ui
+  - echo $TRAVIS_BUILD_DIR
+  - pwd
 
 deploy:
   provider: pages
