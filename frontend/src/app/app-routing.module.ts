@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LayoutComponent } from './core/layout/layout.component';
-import { LandingComponent } from './core';
+import { LandingComponent, AuthLayoutComponent } from './core';
 
 const routes: Routes = [
   {
@@ -10,15 +10,21 @@ const routes: Routes = [
   },
   {
     path: '',
+    component: AuthLayoutComponent,
+    children: [
+      {
+        path: 'account',
+        loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+      },
+    ]
+  },
+  {
+    path: '',
     component: LayoutComponent,
     children: [
       {
         path: 'projects',
         loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule)
-      },
-      {
-        path: 'account',
-        loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
       },
       {
         path: 'forms',
