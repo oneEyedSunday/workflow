@@ -18,6 +18,10 @@ const routes: Routes = [
       {
         path: 'forms',
         loadChildren: () => import('./forms/forms.module').then(m => m.WorkflowFormsModule)
+      },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule)
       }
     ]
   },
