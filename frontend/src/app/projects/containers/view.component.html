@@ -3,16 +3,16 @@
     <!-- Board wrapper -->
     <!-- attach view ref here -->
     <!-- TODO specify height of this wrapper -->
-    <div class="position-relative height-full">
+    <div class="position-relative height-full" [ngClass]=" {'d-none': !process} ">
       <!-- Process details div -->
       <div class="d-flex flex-row py-2 justify-content-between px-2 pb-0 f6">
         <div class="d-flex flex-row">
           <div class="d-table-cell position-relative">
             <h3 class="d-flex align-items-center f5 mb-1">
-              <span>Process Name</span>
+              <span>{{ process?.name }}</span>
             </h3>
             <button class="btn btn-link pl-0  text-inherit">
-              <span>Updated 21 Hours ago</span>
+              <span>Updated {{ process?.lastUpdatedAt | timeAgo }}</span>
             </button>
           </div>
         </div>
@@ -29,8 +29,8 @@
       <!-- Board div holding tasks  -->
       <div class="no-wrap d-flex process-columns position-relative bg-white">
         <div class="w-100 p-2 d-flex height-full">
-          <div class="process-column mr-3" *ngFor="let board of [0, 1, 2]; let i = index;" [attr.data-column_id]="12">
-            <div class="wrapper--shadow scroll-wrapper">
+          <div class="process-column mr-3" *ngFor="let stage of process?.stages; let i = index;" [attr.data-column_id]="12">
+            <div class="wrapper--shadow scroll-wrapper height-full">
               <div class="text-uppercase flex-shrink-0">
                 <div class="p-2 position-relative">
                   <div class="dropdown remove-caret dropdown--options float-right" placement="left-top" ngbDropdown>
@@ -38,25 +38,25 @@
                       <span data-feather="more-horizontal"></span>
                     </button>
                     <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
-                      <button (click)="openSideBar('editStage', board)"
+                      <button (click)="openSideBar('editStage', stage)"
                         class="dropdown-item py-2"><span data-feather="edit"></span>  Edit</button>
                         <!-- TODO is this dropdown necessary self -->
-                      <button class="dropdown-item py-2" (click)="confirmDeleteColumn(board)">
+                      <button class="dropdown-item py-2" (click)="confirmDeleteColumn(stage)">
                         <span data-feather="trash-2"></span> Delete</button>
                     </div>
                   </div>
                   <span class="float-right">➕</span>
                   <h4 class="px-1 m-0 f5 v-align-middle d-inline">
-                    <span class="badge badge-secondary position-badge mr-1">3</span>
-                    <span>Stage Name</span>
+                    <span class="badge badge-secondary position-badge mr-1" [ngClass]="{ 'd-none': !stage.tasks?.length }">{{ stage.tasks?.length }}</span>
+                    <span>{{ stage.name }}</span>
                   </h4>
                 </div>
               </div>
 
-              <div class="scroll">
+              <div class="scroll flex-grow">
         
                 <div class="board-cards custom-scroll px-2 pb-2 flex-grow" dragula="rearrangetask" [attr.data-columnid]="3">
-                  <div  *ngFor="let task of [ 7, 8,44 ,9,0, 80, 71, 228, 18191, 29,29,220, 119,19]" [attr.data-taskid]="4" class="board-card">
+                  <div  *ngFor="let task of stage.tasks" [attr.data-taskid]="4" class="board-card">
                     <div class="d-flex flex-row">
                       <div class="flex-auto position-relative bg-white rounded">
                         <div class="pl-5 p-2 position-relative">
@@ -64,7 +64,7 @@
                           <a class="task--title mb-1 mr-5" (click)="preventDefault($event)"
                           (click)="openSideBar('openTask', task)" href="#">
                           <!-- TODO (oneeyedsunday) link to task page-->
-                            Task Name
+                            {{ task.summary }}
                           </a>
                           <span class="position-absolute task--info">
                             <div class="task-status--ok">
@@ -76,7 +76,7 @@
                               <span data-feather="more-horizontal"></span>
                             </button>
                             <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
-                              <button class="dropdown-item py-2" (click)="confirmDeleteColumn(board)">
+                              <button class="dropdown-item py-2" (click)="confirmDeleteColumn(task)">
                                 Discard Task</button>
                             </div>
                           </div>
@@ -129,6 +129,10 @@
       </div>
 
       <!-- TODO crad with CTA to add stage -->
+    </div>
+
+    <div *ngIf="!process" class="height-full d-flex justify-content-center align-items-center">
+      <span style="font-size: 5em"><i class="fa fa-spin fa-spinner"></i></span>
     </div>
   </div>
 </div>

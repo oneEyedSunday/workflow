@@ -4,6 +4,7 @@ import { of, Observable, throwError, iif, fromEvent } from 'rxjs';
 import { switchMap, catchError, tap, delay, takeUntil } from 'rxjs/operators';
 import { DragulaService } from 'ng2-dragula';
 import * as feather from 'feather-icons';
+import { Stage, Task, Process } from '@shared/interfaces';
 
 interface Coords {
   bottom: number;
@@ -22,10 +23,13 @@ interface Coords {
   styleUrls: ['./view.component.scss',  './boards.scss']
 })
 export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
-  @ViewChild('refProcessBoardContainer', { read: ElementRef, static: false }) boardContainerRef: ElementRef;
+  @ViewChild('refProcessBoardContainer', { read: ElementRef, static: false }) _boardContainerRef: ElementRef;
+  get boardContainerRef() {
+    return this._boardContainerRef;
+  }
   @ViewChild('refSidePane', { read: ElementRef, static: false }) sidePaneRef: ElementRef;
   existingProcess: boolean;
-  process: any;
+  process: Process;
   dragulaGroups: string[] = [];
   public coords = {
     body: null,
@@ -60,8 +64,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       delay(1500), // show loader
       tap(process => {
         this.bootstrapDragula();
-        // get user data
         this.process = process;
+        feather.replace();
+        setTimeout(() => feather.replace());
       }),
       catchError(err => this.handleError(err))
     ).subscribe();
@@ -72,12 +77,12 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(() => feather.replace());
   }
 
-  getProcess(): Observable<any> {
-    return of({});
+  getProcess(): Observable<Process> {
+    return of({} as Process);
   }
 
-  createBaseProcess(): Observable<any> {
-    return of({});
+  createBaseProcess(): Observable<Process> {
+    return of(new Process());
   }
 
   handleError(err: any) {
