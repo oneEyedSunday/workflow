@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { QuillModule } from 'ngx-quill';
 import { DragulaModule } from 'ng2-dragula';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectsRoutingModule } from './projects-routing.module';
 import * as fromContainers from './containers';
 import * as fromComponents from './components';
@@ -16,6 +17,7 @@ import * as fromServices from './services';
     CommonModule,
     QuillModule.forRoot(),
     DragulaModule.forRoot(),
+    NgbDropdownModule,
     ProjectsRoutingModule
   ],
   providers: [

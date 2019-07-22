@@ -1,3 +1,124 @@
-<p>
-  view works!
-</p>
+<div class="container-lg p-0" style="height: 100vh">
+  <div class="height-full">
+    <!-- Board wrapper -->
+    <!-- attach view ref here -->
+    <!-- TODO specify height of this wrapper -->
+    <div class="position-relative height-full">
+      <!-- Process details div -->
+      <div class="d-flex flex-row py-2 justify-content-between px-2 pb-0 f6">
+        <div class="d-flex flex-row">
+          <div class="d-table-cell position-relative">
+            <h3 class="d-flex align-items-center f5 mb-1">
+              <span>Process Name</span>
+            </h3>
+            <button class="btn btn-link pl-0  text-inherit">
+              <span>Updated 21 Hours ago</span>
+            </button>
+          </div>
+        </div>
+        <div class="d-flex flex-row align-items-center f6">
+          <div class="d-table-cell">
+            <button type="button" class="btn btn-link muted-link v-align-middle d-flex align-items-center">
+              ➕
+              <!-- TODO replace with decimal entity rep of &plus; -->
+              <span>Add Stages</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <!-- Board div holding tasks  -->
+      <div class="no-wrap d-flex process-columns position-relative bg-white">
+        <div class="w-100 p-2 d-flex height-full">
+          <div class="process-column mr-3" *ngFor="let board of [0, 1, 2]; let i = index;" [attr.data-column_id]="12">
+            <div class="wrapper--shadow">
+              <div class="text-uppercase">
+                <div class="p-2 position-relative">
+                  <div class="dropdown remove-caret dropdown--options float-right" placement="left-top" ngbDropdown>
+                    <button type="button" class="btn btn-light py-1 px-2 bg-transparent" ngbDropdownToggle>
+                      <span data-feather="more-horizontal"></span>
+                    </button>
+                    <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
+                      <button (click)="openSideBar('editStage', board)"
+                        class="dropdown-item py-2"><span data-feather="edit"></span>  Edit</button>
+                        <!-- TODO is this dropdown necessary self -->
+                      <button class="dropdown-item py-2" (click)="confirmDeleteColumn(board)">
+                        <span data-feather="trash-2"></span> Delete</button>
+                    </div>
+                  </div>
+                  <span class="float-right">➕</span>
+                  <h4 class="px-1 m-0 f5 v-align-middle d-inline">
+                    <span class="badge badge-secondary position-badge mr-1">3</span>
+                    <span>Stage Name</span>
+                  </h4>
+                </div>
+                <!-- <div style="display: none">
+                  <input id="taskboardinput" class="the-taskboard-input" value="{{board.columnSecret.name}}"
+                    style="padding-left: 10px; border-radius: 2px; position: relative;" />
+                  <input style="display: none" value="{{board.id}}">
+                  <span style="display: none">{{board.id}}</span>
+                  <span data-role="updateColumnNameCTA" (click)="updateColumnName($event)"
+                    style="position: absolute; right: 60px; top: 10px; color: #66bb6a; cursor: pointer;">
+                    <i id="clickedit" class="fa fa-edit"></i>
+                  </span>
+                </div> -->
+              </div>
+        
+              <div id="viewtaskdetails list" class="taskboard-cards custom-scroll" dragula="rearrangetask" [attr.data-columnid]="3">
+                <div  *ngFor="let task of [0, 1, 2, 3, 4, 5]" [attr.data-taskid]="4" style="display: none">
+                  <div class="taskboard-task" style="margin-bottom: .5rem; background-color: #fff !important">
+                    <div class="taskboard-task-title" style="cursor: unset">
+                      <span style="color: #000;word-break: break-all; font-size: 0.8em;"
+                      (click)="openSideBar('task', task)">Task Name</span>
+                    </div>
+                    <div class="taskmodal--meta__container">
+                      <div style="text-transform: uppercase">
+                        <div class="badge taskboard-assignee">M</div> {{ '25 December 2015' | date:'d MMM'}}
+                      </div>
+                      <div style="position: absolute; right: 23%;">
+                        <i class="icon ion-android-attach mr-1"></i>
+                        5
+                      </div>
+                      <div style="position: absolute; right: 6%;">
+                        <i class="icon ion-chatbox-working mr-1"></i>
+                        6
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Div that pops up -->
+      <div class="process-pane closed pop-pane border-left border-bottom bg-white" #refSidePane>
+        <div class="d-flex flex-column height-full">
+          <div class="d-flex flex-column">
+            <div class="flex-auto overflow-auto">
+              <div class="p-3 d-flex f4 lh-condensed justify-content-between border-bottom">
+                <div class="flex-auto overflow-hidden lh-default">
+                  <div>Task Name</div>
+                  <!-- Form to edit name -->
+                  <form class="d-none"></form>
+                </div>
+                <div class="d-flex">
+                  <!-- TODO close CTA -->
+                  <div>
+                    <button class="btn mr-2"></button>
+                  </div>
+                  <div>
+                    <button class="btn btn-link close--btn pt-0" (click)="refSidePane.classList.toggle('closed')">
+                    <span data-feather="x"></span>
+                    </button>
+                  </div>
+                </div>
+                <!-- TODO put task creation cmp here -->
+                <!-- TODO put stage creation cmp here -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
