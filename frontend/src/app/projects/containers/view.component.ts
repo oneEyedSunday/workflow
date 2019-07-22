@@ -97,6 +97,11 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     // TODO modals
   }
 
+  preventDefault(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   ngOnDestroy(): void {
 
   }

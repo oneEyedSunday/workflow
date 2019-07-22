@@ -18,10 +18,10 @@
         </div>
         <div class="d-flex flex-row align-items-center f6">
           <div class="d-table-cell">
-            <button type="button" class="btn btn-link muted-link v-align-middle d-flex align-items-center">
+            <button type="button" class="btn btn-link muted-link no-underline v-align-middle d-flex align-items-center" (click)="openSideBar('addTask', null)">
               ➕
               <!-- TODO replace with decimal entity rep of &plus; -->
-              <span>Add Stages</span>
+              <span>Add Task</span>
             </button>
           </div>
         </div>
@@ -30,8 +30,8 @@
       <div class="no-wrap d-flex process-columns position-relative bg-white">
         <div class="w-100 p-2 d-flex height-full">
           <div class="process-column mr-3" *ngFor="let board of [0, 1, 2]; let i = index;" [attr.data-column_id]="12">
-            <div class="wrapper--shadow">
-              <div class="text-uppercase">
+            <div class="wrapper--shadow scroll-wrapper">
+              <div class="text-uppercase flex-shrink-0">
                 <div class="p-2 position-relative">
                   <div class="dropdown remove-caret dropdown--options float-right" placement="left-top" ngbDropdown>
                     <button type="button" class="btn btn-light py-1 px-2 bg-transparent" ngbDropdownToggle>
@@ -51,40 +51,48 @@
                     <span>Stage Name</span>
                   </h4>
                 </div>
-                <!-- <div style="display: none">
-                  <input id="taskboardinput" class="the-taskboard-input" value="{{board.columnSecret.name}}"
-                    style="padding-left: 10px; border-radius: 2px; position: relative;" />
-                  <input style="display: none" value="{{board.id}}">
-                  <span style="display: none">{{board.id}}</span>
-                  <span data-role="updateColumnNameCTA" (click)="updateColumnName($event)"
-                    style="position: absolute; right: 60px; top: 10px; color: #66bb6a; cursor: pointer;">
-                    <i id="clickedit" class="fa fa-edit"></i>
-                  </span>
-                </div> -->
               </div>
+
+              <div class="scroll">
         
-              <div id="viewtaskdetails list" class="taskboard-cards custom-scroll" dragula="rearrangetask" [attr.data-columnid]="3">
-                <div  *ngFor="let task of [0, 1, 2, 3, 4, 5]" [attr.data-taskid]="4" style="display: none">
-                  <div class="taskboard-task" style="margin-bottom: .5rem; background-color: #fff !important">
-                    <div class="taskboard-task-title" style="cursor: unset">
-                      <span style="color: #000;word-break: break-all; font-size: 0.8em;"
-                      (click)="openSideBar('task', task)">Task Name</span>
-                    </div>
-                    <div class="taskmodal--meta__container">
-                      <div style="text-transform: uppercase">
-                        <div class="badge taskboard-assignee">M</div> {{ '25 December 2015' | date:'d MMM'}}
-                      </div>
-                      <div style="position: absolute; right: 23%;">
-                        <i class="icon ion-android-attach mr-1"></i>
-                        5
-                      </div>
-                      <div style="position: absolute; right: 6%;">
-                        <i class="icon ion-chatbox-working mr-1"></i>
-                        6
+                <div class="board-cards custom-scroll px-2 pb-2 flex-grow" dragula="rearrangetask" [attr.data-columnid]="3">
+                  <div  *ngFor="let task of [ 7, 8,44 ,9,0, 80, 71, 228, 18191, 29,29,220, 119,19]" [attr.data-taskid]="4" class="board-card">
+                    <div class="d-flex flex-row">
+                      <div class="flex-auto position-relative bg-white rounded">
+                        <div class="pl-5 p-2 position-relative">
+                          <!-- TODO position status indicator -->
+                          <a class="task--title mb-1 mr-5" (click)="preventDefault($event)"
+                          (click)="openSideBar('openTask', task)" href="#">
+                          <!-- TODO (oneeyedsunday) link to task page-->
+                            Task Name
+                          </a>
+                          <span class="position-absolute task--info">
+                            <div class="task-status--ok">
+                              <span data-feather="info"></span>
+                            </div>
+                          </span>
+                          <div class="dropdown remove-caret dropdown--options float-right" placement="left-top" ngbDropdown>
+                            <button type="button" class="btn btn-light py-1 px-2 bg-transparent" ngbDropdownToggle>
+                              <span data-feather="more-horizontal"></span>
+                            </button>
+                            <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
+                              <button class="dropdown-item py-2" (click)="confirmDeleteColumn(board)">
+                                Discard Task</button>
+                            </div>
+                          </div>
+                          <div class="my-1" style="vertical-align: middle !important; height: 1px;"></div>
+                          <small class="text-gray d-block f-90">
+                            Assigned to Mr. Adeyanju Isiaka & 3 others
+                          </small>
+                          <!-- Heck even priority here -->
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="p-2 bg-gray-light border-top flex-shrink-0 rounded stage--footer">
+
               </div>
             </div>
           </div>
@@ -119,6 +127,8 @@
           </div>
         </div>
       </div>
+
+      <!-- TODO crad with CTA to add stage -->
     </div>
   </div>
 </div>
