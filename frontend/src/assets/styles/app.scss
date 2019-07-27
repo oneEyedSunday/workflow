@@ -8,6 +8,7 @@
 @import "core/navbar";
 // @import "./scrollbar.scss";
 @import "./auth.scss";
+@import '~ngx-toastr/toastr-bs4-alert';
 
 body {
     font-size: $base-font-size;

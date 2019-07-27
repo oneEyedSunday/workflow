@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { guards } from './guards';
 import { pipes } from './pipes';
 import { LoaderComponent } from './loader.component';
 import { StatusBadgeComponent } from './status-badges.component';
@@ -15,7 +14,6 @@ import { StatusBadgeComponent } from './status-badges.component';
     CommonModule
   ],
   providers: [
-    // TODO import intecertors
   ],
   exports: [
     // TODO install bootstrap fontawesome
