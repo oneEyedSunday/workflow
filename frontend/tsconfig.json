@@ -2,6 +2,9 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "@shared/*": ["src/app/shared/*"]
+    },
     "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,

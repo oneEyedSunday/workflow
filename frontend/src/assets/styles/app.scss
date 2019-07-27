@@ -6,7 +6,7 @@
 @import "core/reboot";
 @import "core/feather";
 @import "core/navbar";
-@import "./scrollbar.scss";
+// @import "./scrollbar.scss";
 @import "./auth.scss";
 
 body {
@@ -25,4 +25,12 @@ body {
     [role="main"] {
       padding-top: 48px; /* Space for fixed navbar */
     }
+}
+
+
+.screen--mask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
 }

@@ -6,7 +6,7 @@ import { QuillModule } from 'ngx-quill';
 import { services } from './services';
 import { containers } from './containers';
 import { DocumentsRoutingModule } from './documents-routing.module';
-
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,8 @@ import { DocumentsRoutingModule } from './documents-routing.module';
     FormsModule,
     ReactiveFormsModule,
     QuillModule.forRoot(),
-    DocumentsRoutingModule
+    DocumentsRoutingModule,
+    SharedModule
   ],
   providers: [...services]
 })
