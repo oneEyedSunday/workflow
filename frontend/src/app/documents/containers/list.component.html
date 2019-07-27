@@ -19,7 +19,7 @@
             </tbody>
         </table>
     </div>
-    <div class="screen--mask">
+    <div class="screen--mask" *ngIf="!documents?.length || loading">
         <p class="lead" *ngIf="!documents?.length && documents">
             No Documents yet. Add &nbsp; <a routerLink="new">here</a>
         </p>

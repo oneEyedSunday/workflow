@@ -1,0 +1,13 @@
+.status {
+
+    &__inactive {
+        background-color: #f86c6b !important;
+    }
+    &__pending {
+      background-color: #e8ac3f;
+    }
+
+    &__declined {
+      background-color: #f86c6b;
+    }
+}

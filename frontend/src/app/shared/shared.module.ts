@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { guards } from './guards';
 import { pipes } from './pipes';
 import { LoaderComponent } from './loader.component';
+import { StatusBadgeComponent } from './status-badges.component';
 
 @NgModule({
   declarations: [
     LoaderComponent,
+    StatusBadgeComponent,
     ...pipes
   ],
   imports: [
@@ -18,6 +20,7 @@ import { LoaderComponent } from './loader.component';
   exports: [
     // TODO install bootstrap fontawesome
     LoaderComponent,
+    StatusBadgeComponent,
     ...pipes
   ]
 })
