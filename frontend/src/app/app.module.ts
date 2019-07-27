@@ -13,6 +13,7 @@ import {
 } from '@ng-bootstrap/ng-bootstrap'; // trim imports
 
 import { AppRoutingModule } from './app-routing.module';
+import { SharedModule } from '@shared/shared.module';
 import { AppComponent } from './app.component';
 import * as CoreLayout from './core';
 // TODO import interceptors
@@ -33,7 +34,8 @@ import * as CoreLayout from './core';
     NgbDatepickerModule,
     NgbTimepickerModule,
     NgbModalModule,
-    NgbDropdownModule
+    NgbDropdownModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]
