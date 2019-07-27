@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { of, Observable, throwError, iif, fromEvent } from 'rxjs';
-import { switchMap, catchError, tap, delay, takeUntil } from 'rxjs/operators';
+import { switchMap, catchError, tap, takeUntil } from 'rxjs/operators';
 import { DragulaService } from 'ng2-dragula';
 import * as feather from 'feather-icons';
 import { Stage, Task, Process } from '@shared/interfaces';
@@ -61,7 +61,6 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
           this.createBaseProcess()
         );
       }),
-      delay(1500), // show loader
       tap(process => {
         this.bootstrapDragula();
         this.process = process;

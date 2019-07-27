@@ -26,3 +26,11 @@ body {
       padding-top: 48px; /* Space for fixed navbar */
     }
 }
+
+
+.screen--mask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}

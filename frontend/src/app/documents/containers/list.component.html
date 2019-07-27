@@ -1,0 +1,28 @@
+<div class="my-5">
+    <div class="table-responsive">
+        <table class="table table-striped" *ngIf="documents?.length">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Url</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let doc of documents; let index = index">
+                    <td>{{ index + 1 }}</td>
+                    <td>{{ doc.name }}</td>
+                    <td>
+                        <a href="{{doc.url}}" target="_blank">Preview</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="screen--mask">
+        <p class="lead" *ngIf="!documents?.length && documents">
+            No Documents yet. Add &nbsp; <a routerLink="new">here</a>
+        </p>
+        <app-loader [size]="5" *ngIf="loading"></app-loader>
+    </div>
+</div>
