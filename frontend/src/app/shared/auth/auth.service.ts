@@ -46,19 +46,23 @@ export class AuthService {
   }
 
   login(creds: Pick<IUser, 'email' | 'password'>): Observable<any> {
-    return this.http.post(`${AppConfig.API_URL}/account/login`, creds)
+    // TODO hook this back up whne backend sends token
+    return this.http.post(`${AppConfig.API_URL}/account/login/`, creds)
       .pipe(
-        map(response => response['body']),
-        tap(credentials => {
-          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(credentials));
-          localStorage.setItem(TOKEN, JSON.stringify(''));
-        })
+        // map(response => response['body']),
+        // tap(credentials => {
+        //   localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(credentials));
+        //   localStorage.setItem(TOKEN, JSON.stringify(''));
+        // })
       );
   }
 
+  // TODO (oneeyedsunday) support for file uploads
   register(creds: IUserRegisteration) {
-    return this.http.post<any>(`${AppConfig.API_URL}/account/signup`, creds)
-      .pipe();
+    return this.http.post<any>(`${AppConfig.API_URL}/account/signup/`, creds)
+      .pipe(
+        tap(res => console.log(res))
+      );
   }
 }
 

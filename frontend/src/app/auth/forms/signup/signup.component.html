@@ -15,11 +15,27 @@
                     <h4 class="text-dark-50 text-center mt-0 font-weight-bold">Sign Up</h4>
                     <p class="text-muted mb-4">Register your personal details.</p>
                 </div>
-                <form #registerForm="ngForm">
+                <form #registerForm="ngForm" (ngSubmit)="register()">
                     <!-- TODO (oneeyedsunday) add .text-danger to .form-group on invalid -->
                     <div class="form-group">
-                        <label for="username" required>Username</label>
-                        <input name="username" placeholder="Enter your username" required="" type="text" class="form-control">
+                        <label for="email" required>Email</label>
+                        <input name="email" placeholder="Enter your email" required
+                        type="email" class="form-control" [(ngModel)]="creds.email">
+                    </div>
+                    <div class="form-group">
+                        <label for="first_name" required>First Name</label>
+                        <input name="first_name" placeholder="Enter your first name" required
+                        type="text" class="form-control" [(ngModel)]="creds.first_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="last_name" required>Last Name</label>
+                        <input name="last_name" placeholder="Enter your last name" required
+                        type="text" class="form-control" [(ngModel)]="creds.last_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone_number" required>Phone Number</label>
+                        <input name="phone_number" placeholder="Enter your phone numbee" required
+                        type="text" class="form-control" [(ngModel)]="creds.phone_number">
                     </div>
                     <div class="form-group">
                         <label for="logo" class="">Profile Photo</label>
@@ -28,7 +44,7 @@
                     <div class="form-group" [ngClass]=" { 'text-danger': registerForm.controls['password']?.invalid } ">
                         <label for="password" class="" required>Password</label>
                         <input name="password" [(ngModel)]="registerForm.value.password" #password
-                        [class.is-invalid]="registerForm.controls['password']?.invalid"
+                        [class.is-invalid]="registerForm.controls['password']?.invalid" [(ngModel)]="creds.password"
                         placeholder="Enter your password" required type="password" class="form-control">
                     </div>
                     <div class="form-group" *ngIf="registerForm.value.password">
@@ -37,7 +53,10 @@
                     </div>
     
                     <div class="form-group">
-                        <button class="btn btn-success">Submit</button>
+                        <button class="btn btn-success" [disabled]="loading">
+                            <span class="i fa fa-spin fa-spinner" *ngIf="loading"></span>
+                            Submit
+                        </button>
                     </div>
                 </form>
             </div>
