@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { AuthService } from '@shared/auth';
 
 @Component({
     selector: 'app-landing',
@@ -6,11 +7,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
     styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent implements OnInit, OnDestroy {
-
-    constructor() { }
+    constructor(public auth: AuthService) { }
 
     ngOnInit() {
-        // check auth status??
         // inject css into head
         const head = document.head || document.getElementsByTagName('head')[0];
         head.appendChild(this.createLinkTag());
