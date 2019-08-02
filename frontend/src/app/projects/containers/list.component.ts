@@ -24,7 +24,7 @@ export class ListComponent implements OnInit {
     this._proSvc.fetchProcesses()
       .subscribe(
         processess => this.processes = processess,
-        () => {},
+        () => {this.loading = false; },
         () => this.loading = false
       );
   }
