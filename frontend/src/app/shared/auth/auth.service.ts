@@ -28,6 +28,10 @@ export class AuthService {
     return localStorage.getItem(TOKEN);
   }
 
+  set token(token: string) {
+    localStorage.setItem(TOKEN, token);
+  }
+
   get currentUserValue(): Partial<IUser> {
     return this._user.value;
   }
@@ -46,14 +50,12 @@ export class AuthService {
   }
 
   login(creds: Pick<IUser, 'email' | 'password'>): Observable<any> {
-    // TODO hook this back up whne backend sends token
     return this.http.post(`${AppConfig.API_URL}/account/login/`, creds)
       .pipe(
-        // map(response => response['body']),
-        // tap(credentials => {
-        //   localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(credentials));
-        //   localStorage.setItem(TOKEN, JSON.stringify(''));
-        // })
+        tap((response: { Token: string; User: any }) => {
+          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(response.User));
+          this.token = response.Token;
+        })
       );
   }
 
@@ -61,7 +63,10 @@ export class AuthService {
   register(creds: IUserRegisteration) {
     return this.http.post<any>(`${AppConfig.API_URL}/account/signup/`, creds)
       .pipe(
-        tap(res => console.log(res))
+        tap((res: {Token: string; User: any}) => {
+          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(res.User));
+          this.token = res.Token;
+        })
       );
   }
 }
