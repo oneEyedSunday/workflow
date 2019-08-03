@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { of, Observable, throwError, iif } from 'rxjs';
 import { switchMap, catchError, tap } from 'rxjs/operators';
 import { DocumentService } from '../services';
 import { Document } from '@shared/interfaces';
+import { FileUploader, FileUploaderOptions, ParsedResponseHeaders } from 'ng2-file-upload';
+import { Cloudinary } from '@cloudinary/angular-5.x';
 
 @Component({
     selector: 'app-documents-create-update',
@@ -14,14 +16,20 @@ export class CreateUpdateComponent implements OnInit {
   document: Document;
   submitting: boolean;
   file: File;
+  public uploader: FileUploader;
+  private hasBaseDropZoneOver: boolean;
+  responses: any[] = [];
 
   constructor(
     private _actRoute: ActivatedRoute,
     private _router: Router,
-    private _docSvc: DocumentService
+    private _docSvc: DocumentService,
+    private cloudinary: Cloudinary,
+    private zone: NgZone
   ) { }
 
   ngOnInit() {
+    this.setUpCloudinaryUploader();
     this._actRoute.data.pipe(
       switchMap((data: { edit: boolean }) => {
         this.editing = !!data.edit;
@@ -77,6 +85,96 @@ export class CreateUpdateComponent implements OnInit {
   }
 
   updateDocument() {
+  }
+
+  setUpCloudinaryUploader() {
+    const uploaderOptions: FileUploaderOptions = {
+      url: `https://api.cloudinary.com/v1_1/${this.cloudinary.config().cloud_name}/upload`,
+      // Upload files automatically upon addition to upload queue
+      autoUpload: true,
+      // Use xhrTransport in favor of iframeTransport
+      isHTML5: true,
+      // Calculate progress independently for each uploaded file
+      removeAfterUpload: true,
+      // XHR request headers
+      headers: [
+        {
+          name: 'X-Requested-With',
+          value: 'XMLHttpRequest'
+        }
+      ]
+    };
+
+    this.uploader = new FileUploader(uploaderOptions);
+
+    this.uploader.onBuildItemForm = (fileItem: any, form: FormData): any => {
+      // Add Cloudinary unsigned upload preset to the upload form
+      form.append('upload_preset', this.cloudinary.config().upload_preset);
+
+      // Add file to upload
+      form.append('file', fileItem);
+      form.append('tags', 'document');
+
+      // Use default "withCredentials" value for CORS requests
+      fileItem.withCredentials = false;
+      return { fileItem, form };
+    };
+
+    const upsertResponse = fileItem => {
+
+      // Run the update in a custom zone since for some reason change detection isn't performed
+      // as part of the XHR request to upload the files.
+      // Running in a custom zone forces change detection
+      this.zone.run(() => {
+        // Update an existing entry if it's upload hasn't completed yet
+
+        // Find the id of an existing item
+        const existingId = this.responses.reduce((prev, current, index) => {
+          if (current.file.name === fileItem.file.name && !current.status) {
+            return index;
+          }
+          return prev;
+        }, -1);
+        if (existingId > -1) {
+          // Update existing item with new data
+          this.responses[existingId] = Object.assign(this.responses[existingId], fileItem);
+        } else {
+          // Create new response
+          this.responses.push(fileItem);
+        }
+      });
+    };
+
+    this.uploader.onCompleteItem = (item: any, response: string, status: number, headers: ParsedResponseHeaders) =>
+      upsertResponse(
+        {
+          file: item.file,
+          status,
+          data: JSON.parse(response)
+        }
+      );
+
+    this.uploader.onProgressItem = (fileItem: any, progress: any) =>
+      upsertResponse(
+        {
+          file: fileItem.file,
+          progress,
+          data: {}
+        }
+      );
+  }
+
+  fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
+  }
+
+  getFileProperties(fileProperties: any) {
+    // Transforms Javascript Object to an iterable to be used by *ngFor
+    if (!fileProperties) {
+      return null;
+    }
+    return Object.keys(fileProperties)
+      .map((key) => ({ key, value: fileProperties[key] }));
   }
 
 }
