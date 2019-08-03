@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { of, Observable } from 'rxjs';
 import { Document } from '@shared/interfaces';
 import { AppConfig } from '../../../environments/environment';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HandleError, HttpErrorHandler } from '@shared/http-error-handler.service';
 import { catchError, map } from 'rxjs/operators';
+import { AuthService } from '@shared/auth';
 
 @Injectable()
 export class DocumentService {
@@ -12,6 +13,7 @@ export class DocumentService {
     private readonly url = AppConfig.API_URL;
     constructor(
         private http: HttpClient,
+        private auth: AuthService,
         httpErrorHandler: HttpErrorHandler
     ) {
         this.handleError = httpErrorHandler.createHandleError('Documents');
@@ -32,11 +34,21 @@ export class DocumentService {
         );
     }
 
-    addDocument(document: Partial<Document>, file: File) {
-        const fd = new FormData();
-        fd.append('organization', '1');
-        // fd.append('documenttasks', '[]');
-        fd.append('file', file, file.name);
-        return this.http.post(this.url + '/process/document/', fd);
+    addDocument(document: Partial<Document>, fileUrl: string) {
+        // TODO update organization
+        const docData = {
+            user: this.auth.currentUserValue.id,
+            organization: 1, link: fileUrl, filename: document.name,
+            description: 'Some file description'
+        };
+
+        const formData = new FormData();
+
+        formData.append('link', docData.link);
+        formData.append('organization', '1');
+        formData.append('user', docData.user);
+        formData.append('filename', docData.filename);
+        formData.append('description', 'Some file description');
+        return this.http.post(this.url + '/process/document/', formData);
     }
 }
