@@ -12,6 +12,8 @@ import { Document } from '@shared/interfaces';
 export class CreateUpdateComponent implements OnInit {
   editing: boolean;
   document: Document;
+  submitting: boolean;
+  file: File;
 
   constructor(
     private _actRoute: ActivatedRoute,
@@ -50,6 +52,31 @@ export class CreateUpdateComponent implements OnInit {
     // show error in UI
     // TODO (oneeyedsunday) move this to shared since its similar
     return throwError(err);
+  }
+
+  onFileSelected(files: FileList) {
+    this.file = files[0];
+  }
+
+  onSubmit() {
+    if (this.submitting) {
+      return;
+    }
+    this.submitting = true;
+    this.editing ? this.updateDocument() : this.createDocument();
+  }
+
+  createDocument() {
+    this._docSvc.addDocument(this.document, this.file)
+      .subscribe((res) => {
+        // use toast service here
+        // url of file and name?
+        this._router.navigate(['/documents']);
+      },
+      () => this.submitting = false);
+  }
+
+  updateDocument() {
   }
 
 }

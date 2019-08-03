@@ -31,4 +31,12 @@ export class DocumentService {
             catchError(this.handleError('Fetch Document', null))
         );
     }
+
+    addDocument(document: Partial<Document>, file: File) {
+        const fd = new FormData();
+        fd.append('organization', '1');
+        fd.append('documenttasks', '[]');
+        fd.append('file', file, file.name);
+        return this.http.post(this.url + '/process/document/', fd);
+    }
 }

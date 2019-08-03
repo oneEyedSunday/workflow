@@ -5,11 +5,11 @@ interface IDocument {
 }
 
 export class Document implements IDocument {
-  documentId;
-  name;
-  url;
+  documentId: number;
+  name: string;
+  url: string;
   constructor() {
-    this.name = 'New Document';
+    this.name = '';
   }
 }
 
