@@ -32,6 +32,7 @@ export class HttpErrorHandler {
 
       // Error throw logic based on API structure
       switch (true) {
+        // TODO (oneeyedsunday) - hanlde 401, 403 and 404
         case e.error instanceof ProgressEvent: {
           message = 'Server Unavailable';
           break;

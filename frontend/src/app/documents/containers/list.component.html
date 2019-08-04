@@ -1,19 +1,24 @@
 <div class="my-5">
+    <div class="w-100 px-4 my-2 d-flex" style="justify-content: flex-end"
+    [ngClass]="{'d-none': loading }">
+        <a routerLink="new">&#x0002B; Document</a>
+    </div>
     <div class="table-responsive">
         <table class="table table-striped" *ngIf="documents?.length">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Name</th>
-                    <th>Url</th>
+                    <th></th>
+                    <!-- TODO copy public link -->
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let doc of documents; let index = index">
                     <td>{{ index + 1 }}</td>
-                    <td>{{ doc.name }}</td>
+                    <td>{{ doc.filename }}</td>
                     <td>
-                        <a href="{{doc.url}}" target="_blank">Preview</a>
+                        <a href="{{doc.link}}" target="_blank">Preview</a>
                     </td>
                 </tr>
             </tbody>

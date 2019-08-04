@@ -34,21 +34,15 @@ export class DocumentService {
         );
     }
 
-    addDocument(document: Partial<Document>, fileUrl: string) {
+    addDocument(document: Partial<Document>) {
         // TODO update organization
-        const docData = {
-            user: this.auth.currentUserValue.id,
-            organization: 1, link: fileUrl, filename: document.name,
-            description: 'Some file description'
-        };
-
         const formData = new FormData();
 
-        formData.append('link', docData.link);
+        formData.append('link', document.link);
         formData.append('organization', '1');
-        formData.append('user', docData.user);
-        formData.append('filename', docData.filename);
-        formData.append('description', 'Some file description');
+        formData.append('user', this.auth.currentUserValue.id);
+        formData.append('filename', document.filename);
+        formData.append('description', document.description);
         return this.http.post(this.url + '/process/document/', formData);
     }
 }

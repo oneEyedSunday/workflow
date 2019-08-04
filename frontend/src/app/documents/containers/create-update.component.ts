@@ -4,8 +4,30 @@ import { of, Observable, throwError, iif } from 'rxjs';
 import { switchMap, catchError, tap } from 'rxjs/operators';
 import { DocumentService } from '../services';
 import { Document } from '@shared/interfaces';
-import { FileUploader, FileUploaderOptions, ParsedResponseHeaders } from 'ng2-file-upload';
+import { FileUploader, FileUploaderOptions, ParsedResponseHeaders, FileItem } from 'ng2-file-upload';
 import { Cloudinary } from '@cloudinary/angular-5.x';
+
+
+interface CloudinaryUploadResponse {
+  bytes: number;
+  created_at: string;
+  etag: string;
+  format: string;
+  original_filename: string;
+  pages?: number;
+  public_id: string;
+  resource_type: string;
+  secure_url: string;
+  signature?: string;
+  tags: string[];
+  type: string;
+  url: string;
+}
+
+interface CLoudinaryFileItem {
+  data: CloudinaryUploadResponse;
+  file: FileItem;
+}
 
 @Component({
     selector: 'app-documents-create-update',
@@ -27,6 +49,10 @@ export class CreateUpdateComponent implements OnInit {
     private cloudinary: Cloudinary,
     private zone: NgZone
   ) { }
+
+  get uploadInProgress(): boolean {
+    return this.responses.some(r => !r.status);
+  }
 
   ngOnInit() {
     this.setUpCloudinaryUploader();
@@ -62,24 +88,22 @@ export class CreateUpdateComponent implements OnInit {
     return throwError(err);
   }
 
-  onFileSelected(files: FileList) {
-    this.file = files[0];
-  }
-
   onSubmit() {
     if (this.submitting) {
       return;
     }
     this.submitting = true;
+    const data: CLoudinaryFileItem = this.responses[this.responses.length - 1];
+    this.document.link = data.data.secure_url || data.data.url;
     this.editing ? this.updateDocument() : this.createDocument();
   }
 
   createDocument() {
-    this._docSvc.addDocument(this.document, this.file)
+    this._docSvc.addDocument(this.document)
       .subscribe((res) => {
         // use toast service here
         // url of file and name?
-        this._router.navigate(['/documents']);
+        this._router.navigate(['/documents']); // remove this? and just reste form
       },
       () => this.submitting = false);
   }
@@ -145,14 +169,15 @@ export class CreateUpdateComponent implements OnInit {
       });
     };
 
-    this.uploader.onCompleteItem = (item: any, response: string, status: number, headers: ParsedResponseHeaders) =>
-      upsertResponse(
+    this.uploader.onCompleteItem = (item: any, response: string, status: number, headers: ParsedResponseHeaders) => {
+      return upsertResponse(
         {
           file: item.file,
           status,
           data: JSON.parse(response)
         }
       );
+    };
 
     this.uploader.onProgressItem = (fileItem: any, progress: any) =>
       upsertResponse(
@@ -167,14 +192,4 @@ export class CreateUpdateComponent implements OnInit {
   fileOverBase(e: any): void {
     this.hasBaseDropZoneOver = e;
   }
-
-  getFileProperties(fileProperties: any) {
-    // Transforms Javascript Object to an iterable to be used by *ngFor
-    if (!fileProperties) {
-      return null;
-    }
-    return Object.keys(fileProperties)
-      .map((key) => ({ key, value: fileProperties[key] }));
-  }
-
 }

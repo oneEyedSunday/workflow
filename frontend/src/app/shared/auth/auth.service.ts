@@ -33,7 +33,9 @@ export class AuthService {
   }
 
   get currentUserValue(): Partial<IUser> {
-    return this._user.value;
+    // tslint:disable-next-line: no-unused-expression
+    this.user;
+    return this._user.getValue();
   }
 
   static getToken(): string {
@@ -53,6 +55,7 @@ export class AuthService {
     return this.http.post(`${AppConfig.API_URL}/account/login/`, creds)
       .pipe(
         tap((response: { Token: string; User: any }) => {
+          this._user.next(response.User);
           localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(response.User));
           this.token = response.Token;
         })
@@ -64,6 +67,7 @@ export class AuthService {
     return this.http.post<any>(`${AppConfig.API_URL}/account/signup/`, creds)
       .pipe(
         tap((res: {Token: string; User: any}) => {
+          this._user.next(res.User);
           localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(res.User));
           this.token = res.Token;
         })
