@@ -2,3 +2,25 @@
     display: block;
     padding: 1em 0;
 }
+
+.group--card {
+    &__description {
+        max-height: 200px;
+        overflow-y: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__widget {
+        height: 70px;
+        width: 7em;
+        min-width: 70px;
+
+        & > span {
+            font-size: 3em;
+            color: white;
+            background: #6279;
+            border-radius: 5px;
+            padding: 2px 5px;
+        }
+    }
+}

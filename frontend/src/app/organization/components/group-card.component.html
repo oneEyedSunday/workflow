@@ -1,12 +1,13 @@
 <div class="card">
     <div class="card-header">{{group.group_name}}</div>
     <div class="card-body">
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-row">
             <!-- TODO (oneeyedsunday) Add borders? -->
-            <div style="height: 70px; width: 70px">
-                <span>IO</span>
+            <div class="group--card__widget">
+                <span class="">{{ group.group_name?.substr(0, 2)?.toLowerCase() }}</span>
             </div>
-            <div>
+           
+            <div class="ml-2 group--card__description">
                 {{ group.description }}
             </div>
         </div>
