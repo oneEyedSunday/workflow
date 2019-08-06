@@ -8,8 +8,7 @@ import { containers } from './containers';
 import { DocumentsRoutingModule } from './documents-routing.module';
 import { SharedModule } from '@shared/shared.module';
 import { FileUploadModule } from 'ng2-file-upload';
-import { CloudinaryModule,
-  CloudinaryConfiguration, provideCloudinary } from '@cloudinary/angular-5.x';
+import { CloudinaryModule } from '@cloudinary/angular-5.x';
 import * as Cloudinary from 'cloudinary-core';
 import { AppConfig } from '../../environments/environment';
 
@@ -28,8 +27,7 @@ import { AppConfig } from '../../environments/environment';
     SharedModule
   ],
   providers: [
-    ...services,
-    // provideCloudinary(require('cloudinary-core'), AppConfig.CLOUDINARY as CloudinaryConfiguration)
+    ...services
   ]
 })
 export class DocumentsModule { }
