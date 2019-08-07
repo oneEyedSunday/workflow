@@ -23,7 +23,7 @@ export class DocumentService {
         return this.http.get(this.url + '/process/document')
             .pipe(
                 map(response => response),
-                catchError(this.handleError('Fetch Documnets', null))
+                catchError(this.handleError('Fetch Documents', null))
             );
     }
 
