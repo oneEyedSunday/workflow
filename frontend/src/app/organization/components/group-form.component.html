@@ -1,3 +1,34 @@
 <form #groupForm="ngForm" (ngSubmit)="submitForm()">
-    <!-- Group CRUD Form goes here -->
+    <div class="form-group">
+        <label class="col-form-label col-sm-3">Name</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" name="group_name"
+            [class.is-invalid]="name.dirty && name.invalid" #name
+            [(ngModel)]="group.group_name" placeholder="Group Name" required>
+            <div class="invalid-feedback" *ngIf="groupForm.submitted && groupForm.invalid">
+                <small *ngIf="name.errors?.required">Group Name is required</small>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-form-label col-sm-4">Description</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" name="group_name" rows="10"
+            [class.is-invalid]="description.dirty && description.invalid" #description
+            [(ngModel)]="group.description" placeholder="Group Description" required>
+            </textarea>
+            <div class="invalid-feedback" *ngIf="groupForm.submitted && groupForm.invalid">
+                <small *ngIf="description.errors?.required">Group Description is required</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-4">
+            <button class="btn btn-primary" [disabled]="submitting" type="submit">
+                <span class="fa fa-spin fa-spinner" *ngIf="submitting"></span>
+                Save
+            </button>
+        </div>
+    </div>
 </form>

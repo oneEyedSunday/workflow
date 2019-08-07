@@ -10,13 +10,14 @@ import { IGroup, Group } from '@shared/interfaces';
 export class GroupFormComponent implements OnChanges {
   @Input() group: IGroup;
   @Input() errored: boolean;
-  @Output() formSubmitted: EventEmitter<IGroup> = new EventEmitter<IGroup>();
+  @Output() formSubmitted: EventEmitter<IGroup | Partial<IGroup>> = new EventEmitter<IGroup>();
 
   submitting: boolean;
 
 
   submitForm() {
     this.formSubmitted.emit(this.group);
+    this.submitting = true;
   }
 
   ngOnChanges(changes: SimpleChanges) {

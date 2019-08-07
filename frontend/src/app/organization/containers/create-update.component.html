@@ -1,1 +1,19 @@
-<p>Form to Create Group Goes here</p>
+<div class="my-5">
+    <div class="container">
+        <div class="card mx-auto" style="max-width: 500px">
+            <div class="card-header">
+                {{ editing ? 'Update ' : ' Create ' }} Group
+            </div>
+            <div class="card-body">
+                <app-group-form *ngIf="group else spinner"
+                [group]="group"
+                [errored]="groupError"
+                (formSubmitted)="handleGroupUpdatedEvent($event)"></app-group-form>
+        
+                <ng-template #spinner>
+                    <app-loader [size]="5"></app-loader>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+</div>
