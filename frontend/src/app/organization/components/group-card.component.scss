@@ -19,8 +19,15 @@
             font-size: 3em;
             color: white;
             background: #6279;
-            border-radius: 5px;
-            padding: 2px 5px;
+            a {
+                border-radius: 5px;
+                padding: 2px 5px;
+                color: inherit;
+                background: inherit;
+                &:hover, &:focus, &:focus-within {
+                    text-decoration: none;
+                }
+            }
         }
     }
 

@@ -4,7 +4,11 @@
         <div class="d-flex flex-row" *ngIf="group">
             <!-- TODO (oneeyedsunday) Add borders? -->
             <div class="group--card__widget">
-                <span class="">{{ group.group_name?.substr(0, 2)?.toLowerCase() }}</span>
+                <span class="">
+                    <a routerLink="/organizations/groups/{{group.id}}">
+                        {{ group.group_name?.substr(0, 2)?.toLowerCase() }}
+                    </a>
+                </span>
             </div>
            
             <div class="ml-2 group--card__description">
