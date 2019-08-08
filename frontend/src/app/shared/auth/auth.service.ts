@@ -13,7 +13,6 @@ const TOKEN = 'workflow_token';
 
 @Injectable()
 export class AuthService {
-  redirectUrl: string;
 
   constructor(private http: HttpClient) {}
 
