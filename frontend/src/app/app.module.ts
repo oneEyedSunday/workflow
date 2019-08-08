@@ -20,6 +20,7 @@ import { SharedModule } from '@shared/shared.module';
 import { HttpErrorHandler } from '@shared/http-error-handler.service';
 import { AppComponent } from './app.component';
 import * as CoreLayout from './core';
+import { ErrorInterceptor } from '@shared/interceptors/jwtError.interceptor';
 // TODO angular-calendar or full-calendar 4 dashboard
 // TODO ng bootstraps toast looks good for projects page at least
 // TODO may need to import quill here
@@ -51,6 +52,7 @@ import * as CoreLayout from './core';
     HttpErrorHandler,
     ...guards,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]
 })
