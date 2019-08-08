@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { AuthService } from '@shared/auth';
 import { ToastrService } from 'ngx-toastr';
@@ -23,7 +23,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             AuthService.logout();
             return throwError('Please log  in again');
         default:
-            return throwError('Sorry this operation could not be completed at this time.');
+            return throwError(err);
       }
     }));
   }
