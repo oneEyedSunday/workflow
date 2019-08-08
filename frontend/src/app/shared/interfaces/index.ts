@@ -4,3 +4,4 @@ export * from './process';
 export * from './document';
 export * from './user';
 export * from './group';
+export * from './form';

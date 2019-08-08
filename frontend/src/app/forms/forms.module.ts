@@ -7,6 +7,7 @@ import { FormsRoutingModule } from './forms-routing.module';
 import * as fromContainers from './containers';
 import * as fromComponents from './components';
 import * as fromServices from './services';
+import { SharedModule } from '@shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import * as fromServices from './services';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    SharedModule,
     QuillModule.forRoot(),
     FormsRoutingModule
   ],

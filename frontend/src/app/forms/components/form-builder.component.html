@@ -1,1 +1,8 @@
-<p>Form Bulder works!!!</p>
+<div class="d-flex justify-content-center align-items-center">
+    <iframe src="" frameborder="0" #formBuilder [ngClass]="{ 'd-none': !srcDoc }"
+    style="min-height: 600px; overflow: auto; width: 100%;"></iframe>
+
+   
+    <app-loader [size]="3" *ngIf="!srcDoc"></app-loader>
+</div>
+ 
