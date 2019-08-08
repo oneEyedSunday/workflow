@@ -4,7 +4,7 @@ import { AppConfig } from '../../../environments/environment';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HandleError, HttpErrorHandler } from '@shared/http-error-handler.service';
 import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class FormBuilderService {
@@ -25,5 +25,13 @@ export class FormBuilderService {
             .pipe(
                 catchError(this.handleError('Failed to Init Form Template', null))
             );
+    }
+
+    fetchFormTemplate(formId: number): Observable<any> {
+        return this.http.get(`${this.url}/1/update/${formId}`, {
+            responseType: 'text'
+        }).pipe(
+            catchError(this.handleError('Failed to Get Form Template', null))
+        );
     }
 }
