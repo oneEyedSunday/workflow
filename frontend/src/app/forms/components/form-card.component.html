@@ -1,0 +1,12 @@
+<div class="card">
+    <div class="card-header" style="overflow-x: hidden; text-overflow: ellipsis;">
+        <span class="form__name">
+            <a routerLink="/forms/{{form.id}}">{{ form.form_name }}</a>
+        </span>
+    </div>
+    <div class="card-body">
+       <h6>Description</h6>
+       <p *ngIf="form.description">{{ form.description }}</p>
+       <span class="font-italic" *ngIf="!form.description">No Description</span>
+    </div>
+</div>

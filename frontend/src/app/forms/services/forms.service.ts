@@ -5,25 +5,26 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HandleError, HttpErrorHandler } from '@shared/http-error-handler.service';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { IForm } from '@shared/interfaces';
+import { AuthService } from '@shared/auth';
 
 @Injectable()
-export class FormBuilderService {
+export class FormsService {
     private readonly handleError: HandleError;
-    private readonly url = AppConfig.API_URL + '/process/formbuilder/org';
+    private readonly url = AppConfig.API_URL + '/process/form/';
 
     constructor(
         private http: HttpClient,
+        private auth: AuthService,
         httpErrorHandler: HttpErrorHandler
     ) {
         this.handleError = httpErrorHandler.createHandleError('Form Builder');
     }
 
-    createFormTemplate(): Observable<string> {
-        return this.http.get(`${this.url}/1/create/`, {
-            responseType: 'text'
-        })
+    getForms(): Observable<IForm[]> {
+        return this.http.get(this.url)
             .pipe(
-                catchError(this.handleError('Failed to Init Form Template', null))
+                catchError(this.handleError('Fetch Forms', null))
             );
     }
 }

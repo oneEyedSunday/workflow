@@ -1,0 +1,30 @@
+<div class="my-5">
+    <div class="container">
+        <p>Forms
+            <span class="badge badge-rounded badge-secondary">{{ forms?.length || 0}}</span>
+
+            &nbsp;
+        
+            <span style="cursor: pointer" title="Add Form" *ngIf="!loading">
+                <a routerLink="new"><i class="fa fa-plus"></i></a>
+            </span>
+        </p>
+
+        <div class="row">
+            <ng-container *ngIf="!loading">
+                <div class="col-md-6 col-lg-3 col-sm-12" *ngFor="let form of forms">
+                    <app-form-card
+                    [form]="form"></app-form-card>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="screen--mask" style="margin-top: -8%"
+        *ngIf="!forms?.length || loading">
+            <app-loader [size]="5" *ngIf="loading"></app-loader>
+            <p class="lead" *ngIf="!loading && forms">
+                No Forms yet
+            </p>
+        </div>
+    </div>
+</div>
