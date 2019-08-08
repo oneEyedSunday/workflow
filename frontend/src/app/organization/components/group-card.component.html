@@ -1,0 +1,24 @@
+<div class="card">
+    <div class="card-header" *ngIf="group?.group_name">{{group.group_name}}</div>
+    <div class="card-body">
+        <div class="d-flex flex-row" *ngIf="group">
+            <!-- TODO (oneeyedsunday) Add borders? -->
+            <div class="group--card__widget">
+                <span class="">
+                    <a routerLink="/organizations/groups/{{group.id}}">
+                        {{ group.group_name?.substr(0, 2)?.toLowerCase() }}
+                    </a>
+                </span>
+            </div>
+           
+            <div class="ml-2 group--card__description">
+                {{ group.description }}
+            </div>
+        </div>
+        <div class="group--card__add" *ngIf="!group">
+            <span title="Add Group">
+                <a routerLink="/organizations/groups/new"><i class="fa fa-plus"></i></a>
+            </span>
+        </div>
+    </div>
+</div>

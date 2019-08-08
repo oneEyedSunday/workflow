@@ -19,7 +19,7 @@ export class ListComponent implements OnInit {
       this._docSvc.fetchDocuments()
         .subscribe(
           docs => this.documents = docs,
-          () => {},
+          () => {this.loading = false; },
           () => this.loading = false
         );
     }

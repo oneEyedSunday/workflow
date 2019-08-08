@@ -7,7 +7,11 @@
       <div class="inner">
         <h3 class="masthead-brand">Worflow</h3>
         <nav class="nav nav-masthead justify-content-center">
-          <a class="nav-link" routerLink="/account/signin">Sign in</a>
+          <a routerLink="/dashboard" class="nav-link" *ngIf="auth.user | async; else reauth">Dashboard</a>
+          <ng-template #reauth>
+            <a class="nav-link" routerLink="/account/signin">Sign in</a>
+            <a class="nav-link" routerLink="/account/organization/new">Organization</a>
+          </ng-template>
         </nav>
       </div>
     </header>

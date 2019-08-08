@@ -6,6 +6,14 @@ export const environment = {
   production: false
 };
 
+export const AppConfig = {
+  API_URL: 'https://workflow801.herokuapp.com',
+  CLOUDINARY: {
+    cloud_name: 'dj55g6uya',
+    upload_preset: 'flhrdgqx'
+  }
+};
+
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

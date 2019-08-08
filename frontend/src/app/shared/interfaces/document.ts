@@ -1,15 +1,17 @@
 interface IDocument {
-  documentId: number;
-  name: string;
-  url: string;
+  id: number;
+  filename: string;
+  link: string;
+  description: string;
 }
 
 export class Document implements IDocument {
-  documentId;
-  name;
-  url;
+  id: number;
+  filename: string;
+  link: string;
+  description: string;
   constructor() {
-    this.name = 'New Document';
+    this.filename = '';
   }
 }
 

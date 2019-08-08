@@ -27,7 +27,7 @@
           </table>
       </div>
       <div class="screen--mask" *ngIf="!processes?.length || loading">
-          <p class="lead" *ngIf="!processes?.length && processes">
+          <p class="lead" *ngIf="!processes?.length && !loading">
               No Processes yet. Add &nbsp; <a routerLink="new">here</a>
           </p>
           <app-loader [size]="5" *ngIf="loading"></app-loader>

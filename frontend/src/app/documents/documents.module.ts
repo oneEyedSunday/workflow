@@ -7,6 +7,10 @@ import { services } from './services';
 import { containers } from './containers';
 import { DocumentsRoutingModule } from './documents-routing.module';
 import { SharedModule } from '@shared/shared.module';
+import { FileUploadModule } from 'ng2-file-upload';
+import { CloudinaryModule } from '@cloudinary/angular-5.x';
+import * as Cloudinary from 'cloudinary-core';
+import { AppConfig } from '../../environments/environment';
 
 @NgModule({
   declarations: [
@@ -18,8 +22,12 @@ import { SharedModule } from '@shared/shared.module';
     ReactiveFormsModule,
     QuillModule.forRoot(),
     DocumentsRoutingModule,
+    FileUploadModule,
+    CloudinaryModule.forRoot(Cloudinary, AppConfig.CLOUDINARY),
     SharedModule
   ],
-  providers: [...services]
+  providers: [
+    ...services
+  ]
 })
 export class DocumentsModule { }

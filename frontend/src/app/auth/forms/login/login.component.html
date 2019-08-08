@@ -15,20 +15,24 @@
                     <h4 class="text-dark-50 text-center mt-0 font-weight-bold">Sign In</h4>
                     <p class="text-muted mb-4">Enter your username and password to access your organization data.</p>
                 </div>
-                <form>
+                <form #loginForm="ngForm" (ngSubmit)="login()">
                     <!-- TODO (oneeyedsunday) add .text-danger to .form-group on invalid -->
                     <div class="form-group">
-                        <label for="username" class="">Username</label>
-                        <input name="username" placeholder="Enter your username" required="" type="text" class="form-control">
+                        <label for="email"  required class="">Email</label>
+                        <input name="email" placeholder="Enter your email Address" 
+                        required type="email" class="form-control" [(ngModel)]="creds.email">
                     </div>
                     <div class="form-group">
-                        <label for="password" class="">Password</label>
+                        <label for="password" class="" required>Password</label>
                         <a routerLink="/account/forget-password" class="text-muted float-right"><small>Forgot your password?</small></a>
-                        <input name="password" placeholder="Enter your password" required type="password" class="form-control">
+                        <input name="password" placeholder="Enter your password" required type="password" class="form-control" [(ngModel)]="creds.password">
                         <div class="invalid-feedback" *ngIf="false">This field is invalid</div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-success">Submit</button>
+                        <button class="btn btn-success" [disabled]="loading">
+                            <span class="fa fa-spin fa-spinner" *ngIf="loading"></span>
+                            Submit
+                        </button>
                     </div>
                 </form>
             </div>
