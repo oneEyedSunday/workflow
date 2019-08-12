@@ -6,6 +6,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProjectsRoutingModule } from './projects-routing.module';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { SharedModule } from '@shared/shared.module';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import * as fromContainers from './containers';
 import * as fromComponents from './components';
 import * as fromServices from './services';
@@ -18,6 +19,8 @@ import * as fromServices from './services';
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     QuillModule.forRoot(),
     DragulaModule.forRoot(),
     NgbDropdownModule,
