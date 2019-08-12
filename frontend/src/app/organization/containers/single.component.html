@@ -1,5 +1,42 @@
-<p>Group Description & Members go here</p>
-<p>First Group Description</p>
 <p>Then, list members, with options to remove them</p>
 <p>Then, a CTA to add</p>
 <p>CTA may open up a modal, unsure as of now</p>
+<div class="my-5">
+    <div class="container">
+        <p>Group - group name
+            <span class="fa fa-edit"  data-feather="edit"
+            (click)="edit = true"></span>
+        </p>
+
+        <div class="row">
+            <ng-container *ngIf="!loading">
+                {{ group | json }}
+                <div class="col-sm-12 col-md-6 offset-md-3">
+                    <div class="card">
+                        <div class="card-header">{{ group.group_name }}</div>
+                        <div class="card-body">
+                            {{  group.description || 'No Description'}}
+                        </div>
+                        <div class="card-footer">
+                            <span data-feather="user-plus" class="fa fa-user-plus"></span> Member
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-6 offset-md-6">
+                    <ng-container>
+                        Group Members
+                        <ul class="list-group">
+    
+                        </ul>
+                    </ng-container>
+                </div>
+            </ng-container>
+            
+        </div>
+
+        <div class="screen--mask" *ngIf="loading"
+        style="margin-top: -8%">
+            <app-loader [size]="5"></app-loader>
+        </div>
+    </div>
+</div>

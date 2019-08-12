@@ -28,7 +28,7 @@ export class GroupsService {
     }
 
     fetchGroup(groupId: number): Observable<Group> {
-        return this.http.get(`${this.url}/${groupId}`)
+        return this.http.get(`${this.url}${groupId}`)
             .pipe(
                 catchError(this.handleError('Fetch Group', null))
             );
@@ -56,5 +56,8 @@ export class GroupsService {
             .pipe(
                 catchError(this.handleError('Update Group', null))
             );
+    }
+
+    addUsersToGroups(groupId, userIds) {
     }
 }
