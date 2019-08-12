@@ -17,6 +17,8 @@ interface Coords {
   width: number;
 }
 
+type SideBarTriggers = 'addTask' | 'editTask' | 'addStage' | 'editStage' | 'openTask' | 'openStage';
+
 @Component({
   selector: 'app-projects-view',
   templateUrl: './view.component.html',
@@ -31,6 +33,11 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   existingProcess: boolean;
   process: Process;
   dragulaGroups: string[] = [];
+  sidebarContent: {
+    content: Task | Stage;
+    description: string;
+    extra?: Stage
+  } = null;
   public coords = {
     body: null,
     taskboard: null
@@ -93,7 +100,26 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     // TODO (oneeyedsunday) close stage view when moving stages
   }
 
-  openSideBar(contentType: string, content: any): void {
+  openSideBar(trigger: SideBarTriggers, content: Task | Stage, extra?: Stage): void {
+    switch (trigger) {
+      case 'addTask': case 'openTask': case 'editTask':
+        content = content || new Task();
+        this.sidebarContent = {
+          content, description: (content as Task).summary || 'New Task',
+          extra
+        };
+        break;
+      case 'addStage': case 'openStage': case 'editStage':
+        content = content || new Stage();
+        this.sidebarContent = {
+          content, description: (content as Stage).name || 'New Stage'
+        };
+        break;
+      default:
+        // do not open side bar
+        return;
+    }
+
     (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
   }
 
