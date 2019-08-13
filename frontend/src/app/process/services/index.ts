@@ -1,4 +1,4 @@
-import { ProcessService } from './projects.service';
+import { ProcessService } from './process.service';
 import { StageService } from './stage.service';
 
 export const services: any[] = [
@@ -6,5 +6,5 @@ export const services: any[] = [
     StageService
 ];
 
-export * from './projects.service';
+export * from './process.service';
 export * from './stage.service';

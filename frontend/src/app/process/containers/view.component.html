@@ -9,10 +9,10 @@
         <div class="d-flex flex-row">
           <div class="d-table-cell position-relative">
             <h3 class="d-flex align-items-center f5 mb-1">
-              <span>{{ process?.name }}</span>
+              <span>{{ process?.process_name }}</span>
             </h3>
             <button class="btn btn-link pl-0  text-inherit">
-              <span>Updated {{ process?.lastUpdatedAt | timeAgo }}</span>
+              <span class="d-none">Updated {{ process?.lastUpdatedAt | timeAgo }}</span>
             </button>
           </div>
         </div>
@@ -131,10 +131,13 @@
               <div>
                   <ng-container *ngIf="sidebarContent">
                       <ng-container *ngIf="sidebarContent?.content['taskId']">
-                          {{ sidebarContent.content | json}}
                           <app-task-create
                           [forms]="[]"
+                          [users]="[]"
+                          [groups]="[]"
+                          [stage]="sidebarContent.extra"
                           [task]="sidebarContent.content"
+                          (taskUpdateEvent)="handleTaskUpdate($event)"
                           ></app-task-create>
                       </ng-container>
         
@@ -156,8 +159,8 @@
       <!-- TODO crad with CTA to add stage -->
     </div>
 
-    <div *ngIf="!process" class="height-full d-flex justify-content-center align-items-center">
-      <span style="font-size: 5em"><i class="fa fa-spin fa-spinner"></i></span>
+    <div *ngIf="uiState.loading" class="height-full d-flex justify-content-center align-items-center">
+      <app-loader [size]="5"></app-loader>
     </div>
   </div>
 </div>

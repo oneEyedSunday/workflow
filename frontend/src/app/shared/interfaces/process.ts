@@ -4,15 +4,16 @@ import { Task } from './task';
 interface IProcess {
     processsId?: number;
     stages: Stage[];
-    name: string;
+    process_name: string;
     organizationId: number;
     description: string;
     lastUpdatedAt: string;
+    isComplete?: boolean;
     status: string; // TODO (oneeyedsunday) convert to enums
 }
 
 export class Process implements IProcess {
-    name: string;
+    process_name: string;
     stages;
     processId;
     description;
@@ -20,7 +21,7 @@ export class Process implements IProcess {
     lastUpdatedAt;
     status;
     constructor() {
-        this.name = 'Demo Process';
+        this.process_name = 'Demo Process';
         this.stages = [
             new Stage({ name: 'Demo Stage', tasks: [
                 new Task({summary: 'Send Reports to HOD', status: 'ongoing'}),

@@ -57,6 +57,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     // add ref to notif eg toasts
     // ref to auth svc
     private _auth: AuthService,
+    private _proSvc: ProcessService,
     private _stageSvc: StageService
     // ref to process svc
     // scroll helper
@@ -78,6 +79,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.bootstrapDragula();
         this.process = process;
         feather.replace();
+        this.uiState = {...this.uiState, loading: false};
         setTimeout(() => feather.replace());
       }),
       catchError(err => this.handleError(err))
@@ -90,15 +92,24 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getProcess(): Observable<Process> {
-    return of({} as Process);
+    return this._actRoute.paramMap.pipe(
+      switchMap((params: ParamMap) => {
+        if (isNaN(+params.get('processId'))) {
+          throw new Error('Invalid process id');
+        } else {
+          return this._proSvc.getProcessById(+params.get('processId'));
+        }
+      })
+    );
   }
 
   createBaseProcess(): Observable<Process> {
-    return of(new Process());
+    return this._proSvc.createProcess(this.user.id);
   }
 
   handleError(err: any) {
     // show error in UI
+    this.uiState = { ...this.uiState, loading: false };
     return throwError(err);
   }
 
@@ -140,7 +151,13 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   handleStageUpdate(stage: Stage) {
     console.log(stage);
+    console.log(this.user);
+    console.log(this.process);
     // add user and process details?
+  }
+
+  handleTaskUpdate(task: Task) {
+    console.log(task);
   }
 
   ngOnDestroy(): void {
