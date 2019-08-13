@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ProjectsService } from '../services';
+import { ProcessService } from '../services';
 import { Process } from '@shared/interfaces';
 
 @Component({
@@ -11,7 +11,7 @@ export class ListComponent implements OnInit {
   loading: boolean;
 
   constructor(
-    private _proSvc: ProjectsService
+    private _proSvc: ProcessService
   ) { }
 
   ngOnInit() {

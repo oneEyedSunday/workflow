@@ -29,7 +29,7 @@ export class FormBuilderComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes['srcDoc'].currentValue) {
+        if (changes && changes['srcDoc'].currentValue) {
             (this.refFormBuilder.nativeElement as HTMLIFrameElement).srcdoc = this.srcDoc;
             (this.refFormBuilder.nativeElement as HTMLIFrameElement).src = '';
         }

@@ -5,11 +5,11 @@ import * as ProjectContainers from './containers';
 const routes: Routes = [
   { path: '', component: ProjectContainers.ListComponent },
   { path: 'new', component: ProjectContainers.ViewComponent, data: { creating: true }},
-  { path: ':projectId', component: ProjectContainers.ViewComponent }
+  { path: ':processId', component: ProjectContainers.ViewComponent }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ProjectsRoutingModule { }
+export class ProcessRoutingModule { }
