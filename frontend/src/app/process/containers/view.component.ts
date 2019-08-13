@@ -4,7 +4,9 @@ import { of, Observable, throwError, iif, fromEvent } from 'rxjs';
 import { switchMap, catchError, tap, takeUntil } from 'rxjs/operators';
 import { DragulaService } from 'ng2-dragula';
 import * as feather from 'feather-icons';
-import { Stage, Task, Process } from '@shared/interfaces';
+import { Stage, Task, Process, IUser } from '@shared/interfaces';
+import { StageService, ProcessService } from '../services';
+import { AuthService } from '@shared/auth';
 
 interface Coords {
   bottom: number;
@@ -32,6 +34,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('refSidePane', { read: ElementRef, static: false }) sidePaneRef: ElementRef;
   existingProcess: boolean;
   process: Process;
+  user: IUser;
   dragulaGroups: string[] = [];
   sidebarContent: {
     content: Task | Stage;
@@ -53,10 +56,13 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private _dragulaService: DragulaService,
     // add ref to notif eg toasts
     // ref to auth svc
+    private _auth: AuthService,
+    private _stageSvc: StageService
     // ref to process svc
-    // form builder
     // scroll helper
-  ) { }
+  ) {
+    this.user = (this._auth.currentUserValue as IUser);
+  }
 
   ngOnInit() {
     this._actRoute.data.pipe(
@@ -130,6 +136,11 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   preventDefault(event: Event) {
     event.preventDefault();
     event.stopPropagation();
+  }
+
+  handleStageUpdate(stage: Stage) {
+    console.log(stage);
+    // add user and process details?
   }
 
   ngOnDestroy(): void {

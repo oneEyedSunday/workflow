@@ -25,8 +25,8 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
-        path: 'projects',
-        loadChildren: () => import('./projects/projects.module').then(m => m.ProjectsModule)
+        path: 'process',
+        loadChildren: () => import('./process/process.module').then(m => m.ProjectsModule)
       },
       {
         path: 'forms',

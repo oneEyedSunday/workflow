@@ -3,7 +3,7 @@ import {
     Output, EventEmitter, OnChanges, SimpleChanges
 } from '@angular/core';
 
-import { Task, IForm, Document, IUser, IGroup } from '@shared/interfaces';
+import { Task, IForm, Document, IUser, IGroup, Stage } from '@shared/interfaces';
 
 @Component({
     selector: 'app-task-create',
@@ -16,6 +16,7 @@ export class TaskCreateComponent implements OnChanges {
     @Input() documents: Document[] = [];
     @Input() users: IUser[] = [];
     @Input() groups: IGroup[] = [];
+    @Input() stage: Stage;
     @Output() taskUpdatedEvent: EventEmitter<Task> = new EventEmitter();
     submitting: boolean;
 

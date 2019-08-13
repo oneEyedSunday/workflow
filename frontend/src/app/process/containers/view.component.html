@@ -139,7 +139,9 @@
                       </ng-container>
         
                       <ng-container *ngIf="!sidebarContent?.content?.taskId">
-                        <app-project-stage [stage]="sidebarContent?.content">
+                        <app-project-stage 
+                        [stage]="sidebarContent?.content"
+                        (stageUpdatedEvent)="handleStageUpdate($event)">
     
                         </app-project-stage>
                       </ng-container>

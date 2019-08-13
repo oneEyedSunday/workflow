@@ -9,7 +9,7 @@ import { catchError, map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class ProjectsService {
+export class ProcessService {
   private readonly handleError: HandleError;
   private readonly url = AppConfig.API_URL;
   constructor(

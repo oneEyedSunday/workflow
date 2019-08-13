@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { QuillModule } from 'ngx-quill';
 import { DragulaModule } from 'ng2-dragula';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { ProjectsRoutingModule } from './projects-routing.module';
+import { ProcessRoutingModule } from './process-routing.module';
 import { TimeAgoPipe } from 'time-ago-pipe';
 import { SharedModule } from '@shared/shared.module';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -26,7 +26,7 @@ import * as fromServices from './services';
     QuillModule.forRoot(),
     DragulaModule.forRoot(),
     NgbDropdownModule,
-    ProjectsRoutingModule,
+    ProcessRoutingModule,
     SharedModule
   ],
   providers: [
