@@ -9,6 +9,7 @@
 // @import "./scrollbar.scss";
 @import "./auth.scss";
 @import '~ngx-toastr/toastr-bs4-alert';
+@import "~@ng-select/ng-select/themes/default.theme.css";
 
 body {
     font-size: $base-font-size;
