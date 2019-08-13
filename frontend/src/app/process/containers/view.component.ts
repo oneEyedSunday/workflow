@@ -47,7 +47,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   };
 
   uiState = {
-    loading: true
+    loading: true,
+    stageError: false,
+    taskError: false
   };
 
   constructor(
@@ -150,10 +152,29 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleStageUpdate(stage: Stage) {
-    console.log(stage);
-    console.log(this.user);
-    console.log(this.process);
+    if (stage.id) {
+      this.updateStage(stage);
+    } else {
+      this.createStage({ ...stage,
+        user: this.user.id,
+        process: this.process.id,
+        order: stage.order || this.process.stages.length + 1} );
+    }
     // add user and process details?
+  }
+
+  createStage(stage: Partial<Stage>) {
+    this.uiState = { ...this.uiState, stageError: false };
+    this._stageSvc.createStage(stage)
+      .subscribe((res: Stage) => {
+        this.sidebarContent = null;
+        this.process.stages.push(res);
+        (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
+        // toastr success
+      }, () => this.uiState = {...this.uiState, stageError: true});
+  }
+
+  updateStage(stage: Stage) {
   }
 
   handleTaskUpdate(task: Task) {

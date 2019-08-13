@@ -2,7 +2,7 @@ import { Stage } from './stage';
 import { Task } from './task';
 
 interface IProcess {
-    processsId?: number;
+    id?: number;
     stages: Stage[];
     process_name: string;
     organizationId: number;
@@ -14,8 +14,8 @@ interface IProcess {
 
 export class Process implements IProcess {
     process_name: string;
-    stages;
-    processId;
+    stages: Stage[];
+    id;
     description;
     organizationId;
     lastUpdatedAt;

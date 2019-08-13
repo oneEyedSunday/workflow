@@ -19,7 +19,12 @@ export class StageService {
   }
 
   createStage(stage: Partial<Stage>): Observable<Stage> {
-    return this.http.post(this.url + '/process/stage', stage).pipe(
+    const formData = new FormData();
+    formData.append('name', stage.name);
+    formData.append('order', `${stage.order}`);
+    formData.append('user', `${stage.user}`);
+    formData.append('process', `${stage.process}`);
+    return this.http.post(this.url + '/process/stage/', formData).pipe(
       catchError(this.handleError('Create Stage Failed', null))
     );
   }
