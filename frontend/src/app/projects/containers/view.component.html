@@ -131,7 +131,11 @@
               <div>
                   <ng-container *ngIf="sidebarContent">
                       <ng-container *ngIf="sidebarContent?.content['taskId']">
-                          {{ sidebarContent.content }}
+                          {{ sidebarContent.content | json}}
+                          <app-task-create
+                          [forms]="[]"
+                          [task]="sidebarContent.content"
+                          ></app-task-create>
                       </ng-container>
         
                       <ng-container *ngIf="!sidebarContent?.content?.taskId">

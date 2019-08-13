@@ -21,7 +21,7 @@ export class GroupFormComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['errored'].currentValue) {
+    if (changes && changes['errored'].currentValue) {
       // form has errored
       this.submitting = false;
     }

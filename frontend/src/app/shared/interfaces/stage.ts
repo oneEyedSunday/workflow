@@ -2,14 +2,17 @@ import { Task } from './task';
 
 interface IStage {
     name: string;
-    tasks: Task[];
+    tasks?: Task[];
+    process: number;
+    order: number;
+    isComplete: boolean;
 }
 
-export class Stage implements IStage {
+export class Stage implements Partial<IStage> {
     name;
     tasks;
-    constructor(initObj?: IStage) {
-        this.name = initObj ? initObj.name : 'Demo Stage';
+    constructor(initObj?: Partial<IStage>) {
+        this.name = initObj ? initObj.name : '';
         this.tasks = initObj ? initObj.tasks : [];
     }
 }

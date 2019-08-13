@@ -6,17 +6,12 @@ import { Stage } from '@shared/interfaces';
     selector: 'app-project-stage',
     templateUrl: './stage-create.component.html'
 })
-export class StageComponent implements OnInit, OnChanges {
+export class StageComponent implements OnChanges {
     @Input() stage: Stage;
     @Input() errored: boolean;
     @Output() stageUpdatedEvent: EventEmitter<Stage> = new EventEmitter();
     submitting: boolean;
 
-    constructor() { }
-
-    ngOnInit() {
-
-    }
 
     submitForm() {
         this.stageUpdatedEvent.emit(this.stage);

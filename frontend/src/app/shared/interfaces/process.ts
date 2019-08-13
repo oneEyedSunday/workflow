@@ -22,7 +22,9 @@ export class Process implements IProcess {
     constructor() {
         this.name = 'Demo Process';
         this.stages = [
-            new Stage({ name: 'Demo Stage', tasks: [ new Task(), new Task() ] }),
+            new Stage({ name: 'Demo Stage', tasks: [
+                new Task({summary: 'Send Reports to HOD', status: 'ongoing'}),
+                new Task({summary: 'Send Documentation to Team', status: 'ongoing'}) ] }),
             new Stage({ name: 'Stage 2', tasks: [] })
         ];
         this.status = Math.random() > 0.46 ? 'In progress' : 'Complete';
