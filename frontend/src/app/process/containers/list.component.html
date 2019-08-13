@@ -7,18 +7,20 @@
               <thead>
                   <tr>
                       <th>#</th>
+                      <th>Name</th>
                       <th>Description</th>
-                      <th>Last Updated</th>
                       <th>Status</th>
                   </tr>
               </thead>
               <tbody>
                   <tr *ngFor="let process of processes; let index = index">
                       <td>{{ index + 1 }}</td>
-                      <td style="width: 60%">
-                        {{ process.description }}
+                      <td>
+                        <a routerLink="{{ process.id }}" style="color: inherit">
+                          {{ process.process_name }}
+                        </a>
                       </td>
-                      <td>{{ process.lastUpdatedAt | date: 'medium' }}</td>
+                      <td style="width: 60%">{{ process.description }}</td>
                       <td>
                         <app-status-badge [status]="process.status" [text]="process.status"></app-status-badge>
                       </td>
