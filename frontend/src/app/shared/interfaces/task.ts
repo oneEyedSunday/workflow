@@ -9,6 +9,7 @@ interface ITask {
     summary: string;
     status: string; // TODO update to enum
     users?: IUser[];
+    user: number;
     groups?: IGroup[];
     form?: IForm;
     document?: Document;
@@ -18,6 +19,7 @@ interface ITask {
 
 export class Task implements ITask {
     taskId;
+    user;
     summary;
     status;
     users;

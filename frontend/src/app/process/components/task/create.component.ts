@@ -22,10 +22,12 @@ export class TaskCreateComponent implements OnChanges {
 
     submitForm() {
         this.taskUpdatedEvent.emit(this.task);
+        console.log('emittibg: ', this.task);
         this.submitting = true;
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        console.log(changes);
         if (changes && changes['errored'] && changes['errored'].currentValue) {
             this.submitting = false;
         }

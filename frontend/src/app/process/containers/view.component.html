@@ -29,6 +29,7 @@
         </div>
       </div>
       <!-- Board div holding tasks  -->
+      <!-- TODO (oneeyedsunday) scroll board -->
       <div class="no-wrap d-flex process-columns position-relative bg-white">
         <div class="w-100 p-2 d-flex height-full">
           <div class="process-column mr-3" *ngFor="let stage of process?.stages; let i = index;" [attr.data-column_id]="12">
@@ -132,12 +133,13 @@
                   <ng-container *ngIf="sidebarContent">
                       <ng-container *ngIf="sidebarContent?.content['taskId']">
                           <app-task-create
-                          [forms]="[]"
-                          [users]="[]"
-                          [groups]="[]"
+                          [forms]="forms"
+                          [users]="users"
+                          [groups]="groups"
+                          [documents]="documents"
                           [stage]="sidebarContent.extra"
                           [task]="sidebarContent.content"
-                          (taskUpdateEvent)="handleTaskUpdate($event)"
+                          (taskUpdatedEvent)="handleTaskUpdate($event)"
                           ></app-task-create>
                       </ng-container>
         

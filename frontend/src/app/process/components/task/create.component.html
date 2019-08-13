@@ -1,11 +1,10 @@
 <form #groupForm="ngForm" (ngSubmit)="submitForm()">
-    {{ groupForm.value | json }}
     <div class="form-group">
         <label class="col-form-label col-sm-3">Form</label>
         <div class="col-sm-10">
             <ng-select [items]="forms"
                 name="form"
-                bindLabel="name"
+                bindLabel="form_name"
                 [(ngModel)]="task.form">
             </ng-select>
             <div class="invalid-feedback">
@@ -19,7 +18,7 @@
         <div class="col-sm-10">
             <ng-select [items]="documents"
                 name="document"
-                bindLabel="name"
+                bindLabel="filename"
                 [(ngModel)]="task.document">
             </ng-select>
             <div class="invalid-feedback">
@@ -40,6 +39,13 @@
                 bindLabel="name"
                 placeholder="Select Users"
                 [(ngModel)]="task.users">
+                <ng-template ng-option-tmp let-user="item" let-index="index">
+                    <span>{{ user.first_name }} {{ user.last_name }}</span>
+                </ng-template>
+                <ng-template ng-label-tmp let-user="item" let-clear="clear">
+                    <span (click)="clear(user)" aria-hidden="true" class="ng-value-icon right">×</span>
+                    <span class="px-1">{{ user.first_name}} {{ user.last_name }}</span>
+                </ng-template>
             </ng-select>
         </div>
     </div>
@@ -53,7 +59,7 @@
                 [multiple]="true"
                 [closeOnSelect]="false"
                 [searchable]="false"
-                bindLabel="name"
+                bindLabel="group_name"
                 placeholder="Select Groups"
                 [(ngModel)]="task.groups">
             </ng-select>

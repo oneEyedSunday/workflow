@@ -4,9 +4,15 @@ import { of, Observable, throwError, iif, fromEvent } from 'rxjs';
 import { switchMap, catchError, tap, takeUntil } from 'rxjs/operators';
 import { DragulaService } from 'ng2-dragula';
 import * as feather from 'feather-icons';
-import { Stage, Task, Process, IUser } from '@shared/interfaces';
-import { StageService, ProcessService } from '../services';
+import {
+  Stage, Task, Process, IUser,
+  IGroup, IForm, Document
+} from '@shared/interfaces';
+import { StageService, ProcessService, TaskService } from '../services';
 import { AuthService } from '@shared/auth';
+import { DocumentService } from '../../documents/services';
+import { GroupsService } from '../../organization/services';
+import { FormsService } from '../../forms/services';
 
 interface Coords {
   bottom: number;
@@ -36,6 +42,10 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   process: Process;
   user: IUser;
   dragulaGroups: string[] = [];
+  users: IUser[] = [];
+  groups: IGroup[] = [];
+  forms: IForm[] = [];
+  documents: Document[] = [];
   sidebarContent: {
     content: Task | Stage;
     description: string;
@@ -60,7 +70,11 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     // ref to auth svc
     private _auth: AuthService,
     private _proSvc: ProcessService,
-    private _stageSvc: StageService
+    private _stageSvc: StageService,
+    private _formsSvc: FormsService,
+    private _docSvc: DocumentService,
+    private _groupsSvc: GroupsService,
+    private _taskSvc: TaskService
     // ref to process svc
     // scroll helper
   ) {
@@ -68,6 +82,10 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.fetchDocuments();
+    this.fetchForms();
+    this.fetchGroups();
+    this.fetchUsers();
     this._actRoute.data.pipe(
       switchMap((data: { creating: boolean }) => {
         this.existingProcess = !!!data.creating;
@@ -107,6 +125,25 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   createBaseProcess(): Observable<Process> {
     return this._proSvc.createProcess(this.user.id);
+  }
+
+  fetchUsers() {
+    this.users = [this.user];
+  }
+
+  fetchGroups() {
+    this._groupsSvc.fetchGroups()
+      .subscribe(groups => this.groups = groups);
+  }
+
+  fetchForms() {
+    this._formsSvc.getForms()
+      .subscribe(forms => this.forms = forms);
+  }
+
+  fetchDocuments() {
+    this._docSvc.fetchDocuments()
+      .subscribe(docs => this.documents = docs);
   }
 
   handleError(err: any) {
@@ -169,6 +206,8 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res: Stage) => {
         this.sidebarContent = null;
         this.process.stages.push(res);
+        Promise.resolve().then(() => feather.replace());
+        feather.replace();
         (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
         // toastr success
       }, () => this.uiState = {...this.uiState, stageError: true});
@@ -178,7 +217,24 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleTaskUpdate(task: Task) {
-    console.log(task);
+    const cleanedTask = {...task, user: this.user.id,
+      users: task.users.map(u => u.id), document: task.document ? task.document.id : null,
+      form: task.form ? task.form.formId : null,
+      stage: task.stage.id, groups: task.groups ? task.groups[0].id : ''
+    };
+    this.createTask(cleanedTask);
+  }
+
+  createTask(task: Partial<Task>) {
+    this.uiState = { ...this.uiState, taskError: false };
+    this._taskSvc.createTask(task)
+      .subscribe((res: Task) => {
+        this.sidebarContent = null;
+        (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
+        // find stage
+        // right no
+        // this.process.stages.find(s => s.id === res.stage);
+      }, () => this.uiState = { ...this.uiState, taskError: true });
   }
 
   ngOnDestroy(): void {

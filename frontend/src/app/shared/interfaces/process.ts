@@ -22,12 +22,7 @@ export class Process implements IProcess {
     status;
     constructor() {
         this.process_name = 'Demo Process';
-        this.stages = [
-            new Stage({ name: 'Demo Stage', tasks: [
-                new Task({summary: 'Send Reports to HOD', status: 'ongoing'}),
-                new Task({summary: 'Send Documentation to Team', status: 'ongoing'}) ] }),
-            new Stage({ name: 'Stage 2', tasks: [] })
-        ];
+        this.stages = [];
         this.status = Math.random() > 0.46 ? 'In progress' : 'Complete';
         this.description = Array(40).fill('a');
         this.lastUpdatedAt = new Date(Date.now() - 250000 * Math.random() * 10 * Math.random() * 100);

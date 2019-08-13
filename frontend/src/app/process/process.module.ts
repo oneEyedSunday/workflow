@@ -11,6 +11,9 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import * as fromContainers from './containers';
 import * as fromComponents from './components';
 import * as fromServices from './services';
+import { DocumentService } from '../documents/services';
+import { GroupsService } from '../organization/services';
+import { FormsService } from '../forms/services';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,10 @@ import * as fromServices from './services';
     SharedModule
   ],
   providers: [
-    ...fromServices.services
+    ...fromServices.services,
+    DocumentService,
+    GroupsService,
+    FormsService
   ]
 })
 export class ProjectsModule { }
