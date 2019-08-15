@@ -9,6 +9,7 @@ import { Stage } from '@shared/interfaces';
 export class StageComponent implements OnChanges {
     @Input() stage: Stage;
     @Input() errored: boolean;
+    @Input() maxOrder: number;
     @Output() stageUpdatedEvent: EventEmitter<Stage> = new EventEmitter();
     submitting: boolean;
 
@@ -21,6 +22,10 @@ export class StageComponent implements OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (changes && changes['errored'] && changes['errored'].currentValue) {
             this.submitting = false;
+        }
+
+        if (!(changes['maxOrder'] && changes['maxOrder'].currentValue)) {
+            this.maxOrder = this.stage.order;
         }
     }
 

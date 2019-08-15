@@ -29,10 +29,9 @@
         </div>
       </div>
       <!-- Board div holding tasks  -->
-      <!-- TODO (oneeyedsunday) scroll board -->
       <div class="no-wrap d-flex process-columns position-relative bg-white">
         <div class="w-100 p-2 d-flex height-full">
-          <div class="process-column mr-3" *ngFor="let stage of process?.stages; let i = index;" [attr.data-column_id]="12">
+          <div class="process-column mr-3" *ngFor="let stage of orderStages(process?.stages); let i = index;" [attr.data-column_id]="12">
             <div class="wrapper--shadow scroll-wrapper height-full">
               <div class="text-uppercase flex-shrink-0">
                 <div class="p-2 position-relative">
@@ -44,7 +43,7 @@
                       <button (click)="openSideBar('editStage', stage)"
                         class="dropdown-item py-2"><span data-feather="edit"></span>  Edit</button>
                         <!-- TODO is this dropdown necessary self -->
-                      <button class="dropdown-item py-2" (click)="confirmDeleteColumn(stage)">
+                      <button class="dropdown-item py-2" (click)="confirmDeleteStage(stage)">
                         <span data-feather="trash-2"></span> Delete</button>
                     </div>
                   </div>
@@ -83,7 +82,7 @@
                               <span data-feather="more-horizontal"></span>
                             </button>
                             <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
-                              <button class="dropdown-item py-2" (click)="confirmDeleteColumn(task)">
+                              <button class="dropdown-item py-2" (click)="confirmDeleteTask(stage, task)">
                                 Discard Task</button>
                             </div>
                           </div>
@@ -135,6 +134,7 @@
                           <app-task-create
                           [forms]="forms"
                           [users]="users"
+                          [errored]="uiState.taskError"
                           [groups]="groups"
                           [documents]="documents"
                           [stage]="sidebarContent.extra"
@@ -146,6 +146,8 @@
                       <ng-container *ngIf="!sidebarContent?.content?.taskId">
                         <app-project-stage 
                         [stage]="sidebarContent?.content"
+                        [errored]="uiState.stageError"
+                        [maxOrder]="sidebarContent?.content['id'] ? (process?.stages?.length || 1) : (process?.stages?.length || 0) + 1"
                         (stageUpdatedEvent)="handleStageUpdate($event)">
     
                         </app-project-stage>

@@ -28,4 +28,20 @@ export class StageService {
       catchError(this.handleError('Create Stage Failed', null))
     );
   }
+
+  updateStage(id: number, stage: Stage): Observable<Stage> {
+    const formData = new FormData();
+    formData.append('id', stage.id);
+    formData.append('name', stage.name);
+    formData.append('order', `${stage.order}`);
+    formData.append('user', `${stage.user}`);
+    formData.append('process', `${stage.process}`);
+    return this.http.put(`${this.url}/process/stage/${id}/`, formData).pipe(
+      catchError(this.handleError('Update Stage Failed', null))
+    );
+  }
+
+  deleteStage(stageId: number) {
+    return this.http.delete(`${this.url}/process/stage/${stageId}/`);
+  }
 }

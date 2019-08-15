@@ -157,6 +157,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openSideBar(trigger: SideBarTriggers, content: Task | Stage, extra?: Stage): void {
+    if (content) {
+      content = {...content};
+    }
     switch (trigger) {
       case 'addTask': case 'openTask': case 'editTask':
         content = content || new Task();
@@ -166,7 +169,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         break;
       case 'addStage': case 'openStage': case 'editStage':
-        content = content || new Stage();
+        content = content || new Stage({ order: '' + ((this.process.stages || []).length + 1) });
         this.sidebarContent = {
           content, description: (content as Stage).name || 'New Stage'
         };
@@ -179,8 +182,20 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
   }
 
-  confirmDeleteColumn(details: any) {
+  confirmDeleteStage(stage: Stage) {
     // TODO modals
+    this._stageSvc.deleteStage(stage.id)
+      .subscribe(() => {
+        const stageIndex = this.process.stages
+          .findIndex(s => s.id === stage.id);
+        if (stageIndex > -1) {
+          this.process.stages.splice(stageIndex, 1);
+        }
+      });
+  }
+
+  confirmDeleteTask(stage: Stage, task: Task) {
+    // TODO confirmation modals
   }
 
   preventDefault(event: Event) {
@@ -206,7 +221,10 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res: Stage) => {
         this.sidebarContent = null;
         this.process.stages.push(res);
-        Promise.resolve().then(() => feather.replace());
+        Promise.resolve().then(() => {
+          feather.replace();
+          (window as any).feather.replace();
+        });
         feather.replace();
         (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
         // toastr success
@@ -214,6 +232,25 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateStage(stage: Stage) {
+    this.uiState = { ...this.uiState, stageError: false };
+    this._stageSvc.updateStage(stage.id, { ...stage, user: this.user.id })
+    .subscribe((res: Stage) => {
+      this.sidebarContent = null;
+      const stageIndex = this.process.stages
+        .findIndex(s => s.id === res.id);
+      if (stageIndex > -1) {
+        this.process.stages[stageIndex] = stage;
+      }
+      Promise.resolve().then(() => {
+        feather.replace();
+        (window as any).feather.replace();
+      });
+      feather.replace();
+
+      setTimeout(() => (window as any).feather.replace(), 30);
+      (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
+      // toastr success
+    }, () => this.uiState = {...this.uiState, stageError: true});
   }
 
   handleTaskUpdate(task: Task) {
@@ -235,6 +272,10 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         // right no
         // this.process.stages.find(s => s.id === res.stage);
       }, () => this.uiState = { ...this.uiState, taskError: true });
+  }
+
+  orderStages(stages?: Stage[]): Stage[] {
+    return (stages || []).sort((a, b) => +a.order > +b.order ? 1 : -1);
   }
 
   ngOnDestroy(): void {
