@@ -20,5 +20,8 @@ export class Stage implements Partial<IStage> {
     constructor(initObj?: Partial<IStage>) {
         this.name = initObj ? initObj.name : '';
         this.tasks = initObj ? initObj.tasks : [];
+        if (initObj && initObj.order) {
+            this.order = initObj.order;
+        }
     }
 }
