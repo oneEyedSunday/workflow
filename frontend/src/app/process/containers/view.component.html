@@ -40,6 +40,10 @@
                       <span data-feather="more-horizontal"></span>
                     </button>
                     <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
+                      <button (click)="completeStage(stage)" class="dropdown-item py-2"
+                        *ngIf="!stage.isComplete">
+                        <span data-feather="check-circle"></span> Complete
+                      </button>
                       <button (click)="openSideBar('editStage', stage)"
                         class="dropdown-item py-2"><span data-feather="edit"></span>  Edit</button>
                         <!-- TODO is this dropdown necessary self -->
@@ -66,14 +70,14 @@
                     <div class="d-flex flex-row">
                       <div class="flex-auto position-relative bg-white rounded">
                         <div class="pl-5 p-2 position-relative">
-                          <!-- TODO position status indicator -->
                           <a class="task--title mb-1 mr-5" (click)="preventDefault($event)"
                           (click)="openSideBar('openTask', task)" href="#">
                           <!-- TODO (oneeyedsunday) link to task page-->
                             {{ task.summary }}
                           </a>
                           <span class="position-absolute task--info">
-                            <div class="task-status--ok">
+                            <div 
+                              [ngClass]=" { 'task-status--complete': task.isComplete, 'task-status--inprogress': !task.isComplete } ">
                               <span data-feather="info"></span>
                             </div>
                           </span>
@@ -82,13 +86,28 @@
                               <span data-feather="more-horizontal"></span>
                             </button>
                             <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
+                              <button class="dropdown-item py-2" (click)="completeTask(stage, task)">
+                                  <span data-feather="check-square"></span> Complete
+                              </button>
+                              <button class="dropdown-item py-2" (click)="openSideBar('editTask', task, stage)">
+                                  <span data-feather="edit-3"></span> Update Task
+                              </button>
                               <button class="dropdown-item py-2" (click)="confirmDeleteTask(stage, task)">
-                                Discard Task</button>
+                                  <span data-feather="trash"></span> Discard Task</button>
                             </div>
                           </div>
-                          <div class="my-1" style="vertical-align: middle !important; height: 1px;"></div>
+                          <div class="my-1" style="vertical-align: middle !important; min-height: 1px;">
+                            <!-- Describe Form attached to Task here -->
+                            <p class="detail">
+                              Form: <span class="text-muted">{{ task.form }}</span>
+                            </p>
+                            <!-- Describe & link to document described to task here -->
+                            <p class="detail">
+                              Document: <span class="text-muted">{{ task.document }}</span>
+                            </p>
+                          </div>
                           <small class="text-gray d-block f-90">
-                            Assigned to Mr. Adeyanju Isiaka & 3 others
+                            Assigned to {{ getUserNameFromId(task.users) }} & {{ getGroupNameFromId(task.groups) }}
                           </small>
                           <!-- Heck even priority here -->
                         </div>
@@ -130,7 +149,7 @@
               </div>
               <div>
                   <ng-container *ngIf="sidebarContent">
-                      <ng-container *ngIf="sidebarContent?.content['taskId']">
+                      <ng-container *ngIf="sidebarContent?.content['stage']">
                           <app-task-create
                           [forms]="forms"
                           [users]="users"
@@ -143,7 +162,7 @@
                           ></app-task-create>
                       </ng-container>
         
-                      <ng-container *ngIf="!sidebarContent?.content?.taskId">
+                      <ng-container *ngIf="!sidebarContent?.content['stage']">
                         <app-project-stage 
                         [stage]="sidebarContent?.content"
                         [errored]="uiState.stageError"

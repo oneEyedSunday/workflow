@@ -16,6 +16,7 @@ export class Stage implements Partial<IStage> {
     user;
     order;
     process;
+    isComplete;
     id;
     constructor(initObj?: Partial<IStage>) {
         this.name = initObj ? initObj.name : '';

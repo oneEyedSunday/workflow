@@ -111,8 +111,8 @@ $stage--footer--height: 30px;
     }
 
     &-status {
-        &--ok { color: #28a745!important;  }
-        &--danger {  color: red; }       
+        &--complete { color: #28a745!important;  }
+        &--inprogress {  color: red; }       
     }
 }
 

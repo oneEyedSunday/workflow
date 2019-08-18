@@ -98,17 +98,15 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       tap(process => {
         this.bootstrapDragula();
         this.process = process;
-        feather.replace();
+        this.triggerFeather();
         this.uiState = {...this.uiState, loading: false};
-        setTimeout(() => feather.replace());
       }),
       catchError(err => this.handleError(err))
     ).subscribe();
   }
 
   ngAfterViewInit() {
-    feather.replace();
-    setTimeout(() => feather.replace());
+    this.triggerFeather();
   }
 
   getProcess(): Observable<Process> {
@@ -164,7 +162,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       case 'addTask': case 'openTask': case 'editTask':
         content = content || new Task();
         this.sidebarContent = {
-          content, description: (content as Task).summary || 'New Task',
+          content, description: (content as Task).id ? 'Update Task' : 'New Task',
           extra
         };
         break;
@@ -221,11 +219,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res: Stage) => {
         this.sidebarContent = null;
         this.process.stages.push(res);
-        Promise.resolve().then(() => {
-          feather.replace();
-          (window as any).feather.replace();
-        });
-        feather.replace();
+        this.triggerFeather();
         (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
         // toastr success
       }, () => this.uiState = {...this.uiState, stageError: true});
@@ -241,13 +235,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       if (stageIndex > -1) {
         this.process.stages[stageIndex] = stage;
       }
-      Promise.resolve().then(() => {
-        feather.replace();
-        (window as any).feather.replace();
-      });
-      feather.replace();
-
-      setTimeout(() => (window as any).feather.replace(), 30);
+      this.triggerFeather();
       (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
       // toastr success
     }, () => this.uiState = {...this.uiState, stageError: true});
@@ -255,11 +243,17 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   handleTaskUpdate(task: Task) {
     const cleanedTask = {...task, user: this.user.id,
-      users: task.users.map(u => u.id), document: task.document ? task.document.id : null,
+      users: (task.users || []).map(u => u.id), document: task.document ? task.document.id : null,
       form: task.form ? task.form.formId : null,
-      stage: task.stage.id, groups: task.groups ? task.groups[0].id : ''
+      stage: task.stage.id, groups: task.groups ? ((task.groups || [0]) || {}).id : ''
     };
-    this.createTask(cleanedTask);
+    console.log(task, cleanedTask);
+    // check for update?
+    if (task.id) {
+      this.updateTask(cleanedTask);
+    } else {
+      this.createTask(cleanedTask);
+    }
   }
 
   createTask(task: Partial<Task>) {
@@ -274,8 +268,57 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       }, () => this.uiState = { ...this.uiState, taskError: true });
   }
 
+  updateTask(task: Task) {
+    this.uiState = { ...this.uiState, taskError: false };
+    this._taskSvc.updateTask(task)
+      .subscribe((res: Task) => {
+        this.sidebarContent = null;
+        (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
+        console.log(res);
+        // find stage,
+        // find task
+        // this.process.stages.find(s => s.id === res.stage);
+      }, () => this.uiState = { ...this.uiState, taskError: false });
+  }
+
   orderStages(stages?: Stage[]): Stage[] {
     return (stages || []).sort((a, b) => +a.order > +b.order ? 1 : -1);
+  }
+
+  // TODO update this to handle arrays
+  getUserNameFromId(userId: number): string {
+    const found = this.users.find(user => user.id === userId);
+    if (!found) {
+      return `Unknown`;
+    }
+    return `${found.first_name} ${found.last_name}`;
+  }
+
+  // TODO update this to handle arrays
+  getGroupNameFromId(groupId: number): string {
+    const found = this.groups.find(group => group.id === groupId);
+    if (!found) {
+      return `Unknown Group`;
+    }
+    return `Group: ${found.group_name}`;
+  }
+
+  completeStage(stage: Stage) {
+
+  }
+
+  completeTask(stage: Stage, task: Task) {
+
+  }
+
+  triggerFeather(): void {
+    Promise.resolve().then(() => {
+      feather.replace();
+      (window as any).feather.replace();
+    });
+    feather.replace();
+
+    setTimeout(() => (window as any).feather.replace(), 30);
   }
 
   ngOnDestroy(): void {
