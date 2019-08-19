@@ -1,6 +1,3 @@
-<p>Then, list members, with options to remove them</p>
-<p>Then, a CTA to add</p>
-<p>CTA may open up a modal, unsure as of now</p>
 <div class="my-5">
     <div class="container">
         <p>Group - group name
@@ -10,25 +7,34 @@
 
         <div class="row">
             <ng-container *ngIf="!loading">
-                {{ group | json }}
-                <div class="col-sm-12 col-md-6 offset-md-3">
+                <div class="col-sm-12 col-md-5 offset-md-1 my-2">
                     <div class="card">
                         <div class="card-header">{{ group.group_name }}</div>
                         <div class="card-body">
                             {{  group.description || 'No Description'}}
                         </div>
                         <div class="card-footer">
-                            <span data-feather="user-plus" class="fa fa-user-plus"></span> Member
+                            <button class="btn btn-small btn-sm btn-link muted-link" (click)="openModal(addusermodal)">
+                                <span data-feather="user-plus" class="fa fa-user-plus"></span> Member
+                            </button>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-6 offset-md-6">
-                    <ng-container>
-                        Group Members
-                        <ul class="list-group">
-    
-                        </ul>
-                    </ng-container>
+                <div class="col-sm-12 col-md-5 offset-md-1 my-2">
+                    <div class="card">
+                        <div class="card-header">Group Members</div>
+                        <div class="card-body">
+                            <ul class="list-group" *ngIf="group.usertogroups?.length">
+                                <li class="list-group-item" *ngFor="let member of group.usertogroups; let index = index">#{{ index + 1 }}  {{ member['user_obj'] }}
+                                    <button class="btn btn-small btn-link muted-link" (click)="removeUserFromGroup(member.id)">
+                                        <span data-feather="user-x"></span> Remove
+                                    </button>
+                                </li>
+                            </ul>
+                            <br>
+                            <span class="text-muted font-italic" *ngIf="!group.usertogroups?.length">There are no members in this group</span>
+                        </div>
+                    </div>
                 </div>
             </ng-container>
             
@@ -40,3 +46,32 @@
         </div>
     </div>
 </div>
+
+<ng-template #addusermodal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add User to Group</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="form-group">
+                <label>User</label>
+                <select class="form-control" placeholder="Select User" #selectedUser ngbAutofocus>
+                    <option value="">--Select a User--</option>
+                    <option *ngFor="let u of usersNotInGroup" [attr.value]="u.id">{{ u.first_name }} {{ u.last_name }}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" (click)="addUser(selectedUser?.value)" [disabled]="submitting">
+                    <span data-feather="user-plus"></span> 
+                    <span *ngIf="submitting">
+                        <i class="fa fa-spin fa-spinner"></i>
+                    </span>
+                    Save
+                </button>
+            </div>
+        </form>
+    </div>
+</ng-template>

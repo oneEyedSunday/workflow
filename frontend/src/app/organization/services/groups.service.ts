@@ -58,6 +58,15 @@ export class GroupsService {
             );
     }
 
-    addUsersToGroups(groupId, userIds) {
+    addUserToGroups(groupId: number, userId: number) {
+        const formData = new FormData();
+        formData.append('user_obj', `${userId}`);
+        formData.append('org', '1');
+        formData.append('grp', `${groupId}`);
+        return this.http.post(`${AppConfig.API_URL}/org/joingroup/`, formData).pipe(
+            catchError(this.handleError('Failed to Add User to Group', null))
+        );
     }
+
+    removeUserFromGroup(groupId: number, userId: number) {}
 }

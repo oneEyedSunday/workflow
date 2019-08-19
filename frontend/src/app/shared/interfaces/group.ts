@@ -1,8 +1,11 @@
+import { IUser } from './user';
+
 export interface IGroup {
   id: number;
   organization: number;
   group_name: string;
   description: string;
+  usertogroups: IUser[];
 }
 
 
@@ -17,4 +20,5 @@ export class Group implements IGroup {
   organization;
   group_name;
   description;
+  usertogroups: IUser[];
 }
