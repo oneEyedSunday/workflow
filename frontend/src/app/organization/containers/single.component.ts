@@ -13,6 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class SingleGroupViewComponent implements OnInit {
     editing: boolean;
+    editGroup: boolean;
     group: Group;
     loading = true;
     loadingMembers: boolean;
