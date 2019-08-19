@@ -28,7 +28,7 @@ export class GroupsService {
     }
 
     fetchGroup(groupId: number): Observable<Group> {
-        return this.http.get(`${this.url}/${groupId}`)
+        return this.http.get(`${this.url}${groupId}`)
             .pipe(
                 catchError(this.handleError('Fetch Group', null))
             );
@@ -57,4 +57,16 @@ export class GroupsService {
                 catchError(this.handleError('Update Group', null))
             );
     }
+
+    addUserToGroups(groupId: number, userId: number) {
+        const formData = new FormData();
+        formData.append('user_obj', `${userId}`);
+        formData.append('org', '1');
+        formData.append('grp', `${groupId}`);
+        return this.http.post(`${AppConfig.API_URL}/org/joingroup/`, formData).pipe(
+            catchError(this.handleError('Failed to Add User to Group', null))
+        );
+    }
+
+    removeUserFromGroup(groupId: number, userId: number) {}
 }
