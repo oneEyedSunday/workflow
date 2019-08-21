@@ -56,9 +56,8 @@ export class TaskService {
 
   completeTask(taskId: number): Observable<Task> {
     const formData = new FormData();
-    formData.append('id', '' + taskId);
     formData.append('isComplete', 'true');
-    return this.http.put(`${this.url}/process/stage/task/${taskId}`, formData).pipe(
+    return this.http.patch(`${this.url}/process/stage/task/${taskId}/`, formData).pipe(
       catchError(this.handleError('Complete Task Failed', null))
     );
   }

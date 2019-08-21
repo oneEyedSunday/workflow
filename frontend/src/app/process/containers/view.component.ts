@@ -325,8 +325,11 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  completeTask(stage: Stage, task: Task) {
-
+  completeTask(task: Task) {
+    this._taskSvc.completeTask(task.id)
+      .subscribe((res: Partial<Task>) => {
+        task.isComplete = res.isComplete;
+      });
   }
 
   triggerFeather(): void {

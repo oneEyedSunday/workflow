@@ -86,9 +86,11 @@
                               <span data-feather="more-horizontal"></span>
                             </button>
                             <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
-                              <button class="dropdown-item py-2" (click)="completeTask(stage, task)">
-                                  <span data-feather="check-square"></span> Complete
-                              </button>
+                              <ng-container *ngIf="!task.isComplete">
+                                  <button class="dropdown-item py-2" (click)="completeTask(task)">
+                                      <span data-feather="check-square"></span> Complete
+                                  </button>
+                              </ng-container>
                               <button class="dropdown-item py-2" (click)="openSideBar('editTask', task, stage)">
                                   <span data-feather="edit-3"></span> Update Task
                               </button>
