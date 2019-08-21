@@ -22,7 +22,8 @@ export class ErrorInterceptor implements HttpInterceptor {
             this.router.navigate(['/account/signin'], { queryParams: { returnUrl: this.router.url } });
             AuthService.logout();
             return throwError('Please log  in again');
-        default:
+        case 404: default:
+            // TODO (oneeyedsunday) ctch 404s on delete and redir to not found page
             return throwError(err);
       }
     }));
