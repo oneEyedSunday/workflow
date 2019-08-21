@@ -4,6 +4,7 @@
         <div class="col-sm-10">
             <ng-select [items]="forms"
                 name="form"
+                [compareWith]="formCompare"
                 bindLabel="form_name"
                 [(ngModel)]="task.form">
             </ng-select>
@@ -18,6 +19,7 @@
         <div class="col-sm-10">
             <ng-select [items]="documents"
                 name="document"
+                [compareWith]="documentCompare"
                 bindLabel="filename"
                 [(ngModel)]="task.document">
             </ng-select>
@@ -33,10 +35,10 @@
             <ng-select
                 name="users"
                 [items]="users"
-                [multiple]="true"
                 [closeOnSelect]="false"
                 [searchable]="false"
-                bindLabel="name"
+                bindLabel="id"
+                [compareWith]="userCompare"
                 placeholder="Select Users"
                 [(ngModel)]="task.users">
                 <ng-template ng-option-tmp let-user="item" let-index="index">
@@ -56,9 +58,9 @@
             <ng-select
                 name="groups"
                 [items]="groups"
-                [multiple]="true"
                 [closeOnSelect]="false"
                 [searchable]="false"
+                [compareWith]="groupCompare"
                 bindLabel="group_name"
                 placeholder="Select Groups"
                 [(ngModel)]="task.groups">

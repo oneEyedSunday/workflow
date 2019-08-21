@@ -112,7 +112,7 @@
                             <p class="detail">
                               Document: 
                               <span class="text-muted" [attr.title]="getDoc(task.document)?.description">
-                                <a href="{{getDoc(task.document)?.link || '#'}}" target="_blank">{{ getDoc(task.document)?.filename || 'Unkown DOcument' }}</a>
+                                <a href="{{getDoc(task.document)?.link || '#'}}" target="_blank">{{  task.document && (getDoc(task.document)?.filename || 'Unkown Document') }}</a>
                               </span>
                             </p>
                           </div>
@@ -136,7 +136,7 @@
       <!-- Div that pops up -->
       <div class="process-pane closed pop-pane border-left border-bottom bg-white" #refSidePane>
         <div class="d-flex flex-column height-full">
-          <div class="d-flex flex-column">
+          <div class="d-flex flex-column height-full">
             <div class="flex-auto overflow-auto">
               <div class="p-3 d-flex f4 lh-condensed justify-content-between border-bottom">
                 <div class="flex-auto overflow-hidden lh-default">

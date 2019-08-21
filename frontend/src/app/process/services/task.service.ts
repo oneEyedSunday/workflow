@@ -26,7 +26,7 @@ export class TaskService {
     formData.append('users', task.users);
     formData.append('document', task.document);
     formData.append('groups', task.groups);
-    return this.http.post(this.url + '/process/stage/task', formData).pipe(
+    return this.http.post(this.url + '/process/stage/task/', formData).pipe(
       catchError(this.handleError('Create Task Failed', null))
     );
   }

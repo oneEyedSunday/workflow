@@ -161,6 +161,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openSideBar(trigger: SideBarTriggers, content: Task | Stage, extra?: Stage): void {
+    console.log(content, extra);
     if (content) {
       content = {...content};
     }
@@ -249,9 +250,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   handleTaskUpdate(task: Task) {
     const cleanedTask = {...task, user: this.user.id,
-      users: (task.users || []).map(u => u.id), document: task.document ? task.document.id : null,
-      form: task.form ? task.form.formId : null,
-      stage: task.stage.id, groups: task.groups ? ((task.groups || [0]) || {}).id : ''
+      users: task.users || '', document: task.document || '',
+      form: task.form || '',
+      stage: task.stage, groups: task.groups || ''
     };
     console.log(task, cleanedTask);
     // check for update?
@@ -268,9 +269,10 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res: Task) => {
         this.sidebarContent = null;
         (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
-        // find stage
-        // right no
-        // this.process.stages.find(s => s.id === res.stage);
+        const stage = this.process.stages.find(s => s.id === res.stage);
+        if (stage) {
+          (stage.tasks || []).push(res);
+        }
       }, () => this.uiState = { ...this.uiState, taskError: true });
   }
 
@@ -280,10 +282,14 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res: Task) => {
         this.sidebarContent = null;
         (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
-        console.log(res);
-        // find stage,
-        // find task
-        // this.process.stages.find(s => s.id === res.stage);
+        const stage = this.process.stages.find(s => s.id === res.stage);
+        if (stage) {
+          const taskUpdatedIndex = stage.tasks.findIndex(t => t.id === res.id);
+          if (taskUpdatedIndex > -1) {
+            stage.tasks[taskUpdatedIndex] = res;
+            this.triggerFeather();
+          }
+        }
       }, () => this.uiState = { ...this.uiState, taskError: false });
   }
 
@@ -293,6 +299,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // TODO update this to handle arrays
   getUserNameFromId(userId: number): string {
+    if (!userId) {
+      return 'No one';
+    }
     const found = this.users.find(user => user.id === userId);
     if (!found) {
       return `Unknown`;
@@ -302,6 +311,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // TODO update this to handle arrays
   getGroupNameFromId(groupId: number): string {
+    if (!groupId) {
+      return 'No group';
+    }
     const found = this.groups.find(group => group.id === groupId);
     if (!found) {
       return `Unknown Group`;
@@ -310,6 +322,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   getFormNameFromId(formId: number): string {
+    if (!formId) {
+      return '';
+    }
     const found = this.forms.find(form => form.id === formId);
     if (!found) {
       return 'Unknown Form';
