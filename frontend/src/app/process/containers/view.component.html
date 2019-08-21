@@ -31,7 +31,7 @@
       <!-- Board div holding tasks  -->
       <div class="no-wrap d-flex process-columns position-relative bg-white">
         <div class="w-100 p-2 d-flex height-full">
-          <div class="process-column mr-3" *ngFor="let stage of orderStages(process?.stages); let i = index;" [attr.data-column_id]="12">
+          <div class="process-column mr-3" *ngFor="let stage of orderStages(process?.stages); let i = index;">
             <div class="wrapper--shadow scroll-wrapper height-full">
               <div class="text-uppercase flex-shrink-0">
                 <div class="p-2 position-relative">
@@ -69,8 +69,8 @@
 
               <div class="scroll flex-grow">
         
-                <div class="board-cards custom-scroll px-2 pb-2 flex-grow" dragula="rearrangetask" [attr.data-columnid]="3">
-                  <div  *ngFor="let task of stage.tasks" [attr.data-taskid]="4" class="board-card">
+                <div class="board-cards custom-scroll px-2 pb-2 flex-grow" dragula="movetask" [attr.data-stageid]="stage.id">
+                  <div  *ngFor="let task of stage.tasks" class="board-card" [attr.data-taskid]="task.id">
                     <div class="d-flex flex-row">
                       <div class="flex-auto position-relative bg-white rounded">
                         <div class="pl-5 p-2 position-relative">

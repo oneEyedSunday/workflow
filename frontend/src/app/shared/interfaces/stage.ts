@@ -12,7 +12,7 @@ interface IStage {
 
 export class Stage implements Partial<IStage> {
     name;
-    tasks;
+    tasks: Task[];
     user;
     order;
     process;

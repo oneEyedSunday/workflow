@@ -45,11 +45,11 @@ export class TaskService {
     );
   }
 
-  moveTask(taskId: number, stageId: number): Observable<Task> {
+  moveTask(taskId: number, stageId: number): Observable<Partial<Task>> {
     const formData = new FormData();
     formData.append('id', `${taskId}`);
     formData.append('stage', `${stageId}`);
-    return this.http.put(`${this.url}/process/stage/task/${taskId}`, formData).pipe(
+    return this.http.patch(`${this.url}/process/stage/task/${taskId}/`, formData).pipe(
       catchError(this.handleError('Move Task Failed', null))
     );
   }

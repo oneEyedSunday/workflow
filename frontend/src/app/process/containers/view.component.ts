@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { of, Observable, throwError, iif, fromEvent } from 'rxjs';
+import { of, Observable, throwError, iif, fromEvent, Subscription } from 'rxjs';
 import { switchMap, catchError, tap, takeUntil } from 'rxjs/operators';
 import { DragulaService } from 'ng2-dragula';
 import * as feather from 'feather-icons';
@@ -27,6 +27,7 @@ interface Coords {
 
 type SideBarTriggers = 'addTask' | 'editTask' | 'addStage' | 'editStage' | 'openTask' | 'openStage';
 
+const dragulaGroups: string[] = [];
 @Component({
   selector: 'app-projects-view',
   templateUrl: './view.component.html',
@@ -46,6 +47,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   groups: IGroup[] = [];
   forms: IForm[] = [];
   documents: Document[] = [];
+  subs: Subscription = new Subscription();
   sidebarContent: {
     content: Task | Stage;
     description: string;
@@ -157,11 +159,19 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   bootstrapDragula(): void {
-    // TODO (oneeyedsunday) close stage view when moving stages
+    dragulaGroups.push('movetask');
+
+    this.subs.add(this._dragulaService.drop('movetask')
+      .subscribe(({ name, el, target, source, sibling }) => {
+        const taskId = parseInt((el as HTMLDivElement).dataset['taskid'], 10);
+        const newStageId = parseInt((target as HTMLDivElement).dataset['stageid'], 10);
+        const oldStageId = parseInt((source as HTMLDivElement).dataset['stageid'], 10);
+        this.moveTask(taskId, newStageId, oldStageId);
+      })
+    );
   }
 
   openSideBar(trigger: SideBarTriggers, content: Task | Stage, extra?: Stage): void {
-    console.log(content, extra);
     if (content) {
       content = {...content};
     }
@@ -261,8 +271,6 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       form: task.form || '',
       stage: task.stage, groups: task.groups || ''
     };
-    console.log(task, cleanedTask);
-    // check for update?
     if (task.id) {
       this.updateTask(cleanedTask);
     } else {
@@ -298,6 +306,23 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
       }, () => this.uiState = { ...this.uiState, taskError: true });
+  }
+
+  moveTask(taskId: number, stageId: number, oldStageId: number) {
+    this._taskSvc.moveTask(taskId, stageId)
+      .subscribe((res) => {
+        const oldStage = this.process.stages.find(s => s.id === oldStageId);
+        const newStage = this.process.stages.find(s => s.id === stageId);
+        if (oldStage) {
+          (oldStage.tasks || []).splice((oldStage.tasks || []).findIndex(t => t.id === taskId), 1);
+        }
+
+        if (newStage) {
+          (newStage.tasks || []).push(res as Task);
+        }
+
+        this.triggerFeather();
+      });
   }
 
   orderStages(stages?: Stage[]): Stage[] {
@@ -368,7 +393,8 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
+    this.subs.unsubscribe();
+    dragulaGroups.forEach(groupName => this._dragulaService.destroy(groupName));
   }
 
 }
