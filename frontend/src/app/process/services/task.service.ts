@@ -63,6 +63,8 @@ export class TaskService {
   }
 
   deleteTask(taskId: number) {
-    return this.http.delete(`${this.url}/process/stage/task/${taskId}/`);
+    return this.http.delete(`${this.url}/process/stage/task/${taskId}/`).pipe(
+      catchError(this.handleError('Delete Task Failed', null))
+    );
   }
 }

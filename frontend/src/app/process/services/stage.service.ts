@@ -50,6 +50,8 @@ export class StageService {
   }
 
   deleteStage(stageId: number) {
-    return this.http.delete(`${this.url}/process/stage/${stageId}/`);
+    return this.http.delete(`${this.url}/process/stage/${stageId}/`).pipe(
+      catchError(this.handleError('Delete Stage Failed', null))
+    );
   }
 }

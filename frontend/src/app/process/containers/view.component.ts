@@ -297,7 +297,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
             this.triggerFeather();
           }
         }
-      }, () => this.uiState = { ...this.uiState, taskError: false });
+      }, () => this.uiState = { ...this.uiState, taskError: true });
   }
 
   orderStages(stages?: Stage[]): Stage[] {
