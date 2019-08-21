@@ -41,6 +41,14 @@ export class StageService {
     );
   }
 
+  completeStage(stageId: number): Observable<Partial<Stage>> {
+    const formData = new FormData();
+    formData.append('isComplete', 'true');
+    return this.http.patch(`${this.url}/process/stage/${stageId}/`, formData).pipe(
+      catchError(this.handleError('Complete Stage Failed', null))
+    );
+  }
+
   deleteStage(stageId: number) {
     return this.http.delete(`${this.url}/process/stage/${stageId}/`);
   }

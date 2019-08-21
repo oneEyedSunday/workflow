@@ -58,6 +58,10 @@
                   </button>
                   <h4 class="px-1 m-0 f5 v-align-middle d-inline">
                     <span class="badge badge-secondary position-badge mr-1" [ngClass]="{ 'd-none': !stage.tasks?.length }">{{ stage.tasks?.length }}</span>
+                    <span class="mr-2"
+                      [ngClass]=" { 'task-status--complete': stage.isComplete, 'task-status--inprogress': !stage.isComplete } ">
+                      <span data-feather="info"></span>
+                    </span>
                     <span>{{ stage.name }}</span>
                   </h4>
                 </div>

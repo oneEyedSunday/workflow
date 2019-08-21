@@ -322,7 +322,10 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   completeStage(stage: Stage) {
-
+    this._stageSvc.completeStage(stage.id)
+      .subscribe((res: Partial<Stage>) => {
+        stage.isComplete = res.isComplete;
+      });
   }
 
   completeTask(task: Task) {
