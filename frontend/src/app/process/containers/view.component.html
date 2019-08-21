@@ -99,11 +99,15 @@
                           <div class="my-1" style="vertical-align: middle !important; min-height: 1px;">
                             <!-- Describe Form attached to Task here -->
                             <p class="detail">
-                              Form: <span class="text-muted">{{ task.form }}</span>
+                              <!-- TODO link to form -->
+                              Form: <span class="text-muted">{{ getFormNameFromId(task.form) }}</span>
                             </p>
                             <!-- Describe & link to document described to task here -->
                             <p class="detail">
-                              Document: <span class="text-muted">{{ task.document }}</span>
+                              Document: 
+                              <span class="text-muted" [attr.title]="getDoc(task.document)?.description">
+                                <a href="{{getDoc(task.document)?.link || '#'}}" target="_blank">{{ getDoc(task.document)?.filename || 'Unkown DOcument' }}</a>
+                              </span>
                             </p>
                           </div>
                           <small class="text-gray d-block f-90">

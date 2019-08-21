@@ -11,7 +11,7 @@ import {
 import { StageService, ProcessService, TaskService } from '../services';
 import { AuthService } from '@shared/auth';
 import { DocumentService } from '../../documents/services';
-import { GroupsService } from '../../organization/services';
+import { GroupsService, UsersService } from '../../organization/services';
 import { FormsService } from '../../forms/services';
 
 interface Coords {
@@ -67,15 +67,14 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private _router: Router,
     private _dragulaService: DragulaService,
     // add ref to notif eg toasts
-    // ref to auth svc
     private _auth: AuthService,
     private _proSvc: ProcessService,
     private _stageSvc: StageService,
     private _formsSvc: FormsService,
     private _docSvc: DocumentService,
     private _groupsSvc: GroupsService,
-    private _taskSvc: TaskService
-    // ref to process svc
+    private _taskSvc: TaskService,
+    private _usersSvc: UsersService
     // scroll helper
   ) {
     this.user = (this._auth.currentUserValue as IUser);
@@ -126,7 +125,14 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   fetchUsers() {
-    this.users = [this.user];
+    this._usersSvc.fetchAllUsers()
+      .subscribe(users => {
+        if (!(users || []).length) {
+          this.users = [this.user];
+        } else {
+          this.users = users;
+        }
+      });
   }
 
   fetchGroups() {
@@ -301,6 +307,18 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       return `Unknown Group`;
     }
     return `Group: ${found.group_name}`;
+  }
+
+  getFormNameFromId(formId: number): string {
+    const found = this.forms.find(form => form.id === formId);
+    if (!found) {
+      return 'Unknown Form';
+    }
+    return found.form_name;
+  }
+
+  getDoc(docId): Document {
+    return this.documents.find(doc => doc.id === docId);
   }
 
   completeStage(stage: Stage) {
