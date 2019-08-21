@@ -201,6 +201,13 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   confirmDeleteTask(stage: Stage, task: Task) {
     // TODO confirmation modals
+    this._taskSvc.deleteTask(task.id)
+      .subscribe(() => {
+        const taskIndex = (stage.tasks || []).findIndex(t => t.id === task.id);
+        if (taskIndex > -1) {
+          stage.tasks.splice(taskIndex, 1);
+        }
+      });
   }
 
   preventDefault(event: Event) {
