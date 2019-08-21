@@ -29,7 +29,7 @@
         </div>
       </div>
       <!-- Board div holding tasks  -->
-      <div class="no-wrap d-flex process-columns position-relative bg-white">
+      <div class="no-wrap d-flex process-columns position-relative bg-white" #refProcessBoardContainer>
         <div class="w-100 p-2 d-flex height-full">
           <div class="process-column mr-3" *ngFor="let stage of orderStages(process?.stages); let i = index;">
             <div class="wrapper--shadow scroll-wrapper height-full">

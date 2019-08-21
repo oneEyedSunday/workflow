@@ -97,9 +97,12 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         );
       }),
       tap(process => {
-        this.bootstrapDragula();
         this.process = process;
         this.triggerFeather();
+        setTimeout(() => {
+          this.initializeSizeWatch();
+          this.bootstrapDragula();
+        }, 10);
         this.uiState = {...this.uiState, loading: false};
       }),
       catchError(err => this.handleError(err))
@@ -160,6 +163,24 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   bootstrapDragula(): void {
     dragulaGroups.push('movetask');
+    let dragStart;
+
+    this.subs.add(this._dragulaService.drag('movetask')
+      .subscribe(({ name, el, source }) => {
+        // monitor y axis
+        dragStart = fromEvent(document, 'mousemove');
+
+        dragStart.pipe(
+          takeUntil(fromEvent(document, 'mouseup'))
+        ).subscribe((mouseEvt: MouseEvent) => {
+          if ((mouseEvt.pageX + 40) > (this.coords.taskboard.width + this.coords.taskboard.left)) {
+            this.scrollBoard('RIGHT');
+          } else if (mouseEvt.pageX < 400) {
+            this.scrollBoard('LEFT');
+          }
+        });
+      })
+    );
 
     this.subs.add(this._dragulaService.drop('movetask')
       .subscribe(({ name, el, target, source, sibling }) => {
@@ -169,6 +190,27 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         this.moveTask(taskId, newStageId, oldStageId);
       })
     );
+  }
+
+  scrollBoard(directiom: 'RIGHT' | 'LEFT', size?: number): void {
+    if (directiom === 'RIGHT') {
+      this.boardContainerRef.nativeElement.scrollLeft += size || 50;
+    } else if (directiom === 'LEFT') {
+      this.boardContainerRef.nativeElement.scrollLeft -= size || 50;
+    }
+  }
+
+  initializeSizeWatch() {
+    this.calculateDims();
+    const context = this;
+    window.addEventListener('resize', evt => {
+      context.calculateDims();
+    });
+  }
+
+  calculateDims(): void {
+    this.coords.body = document.getElementsByTagName('body')[0].getBoundingClientRect();
+    this.coords.taskboard = (this.boardContainerRef.nativeElement as HTMLDivElement).getBoundingClientRect();
   }
 
   openSideBar(trigger: SideBarTriggers, content: Task | Stage, extra?: Stage): void {
@@ -287,6 +329,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         const stage = this.process.stages.find(s => s.id === res.stage);
         if (stage) {
           (stage.tasks || []).push(res);
+          this.triggerFeather();
         }
       }, () => this.uiState = { ...this.uiState, taskError: true });
   }
