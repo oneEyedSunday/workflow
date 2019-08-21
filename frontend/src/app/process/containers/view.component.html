@@ -29,10 +29,9 @@
         </div>
       </div>
       <!-- Board div holding tasks  -->
-      <!-- TODO (oneeyedsunday) scroll board -->
-      <div class="no-wrap d-flex process-columns position-relative bg-white">
+      <div class="no-wrap d-flex process-columns position-relative bg-white" #refProcessBoardContainer>
         <div class="w-100 p-2 d-flex height-full">
-          <div class="process-column mr-3" *ngFor="let stage of process?.stages; let i = index;" [attr.data-column_id]="12">
+          <div class="process-column mr-3" *ngFor="let stage of orderStages(process?.stages); let i = index;">
             <div class="wrapper--shadow scroll-wrapper height-full">
               <div class="text-uppercase flex-shrink-0">
                 <div class="p-2 position-relative">
@@ -41,10 +40,14 @@
                       <span data-feather="more-horizontal"></span>
                     </button>
                     <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
+                      <button (click)="completeStage(stage)" class="dropdown-item py-2"
+                        *ngIf="!stage.isComplete">
+                        <span data-feather="check-circle"></span> Complete
+                      </button>
                       <button (click)="openSideBar('editStage', stage)"
                         class="dropdown-item py-2"><span data-feather="edit"></span>  Edit</button>
                         <!-- TODO is this dropdown necessary self -->
-                      <button class="dropdown-item py-2" (click)="confirmDeleteColumn(stage)">
+                      <button class="dropdown-item py-2" (click)="confirmDeleteStage(stage)">
                         <span data-feather="trash-2"></span> Delete</button>
                     </div>
                   </div>
@@ -55,6 +58,10 @@
                   </button>
                   <h4 class="px-1 m-0 f5 v-align-middle d-inline">
                     <span class="badge badge-secondary position-badge mr-1" [ngClass]="{ 'd-none': !stage.tasks?.length }">{{ stage.tasks?.length }}</span>
+                    <span class="mr-2"
+                      [ngClass]=" { 'task-status--complete': stage.isComplete, 'task-status--inprogress': !stage.isComplete } ">
+                      <span data-feather="info"></span>
+                    </span>
                     <span>{{ stage.name }}</span>
                   </h4>
                 </div>
@@ -62,19 +69,19 @@
 
               <div class="scroll flex-grow">
         
-                <div class="board-cards custom-scroll px-2 pb-2 flex-grow" dragula="rearrangetask" [attr.data-columnid]="3">
-                  <div  *ngFor="let task of stage.tasks" [attr.data-taskid]="4" class="board-card">
+                <div class="board-cards custom-scroll px-2 pb-2 flex-grow" dragula="movetask" [attr.data-stageid]="stage.id">
+                  <div  *ngFor="let task of stage.tasks" class="board-card" [attr.data-taskid]="task.id">
                     <div class="d-flex flex-row">
                       <div class="flex-auto position-relative bg-white rounded">
                         <div class="pl-5 p-2 position-relative">
-                          <!-- TODO position status indicator -->
                           <a class="task--title mb-1 mr-5" (click)="preventDefault($event)"
                           (click)="openSideBar('openTask', task)" href="#">
                           <!-- TODO (oneeyedsunday) link to task page-->
                             {{ task.summary }}
                           </a>
                           <span class="position-absolute task--info">
-                            <div class="task-status--ok">
+                            <div 
+                              [ngClass]=" { 'task-status--complete': task.isComplete, 'task-status--inprogress': !task.isComplete } ">
                               <span data-feather="info"></span>
                             </div>
                           </span>
@@ -83,13 +90,34 @@
                               <span data-feather="more-horizontal"></span>
                             </button>
                             <div class="dropdown-menu py-0" role="menu" ngbDropdownMenu>
-                              <button class="dropdown-item py-2" (click)="confirmDeleteColumn(task)">
-                                Discard Task</button>
+                              <ng-container *ngIf="!task.isComplete">
+                                  <button class="dropdown-item py-2" (click)="completeTask(task)">
+                                      <span data-feather="check-square"></span> Complete
+                                  </button>
+                              </ng-container>
+                              <button class="dropdown-item py-2" (click)="openSideBar('editTask', task, stage)">
+                                  <span data-feather="edit-3"></span> Update Task
+                              </button>
+                              <button class="dropdown-item py-2" (click)="confirmDeleteTask(stage, task)">
+                                  <span data-feather="trash"></span> Discard Task</button>
                             </div>
                           </div>
-                          <div class="my-1" style="vertical-align: middle !important; height: 1px;"></div>
+                          <div class="my-1" style="vertical-align: middle !important; min-height: 1px;">
+                            <!-- Describe Form attached to Task here -->
+                            <p class="detail">
+                              <!-- TODO link to form -->
+                              Form: <span class="text-muted">{{ getFormNameFromId(task.form) }}</span>
+                            </p>
+                            <!-- Describe & link to document described to task here -->
+                            <p class="detail">
+                              Document: 
+                              <span class="text-muted" [attr.title]="getDoc(task.document)?.description">
+                                <a href="{{getDoc(task.document)?.link || '#'}}" target="_blank">{{  task.document && (getDoc(task.document)?.filename || 'Unkown Document') }}</a>
+                              </span>
+                            </p>
+                          </div>
                           <small class="text-gray d-block f-90">
-                            Assigned to Mr. Adeyanju Isiaka & 3 others
+                            Assigned to {{ getUserNameFromId(task.users) }} & {{ getGroupNameFromId(task.groups) }}
                           </small>
                           <!-- Heck even priority here -->
                         </div>
@@ -108,7 +136,7 @@
       <!-- Div that pops up -->
       <div class="process-pane closed pop-pane border-left border-bottom bg-white" #refSidePane>
         <div class="d-flex flex-column height-full">
-          <div class="d-flex flex-column">
+          <div class="d-flex flex-column height-full">
             <div class="flex-auto overflow-auto">
               <div class="p-3 d-flex f4 lh-condensed justify-content-between border-bottom">
                 <div class="flex-auto overflow-hidden lh-default">
@@ -131,10 +159,11 @@
               </div>
               <div>
                   <ng-container *ngIf="sidebarContent">
-                      <ng-container *ngIf="sidebarContent?.content['taskId']">
+                      <ng-container *ngIf="sidebarContent?.content['stage']">
                           <app-task-create
                           [forms]="forms"
                           [users]="users"
+                          [errored]="uiState.taskError"
                           [groups]="groups"
                           [documents]="documents"
                           [stage]="sidebarContent.extra"
@@ -143,9 +172,11 @@
                           ></app-task-create>
                       </ng-container>
         
-                      <ng-container *ngIf="!sidebarContent?.content?.taskId">
+                      <ng-container *ngIf="!sidebarContent?.content['stage']">
                         <app-project-stage 
                         [stage]="sidebarContent?.content"
+                        [errored]="uiState.stageError"
+                        [maxOrder]="sidebarContent?.content['id'] ? (process?.stages?.length || 1) : (process?.stages?.length || 0) + 1"
                         (stageUpdatedEvent)="handleStageUpdate($event)">
     
                         </app-project-stage>

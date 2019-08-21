@@ -1,5 +1,7 @@
 <div class="card">
-    <div class="card-header" *ngIf="group?.group_name">{{group.group_name}}</div>
+    <div class="card-header" *ngIf="group?.group_name">
+        <a routerLink="/organizations/groups/{{group.id}}" style="color: inherit">{{group.group_name}}</a>
+    </div>
     <div class="card-body">
         <div class="d-flex flex-row" *ngIf="group">
             <!-- TODO (oneeyedsunday) Add borders? -->

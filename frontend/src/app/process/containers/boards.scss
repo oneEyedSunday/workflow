@@ -8,6 +8,7 @@ $stage--footer--height: 30px;
 .process-column {
     background-color: #eff1f3;
     max-width: 355px;
+    min-width: 355px; // TODO scale this?
     // max-height: 355px;
     overflow: hidden;
     border-radius: 6px!important;
@@ -110,8 +111,8 @@ $stage--footer--height: 30px;
     }
 
     &-status {
-        &--ok { color: #28a745!important;  }
-        &--danger {  color: red; }       
+        &--complete { color: #28a745!important;  }
+        &--inprogress {  color: red; }       
     }
 }
 

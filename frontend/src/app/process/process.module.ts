@@ -12,7 +12,7 @@ import * as fromContainers from './containers';
 import * as fromComponents from './components';
 import * as fromServices from './services';
 import { DocumentService } from '../documents/services';
-import { GroupsService } from '../organization/services';
+import { GroupsService, UsersService } from '../organization/services';
 import { FormsService } from '../forms/services';
 
 @NgModule({
@@ -36,6 +36,7 @@ import { FormsService } from '../forms/services';
     ...fromServices.services,
     DocumentService,
     GroupsService,
+    UsersService,
     FormsService
   ]
 })

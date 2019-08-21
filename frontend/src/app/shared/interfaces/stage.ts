@@ -12,13 +12,17 @@ interface IStage {
 
 export class Stage implements Partial<IStage> {
     name;
-    tasks;
+    tasks: Task[];
     user;
     order;
     process;
+    isComplete;
     id;
     constructor(initObj?: Partial<IStage>) {
         this.name = initObj ? initObj.name : '';
         this.tasks = initObj ? initObj.tasks : [];
+        if (initObj && initObj.order) {
+            this.order = initObj.order;
+        }
     }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { of, Observable, throwError, iif, fromEvent } from 'rxjs';
+import { of, Observable, throwError, iif, fromEvent, Subscription } from 'rxjs';
 import { switchMap, catchError, tap, takeUntil } from 'rxjs/operators';
 import { DragulaService } from 'ng2-dragula';
 import * as feather from 'feather-icons';
@@ -11,7 +11,7 @@ import {
 import { StageService, ProcessService, TaskService } from '../services';
 import { AuthService } from '@shared/auth';
 import { DocumentService } from '../../documents/services';
-import { GroupsService } from '../../organization/services';
+import { GroupsService, UsersService } from '../../organization/services';
 import { FormsService } from '../../forms/services';
 
 interface Coords {
@@ -27,6 +27,7 @@ interface Coords {
 
 type SideBarTriggers = 'addTask' | 'editTask' | 'addStage' | 'editStage' | 'openTask' | 'openStage';
 
+const dragulaGroups: string[] = [];
 @Component({
   selector: 'app-projects-view',
   templateUrl: './view.component.html',
@@ -46,6 +47,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   groups: IGroup[] = [];
   forms: IForm[] = [];
   documents: Document[] = [];
+  subs: Subscription = new Subscription();
   sidebarContent: {
     content: Task | Stage;
     description: string;
@@ -67,15 +69,14 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private _router: Router,
     private _dragulaService: DragulaService,
     // add ref to notif eg toasts
-    // ref to auth svc
     private _auth: AuthService,
     private _proSvc: ProcessService,
     private _stageSvc: StageService,
     private _formsSvc: FormsService,
     private _docSvc: DocumentService,
     private _groupsSvc: GroupsService,
-    private _taskSvc: TaskService
-    // ref to process svc
+    private _taskSvc: TaskService,
+    private _usersSvc: UsersService
     // scroll helper
   ) {
     this.user = (this._auth.currentUserValue as IUser);
@@ -96,19 +97,20 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         );
       }),
       tap(process => {
-        this.bootstrapDragula();
         this.process = process;
-        feather.replace();
+        this.triggerFeather();
+        setTimeout(() => {
+          this.initializeSizeWatch();
+          this.bootstrapDragula();
+        }, 10);
         this.uiState = {...this.uiState, loading: false};
-        setTimeout(() => feather.replace());
       }),
       catchError(err => this.handleError(err))
     ).subscribe();
   }
 
   ngAfterViewInit() {
-    feather.replace();
-    setTimeout(() => feather.replace());
+    this.triggerFeather();
   }
 
   getProcess(): Observable<Process> {
@@ -128,7 +130,14 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   fetchUsers() {
-    this.users = [this.user];
+    this._usersSvc.fetchAllUsers()
+      .subscribe(users => {
+        if (!(users || []).length) {
+          this.users = [this.user];
+        } else {
+          this.users = users;
+        }
+      });
   }
 
   fetchGroups() {
@@ -153,20 +162,71 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   bootstrapDragula(): void {
-    // TODO (oneeyedsunday) close stage view when moving stages
+    dragulaGroups.push('movetask');
+    let dragStart;
+
+    this.subs.add(this._dragulaService.drag('movetask')
+      .subscribe(({ name, el, source }) => {
+        // monitor y axis
+        dragStart = fromEvent(document, 'mousemove');
+
+        dragStart.pipe(
+          takeUntil(fromEvent(document, 'mouseup'))
+        ).subscribe((mouseEvt: MouseEvent) => {
+          if ((mouseEvt.pageX + 40) > (this.coords.taskboard.width + this.coords.taskboard.left)) {
+            this.scrollBoard('RIGHT');
+          } else if (mouseEvt.pageX < 400) {
+            this.scrollBoard('LEFT');
+          }
+        });
+      })
+    );
+
+    this.subs.add(this._dragulaService.drop('movetask')
+      .subscribe(({ name, el, target, source, sibling }) => {
+        const taskId = parseInt((el as HTMLDivElement).dataset['taskid'], 10);
+        const newStageId = parseInt((target as HTMLDivElement).dataset['stageid'], 10);
+        const oldStageId = parseInt((source as HTMLDivElement).dataset['stageid'], 10);
+        this.moveTask(taskId, newStageId, oldStageId);
+      })
+    );
+  }
+
+  scrollBoard(directiom: 'RIGHT' | 'LEFT', size?: number): void {
+    if (directiom === 'RIGHT') {
+      this.boardContainerRef.nativeElement.scrollLeft += size || 50;
+    } else if (directiom === 'LEFT') {
+      this.boardContainerRef.nativeElement.scrollLeft -= size || 50;
+    }
+  }
+
+  initializeSizeWatch() {
+    this.calculateDims();
+    const context = this;
+    window.addEventListener('resize', evt => {
+      context.calculateDims();
+    });
+  }
+
+  calculateDims(): void {
+    this.coords.body = document.getElementsByTagName('body')[0].getBoundingClientRect();
+    this.coords.taskboard = (this.boardContainerRef.nativeElement as HTMLDivElement).getBoundingClientRect();
   }
 
   openSideBar(trigger: SideBarTriggers, content: Task | Stage, extra?: Stage): void {
+    if (content) {
+      content = {...content};
+    }
     switch (trigger) {
       case 'addTask': case 'openTask': case 'editTask':
         content = content || new Task();
         this.sidebarContent = {
-          content, description: (content as Task).summary || 'New Task',
+          content, description: (content as Task).id ? 'Update Task' : 'New Task',
           extra
         };
         break;
       case 'addStage': case 'openStage': case 'editStage':
-        content = content || new Stage();
+        content = content || new Stage({ order: '' + ((this.process.stages || []).length + 1) });
         this.sidebarContent = {
           content, description: (content as Stage).name || 'New Stage'
         };
@@ -179,8 +239,27 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
   }
 
-  confirmDeleteColumn(details: any) {
+  confirmDeleteStage(stage: Stage) {
     // TODO modals
+    this._stageSvc.deleteStage(stage.id)
+      .subscribe(() => {
+        const stageIndex = this.process.stages
+          .findIndex(s => s.id === stage.id);
+        if (stageIndex > -1) {
+          this.process.stages.splice(stageIndex, 1);
+        }
+      });
+  }
+
+  confirmDeleteTask(stage: Stage, task: Task) {
+    // TODO confirmation modals
+    this._taskSvc.deleteTask(task.id)
+      .subscribe(() => {
+        const taskIndex = (stage.tasks || []).findIndex(t => t.id === task.id);
+        if (taskIndex > -1) {
+          stage.tasks.splice(taskIndex, 1);
+        }
+      });
   }
 
   preventDefault(event: Event) {
@@ -206,23 +285,39 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res: Stage) => {
         this.sidebarContent = null;
         this.process.stages.push(res);
-        Promise.resolve().then(() => feather.replace());
-        feather.replace();
+        this.triggerFeather();
         (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
         // toastr success
       }, () => this.uiState = {...this.uiState, stageError: true});
   }
 
   updateStage(stage: Stage) {
+    this.uiState = { ...this.uiState, stageError: false };
+    this._stageSvc.updateStage(stage.id, { ...stage, user: this.user.id })
+    .subscribe((res: Stage) => {
+      this.sidebarContent = null;
+      const stageIndex = this.process.stages
+        .findIndex(s => s.id === res.id);
+      if (stageIndex > -1) {
+        this.process.stages[stageIndex] = stage;
+      }
+      this.triggerFeather();
+      (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
+      // toastr success
+    }, () => this.uiState = {...this.uiState, stageError: true});
   }
 
   handleTaskUpdate(task: Task) {
     const cleanedTask = {...task, user: this.user.id,
-      users: task.users.map(u => u.id), document: task.document ? task.document.id : null,
-      form: task.form ? task.form.formId : null,
-      stage: task.stage.id, groups: task.groups ? task.groups[0].id : ''
+      users: task.users || '', document: task.document || '',
+      form: task.form || '',
+      stage: task.stage, groups: task.groups || ''
     };
-    this.createTask(cleanedTask);
+    if (task.id) {
+      this.updateTask(cleanedTask);
+    } else {
+      this.createTask(cleanedTask);
+    }
   }
 
   createTask(task: Partial<Task>) {
@@ -231,14 +326,118 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe((res: Task) => {
         this.sidebarContent = null;
         (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
-        // find stage
-        // right no
-        // this.process.stages.find(s => s.id === res.stage);
+        const stage = this.process.stages.find(s => s.id === res.stage);
+        if (stage) {
+          (stage.tasks || []).push(res);
+          this.triggerFeather();
+        }
       }, () => this.uiState = { ...this.uiState, taskError: true });
   }
 
-  ngOnDestroy(): void {
+  updateTask(task: Task) {
+    this.uiState = { ...this.uiState, taskError: false };
+    this._taskSvc.updateTask(task)
+      .subscribe((res: Task) => {
+        this.sidebarContent = null;
+        (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
+        const stage = this.process.stages.find(s => s.id === res.stage);
+        if (stage) {
+          const taskUpdatedIndex = stage.tasks.findIndex(t => t.id === res.id);
+          if (taskUpdatedIndex > -1) {
+            stage.tasks[taskUpdatedIndex] = res;
+            this.triggerFeather();
+          }
+        }
+      }, () => this.uiState = { ...this.uiState, taskError: true });
+  }
 
+  moveTask(taskId: number, stageId: number, oldStageId: number) {
+    this._taskSvc.moveTask(taskId, stageId)
+      .subscribe((res) => {
+        const oldStage = this.process.stages.find(s => s.id === oldStageId);
+        const newStage = this.process.stages.find(s => s.id === stageId);
+        if (oldStage) {
+          (oldStage.tasks || []).splice((oldStage.tasks || []).findIndex(t => t.id === taskId), 1);
+        }
+
+        if (newStage) {
+          (newStage.tasks || []).push(res as Task);
+        }
+
+        this.triggerFeather();
+      });
+  }
+
+  orderStages(stages?: Stage[]): Stage[] {
+    return (stages || []).sort((a, b) => +a.order > +b.order ? 1 : -1);
+  }
+
+  // TODO update this to handle arrays
+  getUserNameFromId(userId: number): string {
+    if (!userId) {
+      return 'No one';
+    }
+    const found = this.users.find(user => user.id === userId);
+    if (!found) {
+      return `Unknown`;
+    }
+    return `${found.first_name} ${found.last_name}`;
+  }
+
+  // TODO update this to handle arrays
+  getGroupNameFromId(groupId: number): string {
+    if (!groupId) {
+      return 'No group';
+    }
+    const found = this.groups.find(group => group.id === groupId);
+    if (!found) {
+      return `Unknown Group`;
+    }
+    return `Group: ${found.group_name}`;
+  }
+
+  getFormNameFromId(formId: number): string {
+    if (!formId) {
+      return '';
+    }
+    const found = this.forms.find(form => form.id === formId);
+    if (!found) {
+      return 'Unknown Form';
+    }
+    return found.form_name;
+  }
+
+  getDoc(docId): Document {
+    return this.documents.find(doc => doc.id === docId);
+  }
+
+  completeStage(stage: Stage) {
+    this._stageSvc.completeStage(stage.id)
+      .subscribe((res: Partial<Stage>) => {
+        stage.isComplete = res.isComplete;
+      });
+  }
+
+  completeTask(task: Task) {
+    this._taskSvc.completeTask(task.id)
+      .subscribe((res: Partial<Task>) => {
+        task.isComplete = res.isComplete;
+      });
+  }
+
+  triggerFeather(): void {
+    Promise.resolve().then(() => {
+      feather.replace();
+      (window as any).feather.replace();
+    });
+    feather.replace();
+
+    setTimeout(() => (window as any).feather.replace(), 30);
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
+    dragulaGroups.forEach(groupName => this._dragulaService.destroy(groupName));
   }
 
 }
