@@ -1,3 +1,5 @@
+import { Task, Document, Group } from '@shared/interfaces';
+
 export interface IUser {
     id?; number;
     first_name: string;
@@ -10,6 +12,10 @@ export interface IUser {
     phone_number: string;
     profile_pic: any;
     password?: string;
+    tasks_to_user?: Task[];
+    userdocuments?: Document[];
+    userformresponse?: any[]; // TODO make form response & interface
+    usergroups?: { grp: string; id: number }[];
 }
 
 export interface IUserRegisteration {

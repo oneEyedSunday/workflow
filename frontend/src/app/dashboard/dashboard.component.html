@@ -1,0 +1,92 @@
+<div class="screen--mask" *ngIf="loading">
+    <app-loader [size]="5"></app-loader>
+</div>
+<ng-container *ngIf="me">
+    <div class="my-5">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 my-3">
+                    <div class="card">
+                        <div class="card-header">Personal Info</div>
+                        <div class="card-body">
+                            <div class="media">
+                                <img style="width: 75px; height: 75px"
+                                    [attr.src]="me.profile_pic || '/assets/site/avatar.png' "
+                                    alt="..." class="mr-3 rounded-circle">
+                                <div class="media-body">
+                                    <h5 class="mt-0">Bio</h5>
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item">
+                                            Name: {{ me.first_name }} {{ me.last_name }}
+                                        </div>
+                                        <div class="list-group-item">
+                                            Address: {{ me.address }}
+                                        </div>
+                                        <div class="list-group-item">
+                                            Date Of Birth: {{ me.date_of_birth | date }}
+                                        </div>
+                                        <div class="list-group-item">
+                                            Phone Number: {{ me.phone_number }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 my-3">
+                    <div class="card" style="min-height: 350px">
+                        <div class="card-header">Assigned Tasks</div>
+                        <div class="card-body">
+                            <div class="list-group-flush">
+                                <div class="list-group-item" *ngFor="let task of me.tasks_to_user">
+                                    <a routerLink="/process" title="Go To Processes"> Task #{{ task.id }}</a>
+                                </div>
+                                <div class="list-group-item" *ngIf="!me.tasks_to_user?.length">
+                                    No tasks currently assigned to you.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 my-3">
+                    <div class="card" style="min-height: 350px">
+                        <div class="card-header">Form Responses</div>
+                        <div class="card-body">
+                            No Form Responses yet.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12 col-lg-6 col-xl-4 my-3">
+                    <div class="card">
+                        <div class="card-header">Groups</div>
+                        <div class="card-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div *ngFor="let group of me.usergroups" class="col-md-6 col-sm-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex flex-row align-items-center">
+                                                    <div class="group--card__widget">
+                                                        <span class="">
+                                                            <a routerLink="/organizations/groups/{{group.id}}">
+                                                                {{ group.grp?.substr(0, 2)?.toLowerCase() }}
+                                                            </a>
+                                                        </span>
+                                                    </div>
+                                                    <p class="mb-0" style="word-break: break-all;">{{ group.grp }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>  
+</ng-container>
