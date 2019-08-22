@@ -4,6 +4,7 @@ import * as FormContainers from './containers';
 
 const routes: Routes = [
   { path: 'new', component: FormContainers.CreateUpdateComponent, data: { edit: false } },
+  { path: 'view/:formId', component: FormContainers.ViewFormComponent },
   { path: '', component: FormContainers.ListComponent },
   { path: ':formId', component: FormContainers.CreateUpdateComponent, data: { edit: true } },
 ];

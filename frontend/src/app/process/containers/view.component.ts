@@ -396,15 +396,8 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     return `Group: ${found.group_name}`;
   }
 
-  getFormNameFromId(formId: number): string {
-    if (!formId) {
-      return '';
-    }
-    const found = this.forms.find(form => form.id === formId);
-    if (!found) {
-      return 'Unknown Form';
-    }
-    return found.form_name;
+  getForm(formId: number): IForm {
+    return this.forms.find(form => form.id === formId);
   }
 
   getDoc(docId): Document {

@@ -1,0 +1,12 @@
+<div class="my-5">
+    <div class="container">
+        <div class="card">
+            <div class="card-header">Fill Form</div>
+            <div class="card-body">
+                <app-forms-viewer
+                (formSaveSuccessEvent)="handleSuccessfulSubmission($event)"
+                [srcDoc]="_workflow_src_doc"></app-forms-viewer>
+            </div>
+        </div>
+    </div>
+</div>

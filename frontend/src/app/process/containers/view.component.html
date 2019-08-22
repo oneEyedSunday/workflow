@@ -106,7 +106,9 @@
                             <!-- Describe Form attached to Task here -->
                             <p class="detail">
                               <!-- TODO link to form -->
-                              Form: <span class="text-muted">{{ getFormNameFromId(task.form) }}</span>
+                              Form: <span class="text-muted">
+                                <a routerLink="/forms/view/{{task.form}}">{{ task.form && (getForm(task.form)?.form_name || 'Unknown form') }}</a>
+                              </span>
                             </p>
                             <!-- Describe & link to document described to task here -->
                             <p class="detail">

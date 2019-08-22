@@ -27,11 +27,19 @@ export class FormBuilderService {
             );
     }
 
-    fetchFormTemplate(formId: number): Observable<any> {
+    fetchFormTemplate(formId: number): Observable<string> {
         return this.http.get(`${this.url}/1/update/${formId}`, {
             responseType: 'text'
         }).pipe(
             catchError(this.handleError('Failed to Get Form Template', null))
+        );
+    }
+
+    renderForm(formId: number): Observable<string> {
+        return this.http.get(`${this.url}/1/view/${formId}/`, {
+            responseType: 'text'
+        }).pipe(
+            catchError(this.handleError('Failed to fetch form', null))
         );
     }
 }
