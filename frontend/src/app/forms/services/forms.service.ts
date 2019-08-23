@@ -5,7 +5,7 @@ import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { HandleError, HttpErrorHandler } from '@shared/http-error-handler.service';
 import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { IForm } from '@shared/interfaces';
+import { IForm, IFormResponse } from '@shared/interfaces';
 import { AuthService } from '@shared/auth';
 
 @Injectable()
@@ -26,5 +26,15 @@ export class FormsService {
             .pipe(
                 catchError(this.handleError('Fetch Forms', null))
             );
+    }
+
+    getFormResponses(): Observable<any> {
+        return this.http.get(`${this.url}formresponse/`)
+            .pipe(catchError(this.handleError('Failed to get Form responses', null)));
+    }
+
+    getFormResponse(formId: number): Observable<IFormResponse[]> {
+        return this.http.get(`${AppConfig.API_URL}/process/formbuilder/org/1/view/${formId}/responses/`)
+            .pipe(catchError(this.handleError('Failed to get Form responses', null)));
     }
 }

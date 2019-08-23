@@ -14,7 +14,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint --fix",
-      "pre-push": "ng test --watch=false --code-coverage=true --source-map && npm run build"
+      "pre-push": "ng test --watch=false --code-coverage=true --source-map && npm run build --prod"
     }
   },
   "dependencies": {
