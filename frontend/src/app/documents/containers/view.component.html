@@ -1,0 +1,27 @@
+<div class="my-5">
+    <div class="container">
+        <ng-template #loading>
+            <div class="screen--mask" *ngIf="!document">
+                <app-loader [size]="5"></app-loader>
+            </div>
+        </ng-template>
+        
+        <div *ngIf="document else loading" class="w-100 d-flex justify-content-center align-items-center" style="height: 80vh">
+            <div class="m-3 jumbotron" style="min-width: 400px">
+                <h1 class="display-4 text-center">{{ document.filename || 'Unnamed' }}</h1>
+                <p class="lead">
+                    <ng-container *ngIf="document.description">
+                        {{ document.description }}
+                    </ng-container>
+                    <span class="font-italic text-muted" *ngIf="!document.description">No Description</span>
+                </p>
+                <hr class="my-4">
+                <p class="m-1 d-flex align-items-center justify-content-center">
+                    <button class="btn btn-success" *ngIf="document['documenttasks']">Acknowledge</button>
+                    <a href="{{ document.link }}" target="_blank" style="text-decoration: none !important"
+                        class="btn btn-link ml-2 border border-secondary text-secondary">Download</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
