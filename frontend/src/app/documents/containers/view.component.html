@@ -17,7 +17,13 @@
                 </p>
                 <hr class="my-4">
                 <p class="m-1 d-flex align-items-center justify-content-center">
-                    <button class="btn btn-success" *ngIf="document['documenttasks']">Acknowledge</button>
+                    <button class="btn btn-success" 
+                        (click)="notifyFlow()"
+                        *ngIf="userCanAcknowledge"
+                        [disabled]="notifying">
+                        <span *ngIf="notifying" class="mr-2"><i class="fa fa-spin fa-spinner"></i></span>
+                        Acknowledge
+                    </button>
                     <a href="{{ document.link }}" target="_blank" style="text-decoration: none !important"
                         class="btn btn-link ml-2 border border-secondary text-secondary">Download</a>
                 </p>
