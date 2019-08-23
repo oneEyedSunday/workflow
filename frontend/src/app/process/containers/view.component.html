@@ -105,9 +105,8 @@
                           <div class="my-1" style="vertical-align: middle !important; min-height: 1px;">
                             <!-- Describe Form attached to Task here -->
                             <p class="detail">
-                              <!-- TODO link to form -->
                               Form: <span class="text-muted">
-                                <a routerLink="/forms/view/{{task.form}}" [queryParams]=" {'task': task.id} ">{{ task.form && (getForm(task.form)?.form_name || 'Unknown form') }}</a>
+                                <a routerLink="/forms/view/{{task.form}}" [queryParams]=" {'task': task.id, 'process': process.id} ">{{ task.form && (getForm(task.form)?.form_name || 'Unknown form') }}</a>
                               </span>
                             </p>
                             <!-- Describe & link to document described to task here -->
@@ -143,8 +142,6 @@
               <div class="p-3 d-flex f4 lh-condensed justify-content-between border-bottom">
                 <div class="flex-auto overflow-hidden lh-default">
                   <div>{{ sidebarContent?.description }}</div>
-                  <!-- Form to edit name -->
-                  <form class="d-none"></form>
                 </div>
                 <div class="d-flex">
                   <div>
@@ -153,11 +150,6 @@
                     </button>
                   </div>
                 </div>
-                
-                <!-- TODO put task creation cmp here -->
-                
-                
-                <!-- TODO put stage creation cmp here -->
               </div>
               <div>
                   <ng-container *ngIf="sidebarContent">
@@ -190,8 +182,6 @@
           </div>
         </div>
       </div>
-
-      <!-- TODO crad with CTA to add stage -->
     </div>
 
     <div *ngIf="uiState.loading" class="height-full d-flex justify-content-center align-items-center">

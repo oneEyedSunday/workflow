@@ -37,4 +37,10 @@ export class FormsService {
         return this.http.get(`${AppConfig.API_URL}/process/formbuilder/org/1/view/${formId}/responses/`)
             .pipe(catchError(this.handleError('Failed to get Form responses', null)));
     }
+
+    notifyEngine(taskId: number) {
+        return this.http.post(`${AppConfig.API_URL}/process/processflow/`, { id: taskId }).pipe(
+            catchError(this.handleError('Failed to acknowledge receipt', null))
+        );
+    }
 }
