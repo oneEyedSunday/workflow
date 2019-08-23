@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { of, Observable, throwError, iif } from 'rxjs';
-import { switchMap, catchError, tap, finalize, delay } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { switchMap, catchError, tap, finalize, takeUntil } from 'rxjs/operators';
 import { DocumentService } from '../services';
 import { Document } from '@shared/interfaces';
 import * as feather from 'feather-icons';
@@ -9,17 +9,35 @@ import * as feather from 'feather-icons';
     selector: 'app-documents-view',
     templateUrl: './view.component.html'
 })
-export class ViewComponent implements OnInit {
+export class ViewComponent implements OnInit, OnDestroy {
     document: Document;
+    taskId: number;
+    notifying: boolean;
+    private onDestroy$ = new Subject<void>();
     constructor(
         private _route: ActivatedRoute,
         private _router: Router,
         private _docSvc: DocumentService
     ) { }
 
+    get userCanAcknowledge(): boolean {
+        if (!this.document) {
+            return;
+        }
+        return (this.document['documenttasks'] || []).indexOf(this.taskId) > -1;
+    }
+
     ngOnInit() {
         feather.replace();
         this.getDocument();
+        this._route.queryParamMap
+            .pipe(takeUntil(this.onDestroy$))
+            .subscribe((queryParams: ParamMap) => {
+                const rawTaskId = queryParams.get('task');
+                if (rawTaskId && !isNaN(parseInt(rawTaskId, 10))) {
+                    this.taskId = parseInt(rawTaskId, 10);
+                }
+            });
     }
 
     getDocument() {
@@ -28,12 +46,23 @@ export class ViewComponent implements OnInit {
                 if (isNaN(+params.get('documentId'))) {
                     throw new Error('Invalid Document Id');
                 } else {
-                    return this._docSvc.getDocumentById(+params.get('documentId')).pipe(delay(1500));
+                    return this._docSvc.getDocumentById(+params.get('documentId'));
                 }
             }),
             tap(doc => this.document = doc),
             catchError(() => this._router.navigate(['documents']))
         ).subscribe();
+    }
+
+    notifyFlow() {
+        this.notifying = true;
+        this._docSvc.notifyEngine(this.taskId).pipe(
+            finalize(() => this.notifying = false)
+        ).subscribe(res => console.log(res));
+    }
+
+    ngOnDestroy(): void {
+        this.onDestroy$.next();
     }
 
 }

@@ -45,4 +45,10 @@ export class DocumentService {
         formData.append('description', document.description);
         return this.http.post(this.url + '/process/document/', formData);
     }
+
+    notifyEngine(taskId: number) {
+        return this.http.post(`${this.url}/process/processflow/`, { id: taskId }).pipe(
+            catchError(this.handleError('Failed to acknowledge receipt', null))
+        );
+    }
 }
