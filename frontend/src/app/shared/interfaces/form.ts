@@ -17,3 +17,12 @@ export interface IForm {
     user: number | any;
     user_id: number;
 }
+
+export interface IFormResponse {
+    created_date: string;
+    form: number;
+    id: number;
+    modified_date: string;
+    response?: Record<string, string[]>[];
+    user: number;
+}

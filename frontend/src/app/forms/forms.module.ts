@@ -7,7 +7,9 @@ import { FormsRoutingModule } from './forms-routing.module';
 import * as fromContainers from './containers';
 import * as fromComponents from './components';
 import * as fromServices from './services';
+import { NgbTabsetModule } from '@ng-bootstrap/ng-bootstrap';
 import { SharedModule } from '@shared/shared.module';
+import { UsersService } from '../organization/services';
 
 @NgModule({
   declarations: [
@@ -20,10 +22,12 @@ import { SharedModule } from '@shared/shared.module';
     ReactiveFormsModule,
     SharedModule,
     QuillModule.forRoot(),
+    NgbTabsetModule,
     FormsRoutingModule
   ],
   providers: [
-    ...fromServices.services
+    ...fromServices.services,
+    UsersService
   ]
 })
 export class WorkflowFormsModule { }

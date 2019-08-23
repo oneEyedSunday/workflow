@@ -3,8 +3,9 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { of, Observable, throwError, iif } from 'rxjs';
 import { AuthService } from '@shared/auth';
 import { switchMap, catchError, tap } from 'rxjs/operators';
-import { FormBuilderService } from '../services';
-import { IForm } from '@shared/interfaces';
+import { FormBuilderService, FormsService } from '../services';
+import { IForm, IFormResponse, IUser } from '@shared/interfaces';
+import { UsersService } from '../../organization/services';
 
 interface WindowWithToken extends Window {
     WORKFLOW_TOKEN: string;
@@ -17,13 +18,18 @@ interface WindowWithToken extends Window {
 export class CreateUpdateComponent implements OnInit {
     _workflow_src_doc: string;
     existing: boolean;
+    formResponses: IFormResponse[];
+    users: IUser[] = [];
     constructor(
         private _builder: FormBuilderService,
         private _route: ActivatedRoute,
+        private _formSvc: FormsService,
+        private _usersSvc: UsersService,
         private router: Router
     ) { }
 
     ngOnInit() {
+        this.getUsers();
         this._route.data.pipe(
             switchMap((data: { edit: boolean }) => {
                 this.existing = data.edit;
@@ -55,10 +61,34 @@ export class CreateUpdateComponent implements OnInit {
                 if (isNaN(+params.get('formId'))) {
                     throw new Error('Invalid form Id');
                 } else {
+                    this.getResponses(+params.get('formId'));
                     return this._builder.fetchFormTemplate(+params.get('formId'));
                 }
             })
         );
+    }
+
+    getResponses(formId: number) {
+        this._formSvc.getFormResponse(formId)
+            .subscribe(responses => this.formResponses = responses);
+    }
+
+    getUsers() {
+        this._usersSvc.fetchAllUsers()
+            .subscribe(users => {
+                this.users = users;
+            });
+    }
+
+    getUserName(userId: number) {
+        if (!userId) {
+            return 'No One';
+          }
+        const found = this.users.find(user => user.id === userId);
+        if (!found) {
+            return `Unknown`;
+          }
+        return `${found.first_name} ${found.last_name}`;
     }
 
 }

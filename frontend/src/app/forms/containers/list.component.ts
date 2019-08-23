@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IForm } from '@shared/interfaces';
-import { finalize } from 'rxjs/operators';
+import { finalize, tap } from 'rxjs/operators';
 import { FormsService } from '../services';
 
 @Component({
@@ -16,6 +16,9 @@ export class ListComponent implements OnInit {
 
     ngOnInit() {
         this.getForms();
+        this._formsSvc.getFormResponses()
+            .pipe(tap(m => console.log(m)))
+            .subscribe();
     }
 
     getForms(): void {

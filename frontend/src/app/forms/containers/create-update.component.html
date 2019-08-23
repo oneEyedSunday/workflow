@@ -1,12 +1,43 @@
 <div class="my-5">
     <div class="container">
-        <div class="card">
-            <div class="card-header">Form Builder</div>
-            <div class="card-body">
-                <app-forms-builder
-                (formSaveSuccessEvent)="handleSuccessfulSubmission($event)"
-                [srcDoc]="_workflow_src_doc"></app-forms-builder>
-            </div>
-        </div>
+        <ngb-tabset [destroyOnHide]="false">
+            <ngb-tab title="Form Builder">
+                <ng-template ngbTabContent>
+                    <div class="card">
+                        <div class="card-body">
+                            <app-forms-builder
+                            (formSaveSuccessEvent)="handleSuccessfulSubmission($event)"
+                            [srcDoc]="_workflow_src_doc"></app-forms-builder>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Responses">
+                <ng-template ngbTabContent>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card my-2" *ngFor="let response of formResponses">
+                                <div class="list-group-flush my-2" >
+                                    <div class="list-group-item">
+                                        <span>Answered: </span> {{  response.created_date | date: 'long' }}
+                                    </div>
+                                    <div class="list-group-item">
+                                        <pre *ngIf="response.response">{{ response.response | json }}</pre>
+                                        <span class="text-muted font-italic" *ngIf="!response.response">Unable to get response</span>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <span>Member: </span> {{  getUserName(response.user) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card justify-content-center align-items-center" style="min-height: 300px" *ngIf="!formResponses || !formResponses?.length">
+                                <span class="font-italic text-muted" *ngIf="!formResponses">Couldnt get form responses</span>
+                                <span class="font-italic text-muted" *ngIf="!formResponses?.length && formResponses">No responses yet</span>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+        </ngb-tabset>
     </div>
 </div>
