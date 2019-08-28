@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Process } from '@shared/interfaces';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AppConfig } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { HandleError, HttpErrorHandler } from '@shared/http-error-handler.service';
@@ -41,6 +41,15 @@ export class ProcessService {
     formData.append('organization', '1');
     return this.http.post(this.url + '/process/', formData).pipe(
       catchError(this.handleError('Create Base Process Failed', null))
+    );
+  }
+
+  updateProcessMeta(id: number, process: Partial<Process>): Observable<Partial<Process>> {
+    type ProcessMeta = Pick<Process, 'process_name' | 'description'>;
+    const { process_name, description } = process;
+    const meta: ProcessMeta = { process_name, description };
+    return this.http.patch(this.url + '/process/' + id + '/', meta).pipe(
+      catchError(this.handleError('Failed to update Process meta', null))
     );
   }
 }

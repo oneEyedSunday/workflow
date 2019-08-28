@@ -25,7 +25,7 @@ interface Coords {
   width: number;
 }
 
-type SideBarTriggers = 'addTask' | 'editTask' | 'addStage' | 'editStage' | 'openTask' | 'openStage';
+type SideBarTriggers = 'addTask' | 'editTask' | 'addStage' | 'editStage' | 'openTask' | 'openStage' | 'editProcess';
 
 const dragulaGroups: string[] = [];
 @Component({
@@ -49,7 +49,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   documents: Document[] = [];
   subs: Subscription = new Subscription();
   sidebarContent: {
-    content: Task | Stage;
+    content: Task | Stage | Process;
     description: string;
     extra?: Stage
   } = null;
@@ -61,7 +61,8 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   uiState = {
     loading: true,
     stageError: false,
-    taskError: false
+    taskError: false,
+    processMetaError: false
   };
 
   constructor(
@@ -213,8 +214,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.coords.taskboard = (this.boardContainerRef.nativeElement as HTMLDivElement).getBoundingClientRect();
   }
 
-  openSideBar(trigger: SideBarTriggers, content: Task | Stage, extra?: Stage): void {
+  openSideBar(trigger: SideBarTriggers, content: Task | Stage | Process, extra?: Stage): void {
     if (content) {
+      // deep copy so changes do not reflect
       content = {...content};
     }
     switch (trigger) {
@@ -229,6 +231,11 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         content = content || new Stage({ order: '' + ((this.process.stages || []).length + 1) });
         this.sidebarContent = {
           content, description: (content as Stage).name || 'New Stage'
+        };
+        break;
+      case 'editProcess':
+        this.sidebarContent = {
+          content, description: 'Update Process Metadata'
         };
         break;
       default:
@@ -277,6 +284,19 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
         order: stage.order || this.process.stages.length + 1} );
     }
     // add user and process details?
+  }
+
+  handleProcessMetaUpdate(process: Process) {
+    this.uiState = { ...this.uiState, processMetaError: false};
+    this._proSvc.updateProcessMeta(process.id, process)
+      .subscribe((res) => {
+        // for now dont white wash errything just pertinetnt arts
+        this.process.process_name = res.process_name;
+        this.process.description = res.description;
+        this.triggerFeather();
+        (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
+        this.sidebarContent = null;
+      }, () => this.uiState = { ...this.uiState, processMetaError: true });
   }
 
   createStage(stage: Partial<Stage>) {
