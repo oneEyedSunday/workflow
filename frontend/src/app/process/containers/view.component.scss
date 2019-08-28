@@ -8,3 +8,20 @@ p.detail {
     font-weight: 300;
     margin-bottom: 0.5rem !important;
 }
+
+.process--meta__wrapper {
+    max-width: 600px;
+
+    @media screen and (max-width: 600px){
+        max-width: 80%;
+    }
+}
+
+.f-300 {
+    font-weight: 300;
+}
+
+.blend--link {
+    text-decoration-color: #000;
+    color: #000;
+}
