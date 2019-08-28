@@ -83,8 +83,14 @@ export class SingleGroupViewComponent implements OnInit {
             });
     }
 
-    removeUserFromGroup(userId: number) {
-
+    removeUserFromGroup(userGroupId: number) {
+        this._groupSvc.removeUserFromGroup(userGroupId)
+        .subscribe(() => {
+            const index = (this.group.usertogroups || []).findIndex(item => item.id === userGroupId);
+            if (index > -1) {
+                this.group.usertogroups.splice(index, 1);
+            }
+        });
     }
 
     addUser(userId: number) {
