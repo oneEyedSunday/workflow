@@ -68,5 +68,9 @@ export class GroupsService {
         );
     }
 
-    removeUserFromGroup(groupId: number, userId: number) {}
+    removeUserFromGroup(id: number) {
+        return this.http.delete(`${AppConfig.API_URL}/org/removeuserfromgroup/${id}`).pipe(
+            catchError(this.handleError('Failed to Remove from Group'))
+        );
+    }
 }

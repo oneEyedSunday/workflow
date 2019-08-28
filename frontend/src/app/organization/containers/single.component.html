@@ -1,6 +1,7 @@
 <div class="my-5">
     <div class="container">
-        <p>Group - group name
+        <!-- TODO move meta edit to card -->
+        <p class="d-none">Group - group name
             <span class="fa fa-edit"  data-feather="edit"
             (click)="editGroup = true"></span>
         </p>
@@ -25,8 +26,9 @@
                         <div class="card-header">Group Members</div>
                         <div class="card-body">
                             <ul class="list-group" *ngIf="group.usertogroups?.length">
-                                <li class="list-group-item" *ngFor="let member of group.usertogroups; let index = index">#{{ index + 1 }}  {{ member['user_obj'] }}
-                                    <button class="btn btn-small btn-link muted-link" (click)="removeUserFromGroup(member.id)">
+                                <li class="list-group-item" *ngFor="let member of group.usertogroups; let index = index">
+                                    <span class="py-2 float-left">#{{ index + 1 }}  {{ member['user_obj'] }}</span>
+                                    <button class="btn btn-small btn-link muted-link float-right" (click)="removeUserFromGroup(member.id)">
                                         <span data-feather="user-x"></span> Remove
                                     </button>
                                 </li>
