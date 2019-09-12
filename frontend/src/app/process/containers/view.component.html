@@ -167,7 +167,7 @@
                           ></app-task-create>
                       </ng-container>
         
-                      <ng-container *ngIf="sidebarContent?.content['process']">
+                      <ng-container *ngIf="sidebarContent?.content['process'] || sidebarContent?.content['order']">
                         <app-project-stage 
                         [stage]="sidebarContent?.content"
                         [errored]="uiState.stageError"
