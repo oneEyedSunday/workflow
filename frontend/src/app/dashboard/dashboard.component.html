@@ -40,7 +40,21 @@
                         <div class="card-body">
                             <div class="list-group-flush">
                                 <div class="list-group-item" *ngFor="let task of me.tasks_to_user">
-                                    <a routerLink="/process" title="Go To Processes"> Task #{{ task.id }}</a>
+                                    <div class="my-1" style="vertical-align: middle !important; min-height: 1px;">
+                                        <!-- Describe Form attached to Task here -->
+                                        <p class="detail">
+                                          Form: <span class="text-muted">
+                                            <a routerLink="/forms/view/{{task.form}}" [queryParams]=" {'task': task.id} ">{{ task.form && (getFormMeta(task.form)?.form_name || 'Unknown form') }}</a>
+                                          </span>
+                                        </p>
+                                        <!-- Describe & link to document described to task here -->
+                                        <p class="detail">
+                                          Document: 
+                                          <span class="text-muted" [attr.title]="getDocMeta(task.document)?.description">
+                                            <a routerLink="/documents/view/{{task.document}}" [queryParams]=" {'task': task.id} ">{{  task.document && (getDocMeta(task.document)?.filename || 'Unkown Document') }}</a>
+                                          </span>
+                                        </p>
+                                    </div>
                                 </div>
                                 <div class="list-group-item" *ngIf="!me.tasks_to_user?.length">
                                     No tasks currently assigned to you.
