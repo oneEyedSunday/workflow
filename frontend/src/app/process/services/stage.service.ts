@@ -19,32 +19,19 @@ export class StageService {
   }
 
   createStage(stage: Partial<Stage>): Observable<Stage> {
-    const formData = new FormData();
-    formData.append('name', stage.name);
-    formData.append('order', `${stage.order}`);
-    formData.append('user', `${stage.user}`);
-    formData.append('process', `${stage.process}`);
-    return this.http.post(this.url + '/process/stage/', formData).pipe(
+    return this.http.post(this.url + '/process/stage/', stage).pipe(
       catchError(this.handleError('Create Stage Failed', null))
     );
   }
 
   updateStage(id: number, stage: Stage): Observable<Stage> {
-    const formData = new FormData();
-    formData.append('id', stage.id);
-    formData.append('name', stage.name);
-    formData.append('order', `${stage.order}`);
-    formData.append('user', `${stage.user}`);
-    formData.append('process', `${stage.process}`);
-    return this.http.put(`${this.url}/process/stage/${id}/`, formData).pipe(
+    return this.http.put(`${this.url}/process/stage/${id}/`, stage).pipe(
       catchError(this.handleError('Update Stage Failed', null))
     );
   }
 
   completeStage(stageId: number): Observable<Partial<Stage>> {
-    const formData = new FormData();
-    formData.append('isComplete', 'true');
-    return this.http.patch(`${this.url}/process/stage/${stageId}/`, formData).pipe(
+    return this.http.patch(`${this.url}/process/stage/${stageId}/`, { isComplete: true }).pipe(
       catchError(this.handleError('Complete Stage Failed', null))
     );
   }

@@ -35,35 +35,34 @@ export class GroupsService {
     }
 
     createGroup(group: Partial<IGroup>) {
-        // TODO (get organizatiion dynaimically)
-        const formData = new FormData();
-        formData.append('organization', '1');
-        formData.append('description', group.description),
-        formData.append('group_name', group.group_name);
-        return this.http.post(this.url, formData)
+        // TODO (get organization dynaimically)
+        const { description, group_name } = group;
+        const data = {
+            organization: 1,
+            description, group_name
+        };
+        return this.http.post(this.url, data)
             .pipe(
                 catchError(this.handleError('Create Group', null))
             );
     }
 
     updateGroup(groupId: number, group: Group) {
-        const formData = new FormData();
-        formData.append('id', group.id);
-        formData.append('organization', group.organization);
-        formData.append('description', group.description),
-        formData.append('group_name', group.group_name);
-        return this.http.post(`${this.url}/${groupId}`, formData)
+        const { id, organization, description, group_name } = group;
+        const data = { id, organization, description, group_name };
+        return this.http.post(`${this.url}/${groupId}`, data)
             .pipe(
                 catchError(this.handleError('Update Group', null))
             );
     }
 
     addUserToGroups(groupId: number, userId: number) {
-        const formData = new FormData();
-        formData.append('user_obj', `${userId}`);
-        formData.append('org', '1');
-        formData.append('grp', `${groupId}`);
-        return this.http.post(`${AppConfig.API_URL}/org/joingroup/`, formData).pipe(
+        const data = {
+            user_obj: userId,
+            org: 1,
+            grp: groupId,
+        };
+        return this.http.post(`${AppConfig.API_URL}/org/joingroup/`, data).pipe(
             catchError(this.handleError('Failed to Add User to Group', null))
         );
     }
