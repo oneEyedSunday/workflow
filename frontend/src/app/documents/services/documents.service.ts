@@ -36,14 +36,9 @@ export class DocumentService {
 
     addDocument(document: Partial<Document>) {
         // TODO update organization
-        const formData = new FormData();
-
-        formData.append('link', document.link);
-        formData.append('organization', '1');
-        formData.append('user', this.auth.currentUserValue.id);
-        formData.append('filename', document.filename);
-        formData.append('description', document.description);
-        return this.http.post(this.url + '/process/document/', formData);
+        const { filename, description, link } = document;
+        const data = { link, organization: 1, user: this.auth.currentUserValue.id, filename, description, documenttasks: [] };
+        return this.http.post(this.url + '/process/document/', data);
     }
 
     notifyEngine(taskId: number) {

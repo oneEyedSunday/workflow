@@ -33,13 +33,14 @@ export class ProcessService {
     );
   }
 
-  createProcess(user: number) {
-    const formData = new FormData();
-    formData.append('user', `${user}`);
-    formData.append('process_name', 'New Process');
-    formData.append('description', 'A new process');
-    formData.append('organization', '1');
-    return this.http.post(this.url + '/process/', formData).pipe(
+  createProcess(userId: number) {
+    const data = {
+      user: userId,
+      process_name: 'New Process',
+      description: 'A new process',
+      organization: 1
+    };
+    return this.http.post(this.url + '/process/', data).pipe(
       catchError(this.handleError('Create Base Process Failed', null))
     );
   }

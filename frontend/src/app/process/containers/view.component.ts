@@ -329,9 +329,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   handleTaskUpdate(task: Task) {
     const cleanedTask = {...task, user: this.user.id,
-      users: task.users || '', document: task.document || '',
-      form: task.form || '',
-      stage: task.stage, groups: task.groups || ''
+      users: task.users || null, document: task.document || null,
+      form: task.form || null,
+      stage: task.stage, groups: task.groups || null
     };
     if (task.id) {
       this.updateTask(cleanedTask);
