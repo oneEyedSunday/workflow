@@ -27,7 +27,7 @@
                             <ul class="list-group" *ngIf="group.usertogroups?.length">
                                 <li class="list-group-item" *ngFor="let member of group.usertogroups; let index = index">
                                     <span class="py-2 float-left">#{{ index + 1 }}  {{ member['user_obj'] || member['email'] }}</span>
-                                    <button class="btn btn-small btn-link muted-link float-right" (click)="removeUserFromGroup(member.id)">
+                                    <button class="btn btn-small btn-link muted-link float-right" (click)="confirmMemberRemoval(removeConfirmation, member)">
                                         <span data-feather="user-x"></span> Remove
                                     </button>
                                 </li>
@@ -75,4 +75,32 @@
             </div>
         </form>
     </div>
+</ng-template>
+
+
+<ng-template #removeConfirmation let-modal>
+        <div class="modal-header">
+            <h5 class="modal-title" id="modal-basic-title">Remove user from group</h5>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body text-center">
+            <p class="delete__warning">Are you sure you want to remove &nbsp;
+                <br>
+                <span class="text-primary">{{ userRemoving?.last_name ? userRemoving?.first_name + ' ' + userRemoving?.last_name : 'User' }}</span> from group {{ group.group_name }}?
+            </p>
+            </div>
+            <div class="modal-footer" style="border-top: 1px solid #dee2e6;">
+            <span *ngIf="removing">
+                <i class="fa fa-spinner fa-spin"></i>
+            </span>
+            <button type="button" class="btn btn-light"
+            (click)="modal.close('Cancel click') && (userRemoving = null)"
+            [disabled]="removing"
+            ngbAutoFocus>Cancel</button>
+            <button type="button" class="btn btn-danger"
+            [disabled]="removing"
+            (click)="removeUserFromGroup(userRemoving?.id)">Remove</button>
+        </div>
 </ng-template>

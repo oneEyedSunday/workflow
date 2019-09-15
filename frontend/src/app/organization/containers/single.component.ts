@@ -16,9 +16,11 @@ export class SingleGroupViewComponent implements OnInit {
     editGroup: boolean;
     group: Group;
     loading = true;
+    removing: boolean;
     loadingMembers: boolean;
     submitting: boolean;
     users: IUser[] = [];
+    userRemoving: IUser = null;
 
     constructor(
         private _route: ActivatedRoute,
@@ -83,6 +85,19 @@ export class SingleGroupViewComponent implements OnInit {
             });
     }
 
+    confirmMemberRemoval(modal, member: IUser) {
+        const user = this.users
+            .find(u => u.email === (member['user_obj'] || member['email']));
+        if (user) {
+            this.userRemoving = { ...user };
+        } else {
+            this.userRemoving = { ...member };
+        }
+        this._modal.open(modal, {backdropClass: '',
+        backdrop: 'static',
+        keyboard: false});
+    }
+
     removeUserFromGroup(userGroupId: number) {
         this._groupSvc.removeUserFromGroup(userGroupId)
         .subscribe(() => {
@@ -90,6 +105,7 @@ export class SingleGroupViewComponent implements OnInit {
             if (index > -1) {
                 this.group.usertogroups.splice(index, 1);
             }
+            this.userRemoving = null;
         });
     }
 
