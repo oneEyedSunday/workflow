@@ -1,7 +1,7 @@
 <div class="my-5">
     <div class="w-100 px-4 my-2 d-flex" style="justify-content: flex-end"
     [ngClass]="{'d-none': loading }">
-        <a routerLink="new">&#x0002B; Document</a>
+        <a routerLink="new" *ngIf="hasPrivilege">&#x0002B; Document</a>
     </div>
     <div class="table-responsive">
         <table class="table table-striped" *ngIf="documents?.length">
@@ -26,7 +26,10 @@
     </div>
     <div class="screen--mask" *ngIf="!documents?.length || loading">
         <p class="lead" *ngIf="!documents?.length && documents">
-            No Documents yet. Add &nbsp; <a routerLink="new">here</a>
+            No Documents yet. 
+            <span *ngIf="hasPrivilege">
+                Add &nbsp; <a routerLink="new">here</a>
+            </span>
         </p>
         <app-loader [size]="5" *ngIf="loading"></app-loader>
     </div>
