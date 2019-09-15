@@ -60,7 +60,7 @@ export class AuthService {
         tap((response: AuthResponse) => {
           const userWithPriv = { ...response.User, hasPrivilege: response.hasPrivilege, isAdmin: response.isAdmin };
           this._user.next(userWithPriv);
-          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(response.User));
+          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(userWithPriv));
           this.token = response.Token;
         })
       );
@@ -73,7 +73,7 @@ export class AuthService {
         tap((res: AuthResponse) => {
           const userWithPriv = { ...res.User, hasPrivilege: res.hasPrivilege, isAdmin: res.isAdmin };
           this._user.next(userWithPriv);
-          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(res.User));
+          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(userWithPriv));
           this.token = res.Token;
         })
       );
