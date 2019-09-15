@@ -27,7 +27,7 @@
                         <div class="card-body">
                             <ul class="list-group" *ngIf="group.usertogroups?.length">
                                 <li class="list-group-item" *ngFor="let member of group.usertogroups; let index = index">
-                                    <span class="py-2 float-left">#{{ index + 1 }}  {{ member['user_obj'] }}</span>
+                                    <span class="py-2 float-left">#{{ index + 1 }}  {{ member['user_obj'] || member['email'] }}</span>
                                     <button class="btn btn-small btn-link muted-link float-right" (click)="removeUserFromGroup(member.id)">
                                         <span data-feather="user-x"></span> Remove
                                     </button>

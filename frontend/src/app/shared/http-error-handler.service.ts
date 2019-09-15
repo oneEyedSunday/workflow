@@ -43,12 +43,12 @@ export class HttpErrorHandler {
           break;
         }
 
-        case (typeof e.error.body === 'string'): {
+        case (e.error.body && typeof e.error.body === 'string'): {
           message = e.error.body;
           break;
         }
 
-        case (typeof e.error.message === 'string'): {
+        case (e.error.message && typeof e.error.message === 'string'): {
           message = e.error.message;
           break;
         }

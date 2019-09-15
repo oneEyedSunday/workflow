@@ -94,6 +94,7 @@ export class SingleGroupViewComponent implements OnInit {
     }
 
     addUser(userId: number) {
+        userId = parseInt(userId as any, 10);
         this.submitting = true;
         this._groupSvc.addUserToGroups(this.group.id, userId)
             .subscribe(() => {
