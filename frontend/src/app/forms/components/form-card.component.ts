@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { IForm } from '@shared/interfaces';
 
 @Component({
@@ -19,6 +19,12 @@ import { IForm } from '@shared/interfaces';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class FormCardComponent {
+export class FormCardComponent implements OnInit {
     @Input() form: IForm;
+    @Input() privilegedUser: boolean;
+    link: string;
+
+    ngOnInit() {
+       this.link = this.privilegedUser ? `/forms/${this.form.id}` : `/forms/view/${this.form.id}`;
+    }
 }
