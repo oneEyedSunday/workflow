@@ -16,6 +16,8 @@ export interface IUser {
     userdocuments?: Document[];
     userformresponse?: any[]; // TODO make form response & interface
     usergroups?: { grp: string; id: number }[];
+    hasPrivilege?: boolean;
+    isAdmin?: boolean;
 }
 
 export interface IUserRegisteration {

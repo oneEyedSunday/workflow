@@ -13,6 +13,7 @@ import { AuthService } from '@shared/auth';
 import { DocumentService } from '../../documents/services';
 import { GroupsService, UsersService } from '../../organization/services';
 import { FormsService } from '../../forms/services';
+import { AuthorizationAwareComponent as WithAuth } from '@shared/authorization-aware.component';
 
 interface Coords {
   bottom: number;
@@ -33,7 +34,7 @@ const dragulaGroups: string[] = [];
   templateUrl: './view.component.html',
   styleUrls: ['./view.component.scss',  './boards.scss']
 })
-export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ViewComponent extends WithAuth implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('refProcessBoardContainer', { read: ElementRef, static: false }) _boardContainerRef: ElementRef;
   get boardContainerRef() {
     return this._boardContainerRef;
@@ -70,7 +71,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private _router: Router,
     private _dragulaService: DragulaService,
     // add ref to notif eg toasts
-    private _auth: AuthService,
+    auth: AuthService,
     private _proSvc: ProcessService,
     private _stageSvc: StageService,
     private _formsSvc: FormsService,
@@ -80,6 +81,7 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
     private _usersSvc: UsersService
     // scroll helper
   ) {
+    super(auth);
     this.user = (this._auth.currentUserValue as IUser);
   }
 
@@ -215,6 +217,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   openSideBar(trigger: SideBarTriggers, content: Task | Stage | Process, extra?: Stage): void {
+    if (!this.hasPrivilege) {
+      return;
+    }
     if (content) {
       // deep copy so changes do not reflect
       content = {...content};
@@ -247,6 +252,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   confirmDeleteStage(stage: Stage) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     // TODO modals
     this._stageSvc.deleteStage(stage.id)
       .subscribe(() => {
@@ -259,6 +267,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   confirmDeleteTask(stage: Stage, task: Task) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     // TODO confirmation modals
     this._taskSvc.deleteTask(task.id)
       .subscribe(() => {
@@ -275,6 +286,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleStageUpdate(stage: Stage) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     if (stage.id) {
       this.updateStage(stage);
     } else {
@@ -287,6 +301,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleProcessMetaUpdate(process: Process) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     this.uiState = { ...this.uiState, processMetaError: false};
     this._proSvc.updateProcessMeta(process.id, process)
       .subscribe((res) => {
@@ -300,6 +317,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   createStage(stage: Partial<Stage>) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     this.uiState = { ...this.uiState, stageError: false };
     this._stageSvc.createStage(stage)
       .subscribe((res: Stage) => {
@@ -312,6 +332,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateStage(stage: Stage) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     this.uiState = { ...this.uiState, stageError: false };
     this._stageSvc.updateStage(stage.id, { ...stage, user: this.user.id })
     .subscribe((res: Stage) => {
@@ -328,6 +351,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   handleTaskUpdate(task: Task) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     const cleanedTask = {...task, user: this.user.id,
       users: task.users || null, document: task.document || null,
       form: task.form || null,
@@ -341,6 +367,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   createTask(task: Partial<Task>) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     this.uiState = { ...this.uiState, taskError: false };
     this._taskSvc.createTask(task)
       .subscribe((res: Task) => {
@@ -355,6 +384,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   updateTask(task: Task) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     this.uiState = { ...this.uiState, taskError: false };
     this._taskSvc.updateTask(task)
       .subscribe((res: Task) => {
@@ -372,6 +404,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   moveTask(taskId: number, stageId: number, oldStageId: number) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     this._taskSvc.moveTask(taskId, stageId)
       .subscribe((res) => {
         const oldStage = this.process.stages.find(s => s.id === oldStageId);
@@ -425,6 +460,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   completeStage(stage: Stage) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     this._stageSvc.completeStage(stage.id)
       .subscribe((res: Partial<Stage>) => {
         stage.isComplete = res.isComplete;
@@ -432,6 +470,9 @@ export class ViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   completeTask(task: Task) {
+    if (!this.hasPrivilege) {
+      return;
+    }
     this._taskSvc.completeTask(task.id)
       .subscribe((res: Partial<Task>) => {
         task.isComplete = res.isComplete;

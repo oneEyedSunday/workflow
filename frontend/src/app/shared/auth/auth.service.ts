@@ -11,6 +11,10 @@ import { AppConfig } from '../../../environments/environment';
 const USER_DATA_TOKEN = 'workflow_user_data';
 const TOKEN = 'workflow_token';
 
+interface AuthResponse {
+  Token: string; User: any; hasPrivilege: boolean; isAdmin: boolean;
+}
+
 @Injectable()
 export class AuthService {
 
@@ -53,9 +57,10 @@ export class AuthService {
   login(creds: Pick<IUser, 'email' | 'password'>): Observable<any> {
     return this.http.post(`${AppConfig.API_URL}/account/login/`, creds)
       .pipe(
-        tap((response: { Token: string; User: any }) => {
-          this._user.next(response.User);
-          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(response.User));
+        tap((response: AuthResponse) => {
+          const userWithPriv = { ...response.User, hasPrivilege: response.hasPrivilege, isAdmin: response.isAdmin };
+          this._user.next(userWithPriv);
+          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(userWithPriv));
           this.token = response.Token;
         })
       );
@@ -65,9 +70,10 @@ export class AuthService {
   register(creds: IUserRegisteration) {
     return this.http.post<any>(`${AppConfig.API_URL}/account/signup/`, creds)
       .pipe(
-        tap((res: {Token: string; User: any}) => {
-          this._user.next(res.User);
-          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(res.User));
+        tap((res: AuthResponse) => {
+          const userWithPriv = { ...res.User, hasPrivilege: res.hasPrivilege, isAdmin: res.isAdmin };
+          this._user.next(userWithPriv);
+          localStorage.setItem(USER_DATA_TOKEN, JSON.stringify(userWithPriv));
           this.token = res.Token;
         })
       );

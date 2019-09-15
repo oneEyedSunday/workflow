@@ -1,14 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { DocumentService } from '../services';
 import { Document } from '@shared/interfaces';
+import { AuthService } from '@shared/auth';
+import { AuthorizationAwareComponent as WithAuth } from '@shared/authorization-aware.component';
+
 @Component({
     selector: 'app-documents-list',
     templateUrl: './list.component.html'
 })
-export class ListComponent implements OnInit {
+export class ListComponent extends WithAuth implements OnInit {
     documents: Document[];
     loading: boolean;
-    constructor(private _docSvc: DocumentService) { }
+    constructor(
+      private _docSvc: DocumentService,
+      authSvc: AuthService
+      ) {
+      super(authSvc);
+    }
 
     ngOnInit() {
       this.loading = true;

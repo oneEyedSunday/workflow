@@ -40,7 +40,10 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.loading = false))
       .subscribe(
         () => this.router.navigate([ this.returnUrl || '/dashboard' ]),
-        () => this.authError = true
+        () => {
+          this.authError = true;
+          this.loading = false;
+        }
       );
   }
 
