@@ -36,9 +36,9 @@ export class GroupsService {
 
     createGroup(group: Partial<IGroup>) {
         // TODO (get organization dynaimically)
-        const { description, group_name } = group;
+        const { description, group_name, hasPrivilege } = group;
         const data = {
-            organization: 1,
+            organization: 1, hasPrivilege,
             description, group_name
         };
         return this.http.post(this.url, data)
@@ -48,9 +48,9 @@ export class GroupsService {
     }
 
     updateGroup(groupId: number, group: Group) {
-        const { id, organization, description, group_name } = group;
-        const data = { id, organization, description, group_name };
-        return this.http.post(`${this.url}/${groupId}`, data)
+        const { id, organization, description, group_name, hasPrivilege } = group;
+        const data = { id, organization, description, group_name, hasPrivilege };
+        return this.http.put(`${this.url}${groupId}/`, data)
             .pipe(
                 catchError(this.handleError('Update Group', null))
             );

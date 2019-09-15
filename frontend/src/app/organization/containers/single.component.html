@@ -1,11 +1,5 @@
 <div class="my-5">
     <div class="container">
-        <!-- TODO move meta edit to card -->
-        <p class="d-none">Group - group name
-            <span class="fa fa-edit"  data-feather="edit"
-            (click)="editGroup = true"></span>
-        </p>
-
         <div class="row">
             <ng-container *ngIf="!loading">
                 <div class="col-sm-12 col-md-5 offset-md-1 my-2">
@@ -15,9 +9,14 @@
                             {{  group.description || 'No Description'}}
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-small btn-sm btn-link muted-link" (click)="openModal(addusermodal)">
-                                <span data-feather="user-plus" class="fa fa-user-plus"></span> Member
-                            </button>
+                            <a routerLink="edit" class="btn btn-small btn-link muted-link">
+                                <span data-feather="edit"></span> Group
+                            </a>
+                            <div class="float-right">
+                                <button class="btn btn-small btn-sm btn-link muted-link" (click)="openModal(addusermodal)">
+                                    <span data-feather="user-plus" class="fa fa-user-plus"></span> Member
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -27,7 +26,7 @@
                         <div class="card-body">
                             <ul class="list-group" *ngIf="group.usertogroups?.length">
                                 <li class="list-group-item" *ngFor="let member of group.usertogroups; let index = index">
-                                    <span class="py-2 float-left">#{{ index + 1 }}  {{ member['user_obj'] }}</span>
+                                    <span class="py-2 float-left">#{{ index + 1 }}  {{ member['user_obj'] || member['email'] }}</span>
                                     <button class="btn btn-small btn-link muted-link float-right" (click)="removeUserFromGroup(member.id)">
                                         <span data-feather="user-x"></span> Remove
                                     </button>
