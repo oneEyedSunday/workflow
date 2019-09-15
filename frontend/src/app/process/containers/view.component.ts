@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { of, Observable, throwError, iif, fromEvent, Subscription } from 'rxjs';
-import { switchMap, catchError, tap, takeUntil } from 'rxjs/operators';
+import { switchMap, catchError, tap, takeUntil, finalize } from 'rxjs/operators';
 import { DragulaService } from 'ng2-dragula';
 import * as feather from 'feather-icons';
 import {
@@ -14,6 +14,7 @@ import { DocumentService } from '../../documents/services';
 import { GroupsService, UsersService } from '../../organization/services';
 import { FormsService } from '../../forms/services';
 import { AuthorizationAwareComponent as WithAuth } from '@shared/authorization-aware.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface Coords {
   bottom: number;
@@ -58,6 +59,8 @@ export class ViewComponent extends WithAuth implements OnInit, AfterViewInit, On
     body: null,
     taskboard: null
   };
+  meta: [Stage, Task?];
+
 
   uiState = {
     loading: true,
@@ -78,8 +81,9 @@ export class ViewComponent extends WithAuth implements OnInit, AfterViewInit, On
     private _docSvc: DocumentService,
     private _groupsSvc: GroupsService,
     private _taskSvc: TaskService,
-    private _usersSvc: UsersService
-    // scroll helper
+    private _usersSvc: UsersService,
+    // scroll helper,
+    private _modal: NgbModal
   ) {
     super(auth);
     this.user = (this._auth.currentUserValue as IUser);
@@ -251,12 +255,22 @@ export class ViewComponent extends WithAuth implements OnInit, AfterViewInit, On
     (this.sidePaneRef.nativeElement as HTMLDivElement).classList.toggle('closed');
   }
 
-  confirmDeleteStage(stage: Stage) {
+  confirmDeleteStage(modal, stage: Stage) {
+    this.meta = [stage];
+    this._modal.open(modal, {backdropClass: '',
+    backdrop: 'static',
+    keyboard: false});
+  }
+
+  deleteStage(stage: Stage) {
     if (!this.hasPrivilege) {
       return;
     }
-    // TODO modals
     this._stageSvc.deleteStage(stage.id)
+      .pipe(finalize(() => {
+        this._modal.dismissAll();
+        this.meta = null;
+      }))
       .subscribe(() => {
         const stageIndex = this.process.stages
           .findIndex(s => s.id === stage.id);
@@ -266,12 +280,22 @@ export class ViewComponent extends WithAuth implements OnInit, AfterViewInit, On
       });
   }
 
-  confirmDeleteTask(stage: Stage, task: Task) {
+  confirmDeleteTask(modal, stage: Stage, task: Task) {
+    this.meta = [stage, task];
+    this._modal.open(modal, {backdropClass: '',
+    backdrop: 'static',
+    keyboard: false});
+  }
+
+  deleteTask(stage: Stage, task: Task) {
     if (!this.hasPrivilege) {
       return;
     }
-    // TODO confirmation modals
     this._taskSvc.deleteTask(task.id)
+      .pipe(finalize(() => {
+        this._modal.dismissAll();
+        this.meta = null;
+      }))
       .subscribe(() => {
         const taskIndex = (stage.tasks || []).findIndex(t => t.id === task.id);
         if (taskIndex > -1) {
