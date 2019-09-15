@@ -35,7 +35,10 @@ export class SignupComponent implements OnInit {
       .pipe(finalize(() => this.loading = false))
       .subscribe(
         () => this.router.navigate(['/dashboard']),
-        () => this.authError = true
+        () => {
+          this.loading = false;
+          this.authError = true;
+        }
       );
   }
 
