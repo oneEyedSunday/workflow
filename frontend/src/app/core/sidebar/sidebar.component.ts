@@ -1,12 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-// TODO (oneyedsuday) restrict change detectin for comps like these
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { AuthService } from '@shared/auth';
+import { AuthorizationAwareComponent as WithAuth } from '@shared/authorization-aware.component';
 @Component({
     selector: 'app-sidebar',
-    templateUrl: './sidebar.component.html'
+    templateUrl: './sidebar.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent extends WithAuth implements OnInit {
 
-    constructor() { }
+    constructor(authSvc: AuthService) {
+        super(authSvc);
+    }
 
     ngOnInit() {
 

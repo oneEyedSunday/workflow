@@ -20,7 +20,7 @@
             Documents
           </a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="hasPrivilege">
           <a class="nav-link" routerLink="/forms" routerLinkActive="active">
             <span data-feather="file-text"></span>
             Forms
