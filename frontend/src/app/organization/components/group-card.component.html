@@ -1,15 +1,16 @@
-<div class="card">
+<div class="card" [ngClass]="{ 'd-none': !hasPrivilege && !group }">
     <div class="card-header" *ngIf="group?.group_name">
-        <a routerLink="/organizations/groups/{{group.id}}" style="color: inherit">{{group.group_name}}</a>
+        <a routerLink="/organizations/groups/{{group.id}}" style="color: inherit" *ngIf="hasPrivilege">{{group.group_name}}</a>
+        <span *ngIf="!hasPrivilege">{{group.group_name}}</span>
     </div>
     <div class="card-body">
         <div class="d-flex flex-row" *ngIf="group">
-            <!-- TODO (oneeyedsunday) Add borders? -->
             <div class="group--card__widget">
                 <span class="">
-                    <a routerLink="/organizations/groups/{{group.id}}">
+                    <a routerLink="/organizations/groups/{{group.id}}" *ngIf="hasPrivilege">
                         {{ group.group_name?.substr(0, 2)?.toLowerCase() }}
                     </a>
+                    <span *ngIf="!hasPrivilege">{{ group.group_name?.substr(0, 2)?.toLowerCase() }}</span>
                 </span>
             </div>
            
@@ -17,7 +18,7 @@
                 {{ group.description }}
             </div>
         </div>
-        <div class="group--card__add" *ngIf="!group">
+        <div class="group--card__add" *ngIf="!group && hasPrivilege">
             <span title="Add Group">
                 <a routerLink="/organizations/groups/new"><i class="fa fa-plus"></i></a>
             </span>

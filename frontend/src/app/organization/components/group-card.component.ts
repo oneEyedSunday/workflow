@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { IGroup } from '@shared/interfaces';
 
 @Component({
@@ -9,5 +9,6 @@ import { IGroup } from '@shared/interfaces';
 })
 export class GroupDescriptionCardComponent {
   @Input() group: IGroup;
+  @Input() hasPrivilege: boolean;
 }
 
