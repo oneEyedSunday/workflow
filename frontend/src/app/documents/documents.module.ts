@@ -9,8 +9,9 @@ import { DocumentsRoutingModule } from './documents-routing.module';
 import { SharedModule } from '@shared/shared.module';
 import { FileUploadModule } from 'ng2-file-upload';
 import { CloudinaryModule } from '@cloudinary/angular-5.x';
-import * as Cloudinary from 'cloudinary-core';
+import { Cloudinary } from 'cloudinary-core';
 import { AppConfig } from '../../environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -23,7 +24,7 @@ import { AppConfig } from '../../environments/environment';
     QuillModule.forRoot(),
     DocumentsRoutingModule,
     FileUploadModule,
-    CloudinaryModule.forRoot(Cloudinary, AppConfig.CLOUDINARY),
+    CloudinaryModule.forRoot({ Cloudinary }, AppConfig.CLOUDINARY),
     SharedModule
   ],
   providers: [
