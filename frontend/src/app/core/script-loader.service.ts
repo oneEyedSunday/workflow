@@ -34,12 +34,12 @@ export class ScriptLoaderService {
 
         if (!isFound) {
             const dynamicScripts = [
-                '/assets/home/js/owl.carousel.min.js',
-                '/assets/home/js/waypoints.min.js',
-                '/assets/home/js/jquery.magnific-popup.min.js',
-                '/assets/home/js/jquery.counterup.min.js',
-                '/assets/home/js/isotope.pkgd.min.js',
-                '/assets/home/js/main.js'
+                'assets/home/js/owl.carousel.min.js',
+                'assets/home/js/waypoints.min.js',
+                'assets/home/js/jquery.magnific-popup.min.js',
+                'assets/home/js/jquery.counterup.min.js',
+                'assets/home/js/isotope.pkgd.min.js',
+                'assets/home/js/main.js'
             ];
 
             for (const script of dynamicScripts) {
@@ -58,7 +58,7 @@ export class ScriptLoaderService {
             const link = document.createElement('link');
             link.rel = 'stylesheet';
             link['data-meta'] = 'custom';
-            link.href = `/assets/home/${href}`;
+            link.href = `assets/home/${href}`;
             fragment.appendChild(link);
         }
         const head = document.head || document.getElementsByTagName('head')[0];
