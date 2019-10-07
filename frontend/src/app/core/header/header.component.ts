@@ -7,7 +7,7 @@ import { AuthService } from '@shared/auth';
 })
 export class HeaderComponent implements OnInit {
     public organization = {
-        name: 'Workflow #1'
+        name: 'Unilag Comp.Sci'
     };
     constructor() { }
 
