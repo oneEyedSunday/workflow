@@ -1,20 +1,4 @@
-<!-- <div class="jumbotron">
-    <p class="lead">Welcome to Workflow</p>
-</div> -->
-
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <!-- <header class="masthead mb-auto">
-      <div class="inner">
-        <h3 class="masthead-brand">Worflow</h3>
-        <nav class="nav nav-masthead justify-content-center">
-          <a routerLink="/dashboard" class="nav-link" *ngIf="auth.user | async; else reauth">Dashboard</a>
-          <ng-template #reauth>
-            <a class="nav-link" routerLink="/account/signin">Sign in</a>
-            <a class="nav-link" routerLink="/account/organization/new">Organization</a>
-          </ng-template>
-        </nav>
-      </div>
-    </header> -->
   
     <header id="header">
       <div class="container main-menu">
@@ -23,24 +7,30 @@
           </div>
           <nav id="nav-menu-container">
             <ul class="nav-menu">
-              <a class="nav-link" routerLink="/account/signin">Sign in</a>
-              <a class="nav-link" routerLink="/account/organization/new">Organization</a>
-              <a class="nav-link" routerLink="/account/signin">Staff</a>
+              <ng-container *ngIf="!loggedIn()">
+                <li>
+                    <a class="nav-link" routerLink="/account/signin">Sign in</a>
+                </li>
+                <li>
+                    <a class="nav-link" routerLink="/account/organization/new">Organization</a>
+                </li>
+                  
+                  
+              </ng-container>
+              <!-- if logged in -->
+              <ng-container *ngIf="loggedIn()">
+                <li>
+                    <a class="nav-link" routerLink="/organizations/staff">Staff</a>
+                </li>
+                
+              </ng-container>
+              
+              
             </ul>
           </nav><!-- #nav-menu-container -->		    		
         </div>
       </div>
     </header><!-- #header -->
-
-    <!-- <main role="main" class="inner cover">
-      <h1 class="cover-heading">Workflow</h1>
-      <p class="lead">
-          Workflow is a workflow manager.
-      </p>
-      <p class="lead">
-        <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
-      </p>
-    </main> -->
     
 
     <!-- start banner Area -->
@@ -53,7 +43,7 @@
 							<p>
 								The home of innvation and research
 							</p>
-							<a routerLink="/account/signin" class="primary-btn text-uppercase">Explore</a>
+							<a routerLink="{{ loggedIn() ? '/organizations/staff' :  '/account/signin' }}" class="primary-btn text-uppercase">Explore</a>
 						</div>
 						<div class="col-lg-6 col-md-6 banner-right d-flex align-self-end">
 							<img class="img-fluid" src="/assets/home/images/mast_svg.png" alt="">

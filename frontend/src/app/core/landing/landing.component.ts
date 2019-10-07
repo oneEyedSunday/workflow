@@ -8,18 +8,6 @@ import { ScriptLoaderService } from '../script-loader.service';
     styleUrls: ['./landing.component.scss']
 })
 export class LandingComponent implements OnInit, OnDestroy {
-
-    styleAssets = [
-        'css/linearicons.css',
-        'css/font-awesome.min.css',
-        // 'css/bootstrap.css',
-        'css/magnific-popup.css',
-        // 'css/jquery-ui.css',
-        'css/nice-select.css',
-        'css/animate.min.css',
-        'css/owl.carousel.css',
-        'css/main.css'
-    ];
     constructor(
         public auth: AuthService,
         public scriptLoader: ScriptLoaderService
@@ -29,7 +17,7 @@ export class LandingComponent implements OnInit, OnDestroy {
         // inject css into head
         const head = document.head || document.getElementsByTagName('head')[0];
         head.appendChild(this.createLinkTag());
-        this.insertAssets();
+        this.scriptLoader.insertAssets();
     }
 
     private createLinkTag(): HTMLLinkElement {
@@ -40,17 +28,9 @@ export class LandingComponent implements OnInit, OnDestroy {
         return linkTag;
     }
 
-    private insertAssets(): void {
-        const fragment = document.createDocumentFragment();
-        for (const href of this.styleAssets) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link['data-meta'] = 'custom';
-            link.href = `/assets/home/${href}`;
-            fragment.appendChild(link);
-        }
-        const head = document.head || document.getElementsByTagName('head')[0];
-        head.appendChild(fragment);
+
+    loggedIn(): boolean {
+        return !!localStorage.getItem('workflow_user_data') && !!localStorage.getItem('workflow_token');
     }
 
     ngOnDestroy(): void {
@@ -58,9 +38,7 @@ export class LandingComponent implements OnInit, OnDestroy {
         const head = document.head || document.getElementsByTagName('head')[0];
         head.removeChild(head.querySelector('link#landing__page--cover'));
 
-        document.querySelectorAll('link[data-meta="custom"]').forEach(customLink => {
-            customLink.remove();
-        });
+        this.scriptLoader.removeAssets();
     }
 
 }

@@ -16,20 +16,20 @@ $(document).ready(function() {
 
     //------- Lightbox  js --------//  
 
-    // $('.img-pop-up').magnificPopup({
-    //     type: 'image',
-    //     gallery: {
-    //         enabled: true
-    //     }
-    // });
+    $('.img-pop-up').magnificPopup({
+        type: 'image',
+        gallery: {
+            enabled: true
+        }
+    });
 
-    // $('.play-btn').magnificPopup({
-    //     type: 'iframe',
-    //     mainClass: 'mfp-fade',
-    //     removalDelay: 160,
-    //     preloader: false,
-    //     fixedContentPos: false
-    // });
+    $('.play-btn').magnificPopup({
+        type: 'iframe',
+        mainClass: 'mfp-fade',
+        removalDelay: 160,
+        preloader: false,
+        fixedContentPos: false
+    });
 
     //------- Counter  js --------//  
 
@@ -46,26 +46,26 @@ $(document).ready(function() {
 
     //------- Filter  js --------//  
 
-    //   $('.filters ul li').click(function(){
-    //     $('.filters ul li').removeClass('active');
-    //     $(this).addClass('active');
+      $('.filters ul li').click(function(){
+        $('.filters ul li').removeClass('active');
+        $(this).addClass('active');
         
-    //     var data = $(this).attr('data-filter');
-    //     $grid.isotope({
-    //       filter: data
-    //     })
-    //   });
+        var data = $(this).attr('data-filter');
+        $grid.isotope({
+          filter: data
+        })
+      });
 
 
-    //   if(document.getElementById("portfolio")){
-    //         var $grid = $(".grid").isotope({
-    //           itemSelector: ".all",
-    //           percentPosition: true,
-    //           masonry: {
-    //             columnWidth: ".all"
-    //           }
-    //         })
-    //   };
+      if(document.getElementById("portfolio")){
+            var $grid = $(".grid").isotope({
+              itemSelector: ".all",
+              percentPosition: true,
+              masonry: {
+                columnWidth: ".all"
+              }
+            })
+      };
 
 
     //------- Timeline js --------//  
