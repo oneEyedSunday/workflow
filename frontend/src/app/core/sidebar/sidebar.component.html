@@ -9,9 +9,22 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/process" routerLinkActive="active">
+          <a class="nav-link" routerLink="/process" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <span data-feather="home"></span>
             Processes
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/process/new" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          [queryParams]="{name: 'Course Registration'}">
+            <span data-feather="home"></span>
+            Course Registration
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/process/new"  [queryParams]="{name: 'Library Requests'}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <span data-feather="home"></span>
+            Library Requests
           </a>
         </li>
         <li class="nav-item">
