@@ -3,3 +3,12 @@
     height: 100%;
     width: 100vw;
 }
+
+.single-testimonial {
+    @media (min-width: 700px) {
+        .img-fluid {
+            // height: 223px;
+            max-width: 223px;
+        }
+    }
+}

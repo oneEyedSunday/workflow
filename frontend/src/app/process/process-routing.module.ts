@@ -5,6 +5,7 @@ import * as ProjectContainers from './containers';
 
 const routes: Routes = [
   { path: '', component: ProjectContainers.ListComponent },
+  { path: 'tracker', component: ProjectContainers.TrackerComponent },
   { path: 'new', component: ProjectContainers.ViewComponent, data: { creating: true }, canActivate: [RoleGuard]},
   { path: ':processId', component: ProjectContainers.ViewComponent }
 ];

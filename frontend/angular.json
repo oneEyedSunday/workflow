@@ -36,6 +36,7 @@
               "src/styles.scss"
             ],
             "scripts": [
+              "src/assets/home/js/jquery-2.2.4.min.js",
               "node_modules/feather-icons/dist/feather.min.js"
             ],
             "es5BrowserSupport": true

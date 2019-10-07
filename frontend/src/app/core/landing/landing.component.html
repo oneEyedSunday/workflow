@@ -1,34 +1,240 @@
-<!-- <div class="jumbotron">
-    <p class="lead">Welcome to Workflow</p>
-</div> -->
-
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
-    <header class="masthead mb-auto">
-      <div class="inner">
-        <h3 class="masthead-brand">Worflow</h3>
-        <nav class="nav nav-masthead justify-content-center">
-          <a routerLink="/dashboard" class="nav-link" *ngIf="auth.user | async; else reauth">Dashboard</a>
-          <ng-template #reauth>
-            <a class="nav-link" routerLink="/account/signin">Sign in</a>
-            <a class="nav-link" routerLink="/account/organization/new">Organization</a>
-          </ng-template>
-        </nav>
-      </div>
-    </header>
   
-    <main role="main" class="inner cover">
-      <h1 class="cover-heading">Workflow</h1>
-      <p class="lead">
-          Workflow is a workflow manager.
-      </p>
-      <p class="lead">
-        <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
-      </p>
-    </main>
-  
-    <footer class="mastfoot mt-auto">
-      <div class="inner">
-        <p>Check out the <a href="https://github.com/oneEyedSunday/workflow/tree/master/docs" target="_blank">docs</a>, by <a href="https://twitter.com/idiakosesunday">@oneeyedsunday</a>.</p>
+    <header id="header">
+      <div class="container main-menu">
+        <div class="row align-items-center justify-content-between d-flex">
+          <div id="logo">
+          </div>
+          <nav id="nav-menu-container">
+            <ul class="nav-menu">
+              <ng-container *ngIf="!loggedIn()">
+                <li>
+                    <a class="nav-link" routerLink="/account/signin">Sign in</a>
+                </li>
+                <li>
+                    <a class="nav-link" routerLink="/account/organization/new">Organization</a>
+                </li>
+                  
+                  
+              </ng-container>
+              <!-- if logged in -->
+              <ng-container *ngIf="loggedIn()">
+                <li>
+                    <a class="nav-link" routerLink="/organizations/staff">Staff</a>
+                </li>
+                
+              </ng-container>
+              
+              
+            </ul>
+          </nav><!-- #nav-menu-container -->		    		
+        </div>
       </div>
-    </footer>
+    </header><!-- #header -->
+    
+
+    <!-- start banner Area -->
+			<section class="banner-area">
+				<div class="container">
+					<div class="row fullscreen align-items-center justify-content-between">
+						<div class="col-lg-6 col-md-6 banner-left">
+							<h6>University of Lagos</h6>
+							<h1>Computer Science Department</h1>
+							<p>
+								The home of innvation and research
+							</p>
+							<a routerLink="{{ loggedIn() ? '/dashboard' :  '/account/signin' }}" class="primary-btn text-uppercase">Explore</a>
+						</div>
+						<div class="col-lg-6 col-md-6 banner-right d-flex align-self-end">
+							<img class="img-fluid" src="/assets/home/images/mast_svg.png" alt="">
+						</div>
+					</div>
+				</div>					
+			</section>
+			<!-- End banner Area -->
+
+		<!-- Start services Area -->
+    <section class="services-area section-gap">
+      <div class="container">
+              <div class="row d-flex justify-content-center">
+                  <div class="menu-content  col-lg-7">
+                      <div class="title text-center">
+                          <h1 class="mb-10">Available Programmes</h1>
+                          <p>We currently offer the following academic programmes</p>
+                      </div>
+                  </div>
+              </div>						
+        <div class="row">
+          <div class="col-lg-4 col-md-6">
+            <div class="single-services">
+              <span class="lnr lnr-laptop-phone"></span>
+              <a href="#"><h4>Appreciation of Computers</h4></a>
+              <p>
+                “A program aimed at non technical members of the work force, to improve their application of computers.”
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="single-services">
+              <span class="lnr lnr-database"></span>
+              <a href="#"><h4>Bachelor of Science</h4></a>
+              <p>
+                Five year degree program in Computer Science, students are taught the foundations of computer software, mathematical & formal methods
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="single-services">
+              <span class="lnr lnr-graduation-hat"></span>
+              <a href="#"><h4>Post Graduate Diploma</h4></a>
+              <p>
+                A program to prepare non Computer Science bachelors for postgraduate programs in Computer Science
+              </p>
+            </div>	
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="single-services">
+              <span class="lnr lnr-rocket"></span>
+              <a href="#"><h4>Masters of Information Technology</h4></a>
+              <p>
+                Terminal professional masters programme for working professionals
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="single-services">
+              <span class="lnr lnr-chart-bars"></span>
+              <a href="#"><h4>Masters of Computer Science</h4></a>
+              <p>
+                Non-terminal research and taught masters degree programme
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6">
+            <div class="single-services">
+              <span class="lnr lnr-pie-chart"></span>
+              <a href="#"><h4>Research Positions</h4></a>
+              <p>
+                We also offer doctoral research positions
+              </p>
+            </div>				
+          </div>														
+        </div>
+      </div>	
+    </section>
+    <!-- End services Area -->	
+
+    <!-- Start fact Area -->
+    <section class="facts-area section-gap" id="facts-area">
+      <div class="container">				
+        <div class="row">
+          <div class="col-lg-4 col-md-6 single-fact">
+            <h1 class="counter">2536</h1>
+            <p>Students</p>
+          </div>
+          <div class="col-lg-4 col-md-6 single-fact">
+            <h1 class="counter">2239</h1>
+            <p>Published Papers</p>
+          </div>	
+          <div class="col-lg-4 col-md-6 single-fact">
+            <h1 class="counter">3</h1>
+            <p>Professors</p>
+          </div>												
+        </div>
+      </div>	
+    </section>
+    <!-- end fact Area -->	
+
+    <!-- Start testimonial Area -->
+    <section class="testimonial-area section-gap">
+        <div class="container">
+            <div class="row d-flex justify-content-center">
+                <div class="menu-content pb-70 col-lg-8">
+                    <div class="title text-center">
+                        <h1 class="mb-10">Some kind words from Alumni</h1>
+                        <p>Read what our alumni have to say about us.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="active-testimonial">
+                    <div class="single-testimonial item d-flex flex-row">
+                        <div class="thumb">
+                            <img class="img-fluid" src="/assets/home/images/african_male.png" alt="">
+                        </div>
+                        <div class="desc">
+                            <p>
+                                At the Univeristy of Lagos, Computer Science department, students are introduced to the foundational thought patterns on which they can build on 	and brighten horizons     
+                            </p>
+                            <h4>Adebiyi Ogunsanya</h4>
+                            <p>CTO, Fizzbuzz Tech.</p>
+                        </div>
+                    </div>
+                    <div class="single-testimonial item d-flex flex-row">
+                        <div class="thumb">
+                            <img class="img-fluid" src="/assets/home/images/african_female.png" alt="">
+                        </div>
+                        <div class="desc">
+                            <p>
+                                An institution committed to academic and moral excellence, I recommend any young researcher in the Lagos environs to enroll
+                            </p>
+                            <h4>Carolyn Craig</h4>
+                            <p>Researcher at DangoTech</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- End testimonial Area -->
+      <!-- End home-about Area -->
+      
+      <!-- start footer Area -->
+      <footer class="footer-area section-gap">
+          <div class="container">
+              <div class="row">
+                  <div class="col-lg-5 col-md-6 col-sm-6">
+                      <div class="single-footer-widget">
+                          <h4>Attrition</h4>
+                          <p>Check out the <a href="https://github.com/oneEyedSunday/workflow/tree/master/docs" target="_blank">docs</a>, by <a href="https://twitter.com/idiakosesunday">@oneeyedsunday</a>.</p>
+                          <p class="footer-text"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                      </div>
+                  </div>
+                  <div class="col-lg-5 col-md-6 col-sm-6">
+                      <div class="single-footer-widget">
+                          <h4>Newsletter</h4>
+                          <p>Stay updated with our latest trends</p>
+          <div class="" id="mc_embed_signup">
+             <form target="_blank" action="https://spondonit.us12.list-manage.com/subscribe/post?u=1462626880ade1ac87bd9c93a&amp;id=92a4423d01" method="get">
+              <div class="input-group">
+                <input type="text" class="form-control" name="EMAIL" placeholder="Enter Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Email Address '" required="" type="email">
+                <div class="input-group-btn">
+                  <button class="btn btn-default" type="submit">
+                    <span class="lnr lnr-arrow-right"></span>
+                  </button>    
+                </div>
+                  <div class="info"></div>  
+              </div>
+            </form> 
+          </div>
+                      </div>
+                  </div>
+                  <div class="col-lg-2 col-md-6 col-sm-6 social-widget">
+                      <div class="single-footer-widget">
+                          <h4>Follow Us</h4>
+                          <p>Let us be social</p>
+                          <div class="footer-social d-flex align-items-center">
+                              <a href="#"><i class="fa fa-facebook"></i></a>
+                              <a href="#"><i class="fa fa-twitter"></i></a>
+                              <a href="#"><i class="fa fa-dribbble"></i></a>
+                              <a href="#"><i class="fa fa-behance"></i></a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </footer>
+      <!-- End footer Area -->
 </div>

@@ -9,10 +9,29 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/process" routerLinkActive="active">
+          <a class="nav-link" routerLink="/process" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
             <span data-feather="home"></span>
             Processes
           </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/process/new" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          [queryParams]="{name: 'Course Registration'}">
+            <span class="lnr lnr-pushpin"></span>
+            Course Registration
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/process/new"  [queryParams]="{name: 'Library Requests'}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <span class="lnr lnr-enter"></span>
+            Library Requests
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/process/tracker" routerLinkActive="active" class="nav-link">
+          <span class="lnr lnr-paperclip"></span>
+          Thesis Tracker
+        </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" routerLink="/documents" routerLinkActive="active">
@@ -40,6 +59,13 @@
             routerLinkActive="active">
               <span data-feather="users"></span>
               Groups
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/organizations/staff"
+            routerLinkActive="active">
+              <span data-feather="users"></span>
+              Staff
             </a>
           </li>
         </ul>

@@ -90,17 +90,21 @@ export class ViewComponent extends WithAuth implements OnInit, AfterViewInit, On
   }
 
   ngOnInit() {
+    let newProcessName;
     this.fetchDocuments();
     this.fetchForms();
     this.fetchGroups();
     this.fetchUsers();
+    this._actRoute.queryParams.subscribe(params => {
+      newProcessName = params['name'];
+    });
     this._actRoute.data.pipe(
       switchMap((data: { creating: boolean }) => {
         this.existingProcess = !!!data.creating;
         return iif(
           () => this.existingProcess,
           this.getProcess(),
-          this.createBaseProcess()
+          this.createBaseProcess(newProcessName)
         );
       }),
       tap(process => {
@@ -132,8 +136,8 @@ export class ViewComponent extends WithAuth implements OnInit, AfterViewInit, On
     );
   }
 
-  createBaseProcess(): Observable<Process> {
-    return this._proSvc.createProcess(this.user.id);
+  createBaseProcess(name?: string): Observable<Process> {
+    return this._proSvc.createProcess(this.user.id, name);
   }
 
   fetchUsers() {

@@ -40,3 +40,22 @@ body {
 
 // asterisks
 label[required]:after { content: '*'; color: red; margin-left: 2px }
+
+.card {
+    &-header {
+        background: -webkit-linear-gradient(0deg, #8490ff 0%, #62bdfc 100%);
+        color: #fff;
+        & > * {
+            color: #fff;
+            line-height: 1.2em !important;
+            margin-top: 20px;
+            font-weight: 600;
+        } 
+    }
+}
+
+table{
+    tr:hover {
+        background: -webkit-linear-gradient(0deg, #8490ff 0%, #62bdfc 100%)
+    }
+}

@@ -33,10 +33,10 @@ export class ProcessService {
     );
   }
 
-  createProcess(userId: number) {
+  createProcess(userId: number, process_name?: string) {
     const data = {
       user: userId,
-      process_name: 'New Process',
+      process_name: process_name || 'New Process',
       description: 'A new process',
       organization: 1
     };

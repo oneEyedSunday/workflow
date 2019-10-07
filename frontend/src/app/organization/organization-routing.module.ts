@@ -5,6 +5,7 @@ import * as Containers from './containers';
 
 
 const routes: Routes = [
+  { path: 'staff', component: Containers.LecturersComponent },
   { path: 'groups/new', component: Containers.GroupCreateUpdateComponent, data: { edit: false }, canActivate: [RoleGuard] },
   { path: 'groups', component: Containers.GroupListComponent },
   { path: 'groups/:groupId', component: Containers.SingleGroupViewComponent, data: { edit: true } },
