@@ -4,7 +4,7 @@
         <span *ngIf="!hasPrivilege">{{group.group_name}}</span>
     </div>
     <div class="card-body">
-        <div class="d-flex flex-row" *ngIf="group">
+        <div class="d-flex flex-row mt-3 mb-2 mx-1" *ngIf="group">
             <div class="group--card__widget">
                 <span class="">
                     <a routerLink="/organizations/groups/{{group.id}}" *ngIf="hasPrivilege">
