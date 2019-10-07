@@ -20,6 +20,7 @@ import { SharedModule } from '@shared/shared.module';
 import { HttpErrorHandler } from '@shared/http-error-handler.service';
 import { AppComponent } from './app.component';
 import * as CoreLayout from './core';
+import { ScriptLoaderService } from './core/script-loader.service';
 import { ErrorInterceptor } from '@shared/interceptors/jwtError.interceptor';
 // TODO angular-calendar or full-calendar 4 dashboard
 // TODO ng bootstraps toast looks good for projects page at least
@@ -50,6 +51,7 @@ import { ErrorInterceptor } from '@shared/interceptors/jwtError.interceptor';
   providers: [
     AuthService,
     HttpErrorHandler,
+    ScriptLoaderService,
     ...guards,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
